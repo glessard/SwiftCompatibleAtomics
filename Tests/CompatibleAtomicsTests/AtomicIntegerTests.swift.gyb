@@ -1,0 +1,124 @@
+//
+//  AtomicIntegerTests.swift
+//
+//  Copyright © 2020 Guillaume Lessard. All rights reserved.
+//  This file is distributed under the BSD 3-clause license. See LICENSE for details.
+//
+
+import XCTest
+
+import CompatibleAtomics
+
+public class AtomicIntegerTests: XCTestCase
+{
+  % for IntType in ['Int', 'UInt', 'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64']:
+  public func test${IntType}()
+  {
+    let i = UnsafeAtomic<${IntType}>.create(initialValue: 0)
+    XCTAssertEqual(i.load(ordering: .relaxed), 0)
+
+    let r1 = ${IntType}.randomPositive()
+    let r2 = ${IntType}.randomPositive()
+    let r3 = ${IntType}.randomPositive()
+
+    i.store(r1, ordering: .relaxed)
+    XCTAssertEqual(r1, i.load(ordering: .relaxed))
+
+    var j = i.exchange(r2, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r1, j)
+    XCTAssertEqual(r2, i.load(ordering: .relaxed))
+
+    j = i.loadThenWrappingIncrement(by: r1, ordering: .relaxed)
+    XCTAssertEqual(r2, j)
+    XCTAssertEqual(r1 &+ r2, i.load(ordering: .acquiring))
+
+    j = i.loadThenWrappingDecrement(by: r2, ordering: .relaxed)
+    XCTAssertEqual(r1 &+ r2, j)
+    XCTAssertEqual(r1, i.load(ordering: .sequentiallyConsistent))
+
+    j = i.loadThenWrappingIncrement(ordering: .relaxed)
+    XCTAssertEqual(r1, j)
+    XCTAssertEqual(r1 &+ 1, i.load(ordering: .relaxed))
+
+    i.store(r3, ordering: .releasing)
+    j = i.loadThenWrappingDecrement(ordering: .relaxed)
+    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3 &- 1, i.load(ordering: .relaxed))
+
+    i.store(r1, ordering: .releasing)
+    j = i.loadThenBitwiseOr(with: r2, ordering: .relaxed)
+    XCTAssertEqual(r1, j)
+    XCTAssertEqual(r1 | r2, i.load(ordering: .relaxed))
+
+    i.store(r2, ordering: .sequentiallyConsistent)
+    j = i.loadThenBitwiseXor(with: r1, ordering: .relaxed)
+    XCTAssertEqual(r2, j)
+    XCTAssertEqual(r1 ^ r2, i.load(ordering: .relaxed))
+
+    i.store(r1, ordering: .releasing)
+    j = i.loadThenBitwiseAnd(with: r2, ordering: .relaxed)
+    XCTAssertEqual(r1, j)
+    XCTAssertEqual(r1 & r2, i.load(ordering: .relaxed))
+
+    i.store(r1, ordering: .releasing)
+    var (s, r) = i.compareExchange(expected: r1, desired: r2, ordering: .sequentiallyConsistent)
+    XCTAssertEqual(true, s)
+    XCTAssertEqual(r1, r)
+
+    j = r2
+    i.store(r1, ordering: .releasing)
+    s = false
+    while s == false
+    {
+      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+    }
+    XCTAssertEqual(r1, j)
+    XCTAssertEqual(r3, i.load(ordering: .relaxed))
+
+    i.destroy()
+  }
+
+  % end # for
+  func testLoadAfterAtomic()
+  {
+    let i = UnsafeAtomic<Int>.create(initialValue: 0)
+    var o, j, k: Int
+
+    o = Int.randomPositive()
+    j = i.load(ordering: .relaxed) &+ o
+    k = i.wrappingIncrementThenLoad(by: o, ordering: .relaxed)
+    XCTAssertEqual(j, k)
+
+    o = Int.randomPositive()
+    j = i.load(ordering: .relaxed) &- o
+    k = i.wrappingDecrementThenLoad(by: o, ordering: .relaxed)
+    XCTAssertEqual(j, k)
+
+    o = Int.randomPositive()
+    i.wrappingIncrement(by: o, ordering: .acquiring)
+    k = k &+ o
+    XCTAssertEqual(k, i.load(ordering: .relaxed))
+
+    o = Int.randomPositive()
+    i.wrappingDecrement(by: o, ordering: .acquiring)
+    k = k &- o
+    XCTAssertEqual(k, i.load(ordering: .relaxed))
+
+    o = Int.randomPositive()
+    j = i.load(ordering: .relaxed) | o
+    k = i.bitwiseOrThenLoad(with: o, ordering: .relaxed)
+    XCTAssertEqual(j, k)
+
+    o = Int.randomPositive()
+    j = i.load(ordering: .relaxed) & o
+    k = i.bitwiseAndThenLoad(with: o, ordering: .relaxed)
+    XCTAssertEqual(j, k)
+
+    o = Int.randomPositive()
+    j = i.load(ordering: .relaxed) ^ o
+    k = i.bitwiseXorThenLoad(with: o, ordering: .relaxed)
+    XCTAssertEqual(j, k)
+
+    i.destroy()
+  }
+}

@@ -1,0 +1,101 @@
+//
+//  AtomicPointerTests.swift
+//
+//  Copyright © 2020 Guillaume Lessard. All rights reserved.
+//  This file is distributed under the BSD 3-clause license. See LICENSE for details.
+//
+
+import XCTest
+
+import CompatibleAtomics
+
+public class AtomicPointerTests: XCTestCase
+{
+% for Mutable in ['', 'Mutable']:
+% for Raw in ['', 'Raw']:
+% for Optional in ['', 'Optional']:
+% Pointee = '<Int64>' if (Raw == '') else ''
+  public func test${Optional}Unsafe${Mutable}${Raw}Pointer()
+  {
+% bang = '' if Optional else '!'
+% if Optional == 'Optional':
+    let r1 = Unsafe${Mutable}${Raw}Pointer${Pointee}(bitPattern: 0)
+% else:
+    let r1 = Unsafe${Mutable}${Raw}Pointer${Pointee}(bitPattern: UInt.randomPositive())${bang}
+% end # if Optional
+    let r2 = Unsafe${Mutable}${Raw}Pointer${Pointee}(bitPattern: UInt.randomPositive())${bang}
+    let r3 = Unsafe${Mutable}${Raw}Pointer${Pointee}(bitPattern: UInt.randomPositive())${bang}
+
+% qmark = '?' if Optional else ''
+    let i = UnsafeAtomic<Unsafe${Mutable}${Raw}Pointer${Pointee}${qmark}>.create(initialValue: r1)
+    XCTAssertEqual(r1, i.load(ordering: .relaxed))
+
+    i.store(r2, ordering: .relaxed)
+    XCTAssertEqual(r2, i.load(ordering: .relaxed))
+
+    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, j)
+    XCTAssertEqual(r1, i.load(ordering: .relaxed))
+
+    i.store(r1, ordering: .releasing)
+    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    XCTAssertEqual(true, s)
+    XCTAssertEqual(r1, r)
+    XCTAssertEqual(r3, i.load(ordering: .relaxed))
+
+    repeat {
+      (s, j) = i.compareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+    } while s == false
+    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r1, i.load(ordering: .relaxed))
+
+    i.destroy()
+  }
+
+% end # for Optional
+% end # for Raw
+% end # for Mutable
+  class TestObject {}
+% for Optional in ['', 'Optional']:
+% qmark = '?' if Optional else ''
+
+  public func test${Optional}Unmanaged()
+  {
+% if Optional == 'Optional':
+    let r1 = Optional<Unmanaged<TestObject>>.none
+    let r2 = Optional(Unmanaged<TestObject>.passRetained(TestObject()))
+    let r3 = Optional(Unmanaged<TestObject>.passRetained(TestObject()))
+% else:
+    let r1 = Unmanaged<TestObject>.passRetained(TestObject())
+    let r2 = Unmanaged<TestObject>.passRetained(TestObject())
+    let r3 = Unmanaged<TestObject>.passRetained(TestObject())
+% end # if Optional
+
+    let i = UnsafeAtomic<Unmanaged<TestObject>${qmark}>.create(initialValue: r1)
+    XCTAssertEqual(r1${qmark}.toOpaque(), i.load(ordering: .relaxed)${qmark}.toOpaque())
+
+    i.store(r2, ordering: .relaxed)
+    XCTAssertEqual(r2${qmark}.toOpaque(), i.load(ordering: .relaxed)${qmark}.toOpaque())
+
+    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2${qmark}.toOpaque(), j${qmark}.toOpaque())
+    XCTAssertEqual(r1${qmark}.toOpaque(), i.load(ordering: .relaxed)${qmark}.toOpaque())
+
+    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    XCTAssertEqual(true, s)
+    XCTAssertEqual(r1${qmark}.toOpaque(), r${qmark}.toOpaque())
+    XCTAssertEqual(r3${qmark}.toOpaque(), i.load(ordering: .relaxed)${qmark}.toOpaque())
+
+    repeat {
+      (s, j) = i.compareExchange(expected: j, desired: r1, ordering: .sequentiallyConsistent, failureOrdering: .relaxed)
+    } while s == false
+    XCTAssertEqual(r3${qmark}.toOpaque(), j${qmark}.toOpaque())
+    XCTAssertEqual(r1${qmark}.toOpaque(), i.load(ordering: .relaxed)${qmark}.toOpaque())
+
+    i.destroy()
+    r1${qmark}.release()
+    r2${qmark}.release()
+    r3${qmark}.release()
+  }
+% end # for Optional
+}

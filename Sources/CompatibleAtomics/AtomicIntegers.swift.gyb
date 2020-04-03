@@ -1,0 +1,106 @@
+//
+//  AtomicIntegers.swift
+//
+//  Licensed under Apache License v2.0
+//
+
+import CAtomics
+% for IntType in ['Int', 'UInt', 'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64']:
+
+extension ${IntType}: AtomicProtocol
+{
+  public typealias AtomicStorage = CAtomics.Atomic${IntType}
+
+  @inlinable
+  public static func atomicStorage(for value: ${IntType}) -> AtomicStorage
+  {
+    return AtomicStorage(value)
+  }
+
+  @inlinable
+  public static func deinitializeAtomicStorage(at address: UnsafeMutablePointer<AtomicStorage>) {}
+
+  @inlinable
+  public static func atomicLoad(at address: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> ${IntType}
+  {
+    return CAtomicsLoad(address, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicStore(_ desired: ${IntType}, at address: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicStoreOrdering)
+  {
+    CAtomicsStore(address, desired, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicExchange(_ desired: ${IntType}, at address: UnsafeMutablePointer<AtomicStorage>,
+                                    ordering: AtomicUpdateOrdering) -> ${IntType}
+  {
+    return CAtomicsExchange(address, desired, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicCompareExchange(expected: ${IntType}, desired: ${IntType},
+                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: ${IntType})
+  {
+    return atomicCompareExchange(expected: expected, desired: desired, at: address,
+                                 ordering: ordering, failureOrdering: ordering.asLoadOrdering())
+  }
+
+  @inlinable
+  public static func atomicCompareExchange(expected: ${IntType}, desired: ${IntType},
+                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           ordering: AtomicUpdateOrdering,
+                                           failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${IntType})
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
+                                               ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+}
+
+extension ${IntType}: AtomicInteger
+{
+  @inlinable
+  public static func atomicLoadThenWrappingIncrement(by operand: ${IntType},
+                                                     at address: UnsafeMutablePointer<AtomicStorage>,
+                                                     ordering: AtomicUpdateOrdering) -> ${IntType}
+  {
+    return CAtomicsAdd(address, operand, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicLoadThenWrappingDecrement(by operand: ${IntType},
+                                                     at address: UnsafeMutablePointer<AtomicStorage>,
+                                                     ordering: AtomicUpdateOrdering) -> ${IntType}
+  {
+    return CAtomicsSubtract(address, operand, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicLoadThenBitwiseAnd(with operand: ${IntType},
+                                              at address: UnsafeMutablePointer<AtomicStorage>,
+                                              ordering: AtomicUpdateOrdering) -> ${IntType}
+  {
+    return CAtomicsBitwiseAnd(address, operand, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicLoadThenBitwiseOr(with operand: ${IntType},
+                                             at address: UnsafeMutablePointer<AtomicStorage>,
+                                             ordering: AtomicUpdateOrdering) -> ${IntType}
+  {
+    return CAtomicsBitwiseOr(address, operand, ordering._rawValue)
+  }
+
+  @inlinable
+  public static func atomicLoadThenBitwiseXor(with operand: ${IntType},
+                                              at address: UnsafeMutablePointer<AtomicStorage>,
+                                              ordering: AtomicUpdateOrdering) -> ${IntType}
+  {
+    return CAtomicsBitwiseXor(address, operand, ordering._rawValue)
+  }
+}
+% end # for
