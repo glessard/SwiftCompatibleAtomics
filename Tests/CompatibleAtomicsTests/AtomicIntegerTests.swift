@@ -16,9 +16,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<Int>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = Int.randomPositive()
     let r2 = Int.randomPositive()
     let r3 = Int.randomPositive()
+#else
+    let r1 = Int(UInt.randomPositive())
+    let r2 = Int(UInt.randomPositive())
+    let r3 = Int(UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -82,9 +88,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<UInt>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = UInt.randomPositive()
     let r2 = UInt.randomPositive()
     let r3 = UInt.randomPositive()
+#else
+    let r1 = UInt(UInt.randomPositive())
+    let r2 = UInt(UInt.randomPositive())
+    let r3 = UInt(UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -148,9 +160,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<Int8>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = Int8.randomPositive()
     let r2 = Int8.randomPositive()
     let r3 = Int8.randomPositive()
+#else
+    let r1 = Int8(truncatingBitPattern: UInt.randomPositive())
+    let r2 = Int8(truncatingBitPattern: UInt.randomPositive())
+    let r3 = Int8(truncatingBitPattern: UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -214,9 +232,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<UInt8>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = UInt8.randomPositive()
     let r2 = UInt8.randomPositive()
     let r3 = UInt8.randomPositive()
+#else
+    let r1 = UInt8(truncatingBitPattern: UInt.randomPositive())
+    let r2 = UInt8(truncatingBitPattern: UInt.randomPositive())
+    let r3 = UInt8(truncatingBitPattern: UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -280,9 +304,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<Int16>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = Int16.randomPositive()
     let r2 = Int16.randomPositive()
     let r3 = Int16.randomPositive()
+#else
+    let r1 = Int16(truncatingBitPattern: UInt.randomPositive())
+    let r2 = Int16(truncatingBitPattern: UInt.randomPositive())
+    let r3 = Int16(truncatingBitPattern: UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -346,9 +376,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<UInt16>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = UInt16.randomPositive()
     let r2 = UInt16.randomPositive()
     let r3 = UInt16.randomPositive()
+#else
+    let r1 = UInt16(truncatingBitPattern: UInt.randomPositive())
+    let r2 = UInt16(truncatingBitPattern: UInt.randomPositive())
+    let r3 = UInt16(truncatingBitPattern: UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -412,9 +448,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<Int32>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = Int32.randomPositive()
     let r2 = Int32.randomPositive()
     let r3 = Int32.randomPositive()
+#else
+    let r1 = Int32(truncatingBitPattern: UInt.randomPositive())
+    let r2 = Int32(truncatingBitPattern: UInt.randomPositive())
+    let r3 = Int32(truncatingBitPattern: UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -478,9 +520,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<UInt32>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = UInt32.randomPositive()
     let r2 = UInt32.randomPositive()
     let r3 = UInt32.randomPositive()
+#else
+    let r1 = UInt32(truncatingBitPattern: UInt.randomPositive())
+    let r2 = UInt32(truncatingBitPattern: UInt.randomPositive())
+    let r3 = UInt32(truncatingBitPattern: UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -544,9 +592,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<Int64>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = Int64.randomPositive()
     let r2 = Int64.randomPositive()
     let r3 = Int64.randomPositive()
+#else
+    let r1 = Int64(UInt.randomPositive())
+    let r2 = Int64(UInt.randomPositive())
+    let r3 = Int64(UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -610,9 +664,15 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<UInt64>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
+#if swift(>=4.0)
     let r1 = UInt64.randomPositive()
     let r2 = UInt64.randomPositive()
     let r3 = UInt64.randomPositive()
+#else
+    let r1 = UInt64(UInt.randomPositive())
+    let r2 = UInt64(UInt.randomPositive())
+    let r3 = UInt64(UInt.randomPositive())
+#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -673,40 +733,40 @@ public class AtomicIntegerTests: XCTestCase
 
   func testLoadAfterAtomic()
   {
-    let i = UnsafeAtomic<Int>.create(initialValue: 0)
-    var o, j, k: Int
+    let i = UnsafeAtomic<UInt>.create(initialValue: 0)
+    var o, j, k: UInt
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     j = i.load(ordering: .relaxed) &+ o
     k = i.wrappingIncrementThenLoad(by: o, ordering: .relaxed)
     XCTAssertEqual(j, k)
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     j = i.load(ordering: .relaxed) &- o
     k = i.wrappingDecrementThenLoad(by: o, ordering: .relaxed)
     XCTAssertEqual(j, k)
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     i.wrappingIncrement(by: o, ordering: .acquiring)
     k = k &+ o
     XCTAssertEqual(k, i.load(ordering: .relaxed))
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     i.wrappingDecrement(by: o, ordering: .acquiring)
     k = k &- o
     XCTAssertEqual(k, i.load(ordering: .relaxed))
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     j = i.load(ordering: .relaxed) | o
     k = i.bitwiseOrThenLoad(with: o, ordering: .relaxed)
     XCTAssertEqual(j, k)
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     j = i.load(ordering: .relaxed) & o
     k = i.bitwiseAndThenLoad(with: o, ordering: .relaxed)
     XCTAssertEqual(j, k)
 
-    o = Int.randomPositive()
+    o = UInt.randomPositive()
     j = i.load(ordering: .relaxed) ^ o
     k = i.bitwiseXorThenLoad(with: o, ordering: .relaxed)
     XCTAssertEqual(j, k)
