@@ -1,0 +1,28 @@
+os: linux
+dist: bionic
+language: generic
+
+jobs:
+  include:
+    - os: osx
+      osx_image: xcode10.1
+      env: SWIFT=4.2.1
+
+    - os: osx
+      osx_image: xcode10.3
+      env: SWIFT=5.0.3
+
+    - env: SWIFT=4.2.4
+
+    - env: SWIFT=5.0.3
+
+    - env: SWIFT=5.1.5
+
+    - env: SWIFT=5.2.1
+
+before_install:
+  - . Utilities/install-swift.sh
+
+script:
+  - /bin/bash Utilities/validate-gybbed-files.sh
+  - /bin/bash Tests/test-script.sh
