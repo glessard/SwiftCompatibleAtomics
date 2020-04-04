@@ -9,7 +9,7 @@ import XCTest
 
 import CompatibleAtomics
 
-enum TestEnum: UInt32, AtomicRepresentable
+enum TestEnum: UInt32, AtomicProtocol
 {
   case a = 0, b, c, d, e, f, g, h
 }

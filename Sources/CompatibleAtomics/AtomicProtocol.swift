@@ -40,3 +40,64 @@ public protocol AtomicProtocol
                                     ordering: AtomicUpdateOrdering,
                                     failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Self)
 }
+
+extension AtomicProtocol where Self: RawRepresentable, Self.RawValue: AtomicProtocol, AtomicStorage == Self.RawValue.AtomicStorage
+{
+  @inlinable
+  public static func atomicStorage(for value: Self) -> RawValue.AtomicStorage
+  {
+    return RawValue.atomicStorage(for: value.rawValue)
+  }
+
+  @inlinable
+  public static func deinitializeAtomicStorage(at address: UnsafeMutablePointer<AtomicStorage>)
+  {
+    address.deinitialize(count: 1)
+  }
+
+  @inlinable
+  public static func atomicLoad(at address: UnsafeMutablePointer<AtomicStorage>,
+                                ordering: AtomicLoadOrdering) -> Self
+  {
+    return Self(rawValue: RawValue.atomicLoad(at: address, ordering: ordering))!
+  }
+
+  @inlinable
+  public static func atomicStore(_ desired: Self,
+                                 at address: UnsafeMutablePointer<AtomicStorage>,
+                                 ordering: AtomicStoreOrdering)
+  {
+    RawValue.atomicStore(desired.rawValue, at: address, ordering: ordering)
+  }
+
+  @inlinable
+  public static func atomicExchange(_ desired: Self,
+                                    at address: UnsafeMutablePointer<AtomicStorage>,
+                                    ordering: AtomicUpdateOrdering) -> Self
+  {
+    return Self(rawValue: RawValue.atomicExchange(desired.rawValue, at: address, ordering: ordering))!
+  }
+
+  @inlinable
+  public static func atomicCompareExchange(expected: Self,
+                                           desired: Self,
+                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Self)
+  {
+    let (exchanged, raw) = RawValue.atomicCompareExchange(expected: expected.rawValue, desired: desired.rawValue,
+                                                          at: address, ordering: ordering)
+    return (exchanged, Self(rawValue: raw)!)
+  }
+
+  @inlinable
+  public static func atomicCompareExchange(expected: Self,
+                                           desired: Self,
+                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           ordering: AtomicUpdateOrdering,
+                                           failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Self)
+  {
+    let (exchanged, raw) = RawValue.atomicCompareExchange(expected: expected.rawValue, desired: desired.rawValue,
+                                                          at: address, ordering: ordering, failureOrdering: failureOrdering)
+    return (exchanged, Self(rawValue: raw)!)
+  }
+}
