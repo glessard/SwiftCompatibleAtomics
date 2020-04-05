@@ -15,18 +15,16 @@ import CAtomics
 public struct AtomicLoadOrdering: Equatable, Hashable
 {
 #if swift(>=4.2)
-  @usableFromInline
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${usableFromInline}
   internal var _rawValue: LoadMemoryOrder
 
-  @inlinable
+  ${inlinable}
   internal init(_rawValue: LoadMemoryOrder) { self._rawValue = _rawValue }
-#else
-  @_versioned
-  internal var _rawValue: LoadMemoryOrder
-
-  @inline(__always)
-  internal init(_rawValue: LoadMemoryOrder) { self._rawValue = _rawValue }
-#endif
+${end}
+% end
 
   public static var relaxed: AtomicLoadOrdering                { return .init(_rawValue: .relaxed) }
   public static var acquiring: AtomicLoadOrdering              { return .init(_rawValue: .acquire) }
@@ -49,18 +47,16 @@ extension AtomicLoadOrdering: CustomStringConvertible
 public struct AtomicStoreOrdering: Equatable, Hashable
 {
 #if swift(>=4.2)
-  @usableFromInline
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${usableFromInline}
   internal var _rawValue: StoreMemoryOrder
 
-  @inlinable
+  ${inlinable}
   internal init(_rawValue: StoreMemoryOrder) { self._rawValue = _rawValue }
-#else
-  @_versioned
-  internal var _rawValue: StoreMemoryOrder
-
-  @inline(__always)
-  internal init(_rawValue: StoreMemoryOrder) { self._rawValue = _rawValue }
-#endif
+${end}
+% end
 
   public static var relaxed: AtomicStoreOrdering                { return .init(_rawValue: .relaxed) }
   public static var releasing: AtomicStoreOrdering              { return .init(_rawValue: .release) }
@@ -83,18 +79,16 @@ extension AtomicStoreOrdering: CustomStringConvertible
 public struct AtomicUpdateOrdering: Equatable, Hashable
 {
 #if swift(>=4.2)
-  @usableFromInline
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${usableFromInline}
   internal var _rawValue: MemoryOrder
 
-  @inlinable
+  ${inlinable}
   internal init(_rawValue: MemoryOrder) { self._rawValue = _rawValue }
-#else
-  @_versioned
-  internal var _rawValue: MemoryOrder
-
-  @inline(__always)
-  internal init(_rawValue: MemoryOrder) { self._rawValue = _rawValue }
-#endif
+${end}
+% end
 
   public static var relaxed: AtomicUpdateOrdering                { return .init(_rawValue: .relaxed) }
   public static var acquiring: AtomicUpdateOrdering              { return .init(_rawValue: .acquire) }
@@ -103,7 +97,10 @@ public struct AtomicUpdateOrdering: Equatable, Hashable
   public static var sequentiallyConsistent: AtomicUpdateOrdering { return .init(_rawValue: .sequential) }
 
 #if swift(>=4.2)
-  @usableFromInline
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${usableFromInline}
   internal func asLoadOrdering() -> AtomicLoadOrdering
   {
     switch self {
@@ -115,20 +112,8 @@ public struct AtomicUpdateOrdering: Equatable, Hashable
     default: return AtomicLoadOrdering(_rawValue: LoadMemoryOrder(rawValue: self._rawValue.rawValue)!)
     }
   }
-#else
-  @_versioned
-  internal func asLoadOrdering() -> AtomicLoadOrdering
-  {
-    switch self {
-    case .relaxed:                return .relaxed
-    case .acquiring:              return .acquiring
-    case .releasing:              return .relaxed
-    case .acquiringAndReleasing:  return .acquiring
-    case .sequentiallyConsistent: return .sequentiallyConsistent
-    default: return AtomicLoadOrdering(_rawValue: LoadMemoryOrder(rawValue: self._rawValue.rawValue)!)
-    }
-  }
-#endif
+${end}
+% end
 }
 
 extension AtomicUpdateOrdering: CustomStringConvertible {
@@ -145,15 +130,13 @@ extension AtomicUpdateOrdering: CustomStringConvertible {
 }
 
 #if swift(>=4.2)
-@inlinable
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+${inlinable}
 public func atomicMemoryFence(ordering: AtomicUpdateOrdering)
 {
   CAtomicsThreadFence(ordering._rawValue)
 }
-#else
-@inline(__always)
-public func atomicMemoryFence(ordering: AtomicUpdateOrdering)
-{
-  CAtomicsThreadFence(ordering._rawValue)
-}
-#endif
+${end}
+% end
