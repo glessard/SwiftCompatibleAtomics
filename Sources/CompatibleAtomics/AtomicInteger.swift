@@ -13,22 +13,22 @@
 public protocol AtomicInteger: AtomicProtocol, FixedWidthInteger
 {
   static func atomicLoadThenWrappingIncrement(by operand: Self,
-                                              at address: UnsafeMutablePointer<AtomicStorage>,
+                                              at pointer: UnsafeMutablePointer<AtomicStorage>,
                                               ordering: AtomicUpdateOrdering) -> Self
 
   static func atomicLoadThenWrappingDecrement(by operand: Self,
-                                              at address: UnsafeMutablePointer<AtomicStorage>,
+                                              at pointer: UnsafeMutablePointer<AtomicStorage>,
                                               ordering: AtomicUpdateOrdering) -> Self
 
   static func atomicLoadThenBitwiseAnd(with operand: Self,
-                                       at address: UnsafeMutablePointer<AtomicStorage>,
+                                       at pointer: UnsafeMutablePointer<AtomicStorage>,
                                        ordering: AtomicUpdateOrdering) -> Self
 
   static func atomicLoadThenBitwiseOr(with operand: Self,
-                                      at address: UnsafeMutablePointer<AtomicStorage>,
+                                      at pointer: UnsafeMutablePointer<AtomicStorage>,
                                       ordering: AtomicUpdateOrdering) -> Self
 
   static func atomicLoadThenBitwiseXor(with operand: Self,
-                                       at address: UnsafeMutablePointer<AtomicStorage>,
+                                       at pointer: UnsafeMutablePointer<AtomicStorage>,
                                        ordering: AtomicUpdateOrdering) -> Self
 }

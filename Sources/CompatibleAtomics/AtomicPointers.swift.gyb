@@ -24,56 +24,56 @@ extension ${PointerType}: AtomicProtocol
   }
 
   ${inlinable}
-  public static func deinitializeAtomicStorage(at address: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
 
   ${inlinable}
-  public static func atomicLoad(at address: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}
   {
-    return CAtomicsLoad(address, ordering._rawValue)${binding}
+    return CAtomicsLoad(pointer, ordering._rawValue)${binding}
   }
 
   ${inlinable}
-  public static func atomicStore(_ desired: ${PointerType}, at address: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicStoreOrdering)
+  public static func atomicStore(_ desired: ${PointerType}, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicStoreOrdering)
   {
-    CAtomicsStore(address, desired, ordering._rawValue)
+    CAtomicsStore(pointer, desired, ordering._rawValue)
   }
 
   ${inlinable}
-  public static func atomicExchange(_ desired: ${PointerType}, at address: UnsafeMutablePointer<AtomicStorage>,
+  public static func atomicExchange(_ desired: ${PointerType}, at pointer: UnsafeMutablePointer<AtomicStorage>,
                                     ordering: AtomicUpdateOrdering) -> ${PointerType}
   {
-    return CAtomicsExchange(address, desired, ordering._rawValue)${binding}
+    return CAtomicsExchange(pointer, desired, ordering._rawValue)${binding}
   }
 
   ${inlinable}
   public static func atomicCompareExchange(expected: ${PointerType}, desired: ${PointerType},
-                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
                                            ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: ${PointerType})
   {
-    return atomicCompareExchange(expected: expected, desired: desired, at: address,
+    return atomicCompareExchange(expected: expected, desired: desired, at: pointer,
                                  ordering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   ${inlinable}
   public static func atomicCompareExchange(expected: ${PointerType}, desired: ${PointerType},
-                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
                                            ordering: AtomicUpdateOrdering,
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType})
   {
     var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+    let exchanged = CAtomicsCompareAndExchangeStrong(pointer, &expected, desired,
                                                      ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected${binding})
   }
 
   ${inlinable}
   public static func atomicWeakCompareExchange(expected: ${PointerType}, desired: ${PointerType},
-                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               at pointer: UnsafeMutablePointer<AtomicStorage>,
                                                ordering: AtomicUpdateOrdering,
                                                failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType})
   {
     var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+    let exchanged = CAtomicsCompareAndExchangeWeak(pointer, &expected, desired,
                                                    ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected${binding})
   }
@@ -96,56 +96,56 @@ extension ${PointerType}: NullableAtomic
   }
 
   ${inlinable}
-  public static func deinitializeNullableAtomicStorage(at address: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
 
   ${inlinable}
-  public static func atomicOptionalLoad(at address: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}?
+  public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}?
   {
-    return CAtomicsLoad(address, ordering._rawValue)${optionalbinding}
+    return CAtomicsLoad(pointer, ordering._rawValue)${optionalbinding}
   }
 
   ${inlinable}
-  public static func atomicOptionalStore(_ desired: ${PointerType}?, at address: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicStoreOrdering)
+  public static func atomicOptionalStore(_ desired: ${PointerType}?, at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicStoreOrdering)
   {
-    CAtomicsStore(address, desired, ordering._rawValue)
+    CAtomicsStore(pointer, desired, ordering._rawValue)
   }
 
   ${inlinable}
-  public static func atomicOptionalExchange(_ desired: ${PointerType}?, at address: UnsafeMutablePointer<NullableAtomicStorage>,
+  public static func atomicOptionalExchange(_ desired: ${PointerType}?, at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                             ordering: AtomicUpdateOrdering) -> ${PointerType}?
   {
-    return CAtomicsExchange(address, desired, ordering._rawValue)${optionalbinding}
+    return CAtomicsExchange(pointer, desired, ordering._rawValue)${optionalbinding}
   }
 
   ${inlinable}
   public static func atomicOptionalCompareExchange(expected: ${PointerType}?, desired: ${PointerType}?,
-                                                   at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                                   at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                                    ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: ${PointerType}?)
   {
-    return atomicOptionalCompareExchange(expected: expected, desired: desired, at: address,
+    return atomicOptionalCompareExchange(expected: expected, desired: desired, at: pointer,
                                          ordering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   ${inlinable}
   public static func atomicOptionalCompareExchange(expected: ${PointerType}?, desired: ${PointerType}?,
-                                                   at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                                   at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                                    ordering: AtomicUpdateOrdering,
                                                    failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType}?)
   {
     var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+    let exchanged = CAtomicsCompareAndExchangeStrong(pointer, &expected, desired,
                                                      ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected${optionalbinding})
   }
 
   ${inlinable}
   public static func atomicOptionalWeakCompareExchange(expected: ${PointerType}?, desired: ${PointerType}?,
-                                                       at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                                       at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                                        ordering: AtomicUpdateOrdering,
                                                        failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType}?)
   {
     var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+    let exchanged = CAtomicsCompareAndExchangeWeak(pointer, &expected, desired,
                                                    ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected${optionalbinding})
   }

@@ -15,9 +15,9 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   internal let _ptr: UnsafeMutablePointer<AtomicStorage>
 
   @inlinable
-  public init(at address: UnsafeMutablePointer<AtomicStorage>)
+  public init(at pointer: UnsafeMutablePointer<AtomicStorage>)
   {
-    self._ptr = address
+    self._ptr = pointer
   }
 
   @inlinable
@@ -67,9 +67,9 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   internal let _ptr: UnsafeMutablePointer<AtomicStorage>
 
   @inline(__always)
-  public init(at address: UnsafeMutablePointer<AtomicStorage>)
+  public init(at pointer: UnsafeMutablePointer<AtomicStorage>)
   {
-    self._ptr = address
+    self._ptr = pointer
   }
 
   @inline(__always)

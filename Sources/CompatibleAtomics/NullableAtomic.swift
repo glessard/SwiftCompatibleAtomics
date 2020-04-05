@@ -16,33 +16,33 @@ public protocol NullableAtomic: AtomicProtocol
 
   static func nullableAtomicStorage(for value: Self?) -> NullableAtomicStorage
 
-  static func deinitializeNullableAtomicStorage(at address: UnsafeMutablePointer<NullableAtomicStorage>)
+  static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
 
-  static func atomicOptionalLoad(at address: UnsafeMutablePointer<NullableAtomicStorage>,
+  static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                  ordering: AtomicLoadOrdering) -> Self?
 
   static func atomicOptionalStore(_ desired: Self?,
-                                  at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                  at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                   ordering: AtomicStoreOrdering)
 
   static func atomicOptionalExchange(_ desired: Self?,
-                                     at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                     at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                      ordering: AtomicUpdateOrdering) -> Self?
 
   static func atomicOptionalCompareExchange(expected: Self?,
                                             desired: Self?,
-                                            at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                            at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                             ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Self?)
 
   static func atomicOptionalCompareExchange(expected: Self?,
                                             desired: Self?,
-                                            at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                            at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                             ordering: AtomicUpdateOrdering,
                                             failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Self?)
 
   static func atomicOptionalWeakCompareExchange(expected: Self?,
                                                 desired: Self?,
-                                                at address: UnsafeMutablePointer<NullableAtomicStorage>,
+                                                at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
                                                 ordering: AtomicUpdateOrdering,
                                                 failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Self?)
 }
@@ -59,62 +59,62 @@ extension Optional: AtomicProtocol where Wrapped: NullableAtomic
   }
 
   @inlinable
-  public static func deinitializeAtomicStorage(at address: UnsafeMutablePointer<AtomicStorage>)
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
   {
-    Wrapped.deinitializeNullableAtomicStorage(at: address)
+    Wrapped.deinitializeNullableAtomicStorage(at: pointer)
   }
 
   @inlinable
-  public static func atomicLoad(at address: UnsafeMutablePointer<AtomicStorage>,
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>,
                                 ordering: AtomicLoadOrdering) -> Optional
   {
-    return Wrapped.atomicOptionalLoad(at: address, ordering: ordering)
+    return Wrapped.atomicOptionalLoad(at: pointer, ordering: ordering)
   }
 
   @inlinable
   public static func atomicStore(_ desired: Optional,
-                                 at address: UnsafeMutablePointer<AtomicStorage>,
+                                 at pointer: UnsafeMutablePointer<AtomicStorage>,
                                  ordering: AtomicStoreOrdering)
   {
-    return Wrapped.atomicOptionalStore(desired, at: address, ordering: ordering)
+    return Wrapped.atomicOptionalStore(desired, at: pointer, ordering: ordering)
   }
 
   @inlinable
   public static func atomicExchange(_ desired: Optional,
-                                    at address: UnsafeMutablePointer<AtomicStorage>,
+                                    at pointer: UnsafeMutablePointer<AtomicStorage>,
                                     ordering: AtomicUpdateOrdering) -> Optional
   {
-    return Wrapped.atomicOptionalExchange(desired, at: address, ordering: ordering)
+    return Wrapped.atomicOptionalExchange(desired, at: pointer, ordering: ordering)
   }
 
   @inlinable
   public static func atomicCompareExchange(expected: Optional,
                                            desired: Optional,
-                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
                                            ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Optional)
   {
-    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: address, ordering: ordering)
+    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: pointer, ordering: ordering)
   }
 
   @inlinable
   public static func atomicCompareExchange(expected: Optional,
                                            desired: Optional,
-                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
                                            ordering: AtomicUpdateOrdering,
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Optional)
   {
-    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: address,
+    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: pointer,
                                                  ordering: ordering, failureOrdering: failureOrdering)
   }
 
   @inlinable
   public static func atomicWeakCompareExchange(expected: Optional,
                                                desired: Optional,
-                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               at pointer: UnsafeMutablePointer<AtomicStorage>,
                                                ordering: AtomicUpdateOrdering,
                                                failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Optional)
   {
-    return Wrapped.atomicOptionalWeakCompareExchange(expected: expected, desired: desired, at: address,
+    return Wrapped.atomicOptionalWeakCompareExchange(expected: expected, desired: desired, at: pointer,
                                                      ordering: ordering, failureOrdering: failureOrdering)
   }
 #else
@@ -125,62 +125,62 @@ extension Optional: AtomicProtocol where Wrapped: NullableAtomic
   }
 
   @inline(__always)
-  public static func deinitializeAtomicStorage(at address: UnsafeMutablePointer<AtomicStorage>)
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
   {
-    Wrapped.deinitializeNullableAtomicStorage(at: address)
+    Wrapped.deinitializeNullableAtomicStorage(at: pointer)
   }
 
   @inline(__always)
-  public static func atomicLoad(at address: UnsafeMutablePointer<AtomicStorage>,
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>,
                                 ordering: AtomicLoadOrdering) -> Optional
   {
-    return Wrapped.atomicOptionalLoad(at: address, ordering: ordering)
+    return Wrapped.atomicOptionalLoad(at: pointer, ordering: ordering)
   }
 
   @inline(__always)
   public static func atomicStore(_ desired: Optional,
-                                 at address: UnsafeMutablePointer<AtomicStorage>,
+                                 at pointer: UnsafeMutablePointer<AtomicStorage>,
                                  ordering: AtomicStoreOrdering)
   {
-    return Wrapped.atomicOptionalStore(desired, at: address, ordering: ordering)
+    return Wrapped.atomicOptionalStore(desired, at: pointer, ordering: ordering)
   }
 
   @inline(__always)
   public static func atomicExchange(_ desired: Optional,
-                                    at address: UnsafeMutablePointer<AtomicStorage>,
+                                    at pointer: UnsafeMutablePointer<AtomicStorage>,
                                     ordering: AtomicUpdateOrdering) -> Optional
   {
-    return Wrapped.atomicOptionalExchange(desired, at: address, ordering: ordering)
+    return Wrapped.atomicOptionalExchange(desired, at: pointer, ordering: ordering)
   }
 
   @inline(__always)
   public static func atomicCompareExchange(expected: Optional,
                                            desired: Optional,
-                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
                                            ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Optional)
   {
-    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: address, ordering: ordering)
+    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: pointer, ordering: ordering)
   }
 
   @inline(__always)
   public static func atomicCompareExchange(expected: Optional,
                                            desired: Optional,
-                                           at address: UnsafeMutablePointer<AtomicStorage>,
+                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
                                            ordering: AtomicUpdateOrdering,
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Optional)
   {
-    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: address,
+    return Wrapped.atomicOptionalCompareExchange(expected: expected, desired: desired, at: pointer,
                                                  ordering: ordering, failureOrdering: failureOrdering)
   }
 
   @inline(__always)
   public static func atomicWeakCompareExchange(expected: Optional,
                                                desired: Optional,
-                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               at pointer: UnsafeMutablePointer<AtomicStorage>,
                                                ordering: AtomicUpdateOrdering,
                                                failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Optional)
   {
-    return Wrapped.atomicOptionalWeakCompareExchange(expected: expected, desired: desired, at: address,
+    return Wrapped.atomicOptionalWeakCompareExchange(expected: expected, desired: desired, at: pointer,
                                                      ordering: ordering, failureOrdering: failureOrdering)
   }
 #endif

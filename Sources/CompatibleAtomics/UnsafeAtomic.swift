@@ -19,9 +19,9 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   internal let _ptr: UnsafeMutablePointer<Value.AtomicStorage>
 
   @inlinable
-  public init(at address: UnsafeMutablePointer<Value.AtomicStorage>)
+  public init(at pointer: UnsafeMutablePointer<Value.AtomicStorage>)
   {
-    self._ptr = address
+    self._ptr = pointer
   }
 
   @inlinable
@@ -42,38 +42,44 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
 
 extension UnsafeAtomic
 {
-  @inlinable public func load(ordering: AtomicLoadOrdering) -> Value
+  @inlinable
+  public func load(ordering: AtomicLoadOrdering) -> Value
   {
     return Value.atomicLoad(at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func store(_ desired: Value, ordering: AtomicStoreOrdering)
+  @inlinable
+  public func store(_ desired: Value, ordering: AtomicStoreOrdering)
   {
     Value.atomicStore(desired, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func exchange(_ desired: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func exchange(_ desired: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicExchange(desired, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func compareExchange(expected: Value, desired: Value,
-                                         ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Value)
+  @inlinable
+  public func compareExchange(expected: Value, desired: Value,
+                              ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Value)
   {
     return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func compareExchange(expected: Value, desired: Value,
-                                         ordering: AtomicUpdateOrdering,
-                                         failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
+  @inlinable
+  public func compareExchange(expected: Value, desired: Value,
+                              ordering: AtomicUpdateOrdering,
+                              failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr,
                                        ordering: ordering, failureOrdering: failureOrdering)
   }
 
-  @inlinable public func weakCompareExchange(expected: Value, desired: Value,
-                                               ordering: AtomicUpdateOrdering,
-                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
+  @inlinable
+  public func weakCompareExchange(expected: Value, desired: Value,
+                                  ordering: AtomicUpdateOrdering,
+                                  failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     return Value.atomicWeakCompareExchange(expected: expected, desired: desired, at: _ptr,
                                            ordering: ordering, failureOrdering: failureOrdering)
@@ -82,64 +88,76 @@ extension UnsafeAtomic
 
 extension UnsafeAtomic where Value: AtomicInteger
 {
-  @inlinable public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func loadThenWrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func loadThenWrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func loadThenBitwiseAnd(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func loadThenBitwiseAnd(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseAnd(with: operand, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func loadThenBitwiseOr(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func loadThenBitwiseOr(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseOr(with: operand, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func loadThenBitwiseXor(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func loadThenBitwiseXor(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering)
   }
 
 
-  @inlinable public func wrappingIncrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func wrappingIncrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering) &+ operand
   }
 
-  @inlinable public func wrappingDecrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func wrappingDecrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering) &- operand
   }
 
-  @inlinable public func bitwiseAndThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func bitwiseAndThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseAnd(with: operand, at: _ptr, ordering: ordering) & operand
   }
 
-  @inlinable public func bitwiseOrThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func bitwiseOrThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseOr(with: operand, at: _ptr, ordering: ordering) | operand
   }
 
-  @inlinable public func bitwiseXorThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inlinable
+  public func bitwiseXorThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering) ^ operand
   }
 
   
-  @inlinable public func wrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
+  @inlinable
+  public func wrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
   {
     _ = Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering)
   }
 
-  @inlinable public func wrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
+  @inlinable
+  public func wrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
   {
     _ = Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
   }
@@ -151,9 +169,9 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   internal let _ptr: UnsafeMutablePointer<Value.AtomicStorage>
 
   @inline(__always)
-  public init(at address: UnsafeMutablePointer<Value.AtomicStorage>)
+  public init(at pointer: UnsafeMutablePointer<Value.AtomicStorage>)
   {
-    self._ptr = address
+    self._ptr = pointer
   }
 
   @inline(__always)
@@ -174,38 +192,44 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
 
 extension UnsafeAtomic
 {
-  @inline(__always) public func load(ordering: AtomicLoadOrdering) -> Value
+  @inline(__always)
+  public func load(ordering: AtomicLoadOrdering) -> Value
   {
     return Value.atomicLoad(at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func store(_ desired: Value, ordering: AtomicStoreOrdering)
+  @inline(__always)
+  public func store(_ desired: Value, ordering: AtomicStoreOrdering)
   {
     Value.atomicStore(desired, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func exchange(_ desired: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func exchange(_ desired: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicExchange(desired, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func compareExchange(expected: Value, desired: Value,
-                                         ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Value)
+  @inline(__always)
+  public func compareExchange(expected: Value, desired: Value,
+                              ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Value)
   {
     return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func compareExchange(expected: Value, desired: Value,
-                                         ordering: AtomicUpdateOrdering,
-                                         failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
+  @inline(__always)
+  public func compareExchange(expected: Value, desired: Value,
+                              ordering: AtomicUpdateOrdering,
+                              failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr,
                                        ordering: ordering, failureOrdering: failureOrdering)
   }
 
-  @inline(__always) public func weakCompareExchange(expected: Value, desired: Value,
-                                               ordering: AtomicUpdateOrdering,
-                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
+  @inline(__always)
+  public func weakCompareExchange(expected: Value, desired: Value,
+                                  ordering: AtomicUpdateOrdering,
+                                  failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     return Value.atomicWeakCompareExchange(expected: expected, desired: desired, at: _ptr,
                                            ordering: ordering, failureOrdering: failureOrdering)
@@ -214,64 +238,76 @@ extension UnsafeAtomic
 
 extension UnsafeAtomic where Value: AtomicInteger
 {
-  @inline(__always) public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func loadThenWrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func loadThenWrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func loadThenBitwiseAnd(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func loadThenBitwiseAnd(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseAnd(with: operand, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func loadThenBitwiseOr(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func loadThenBitwiseOr(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseOr(with: operand, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func loadThenBitwiseXor(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func loadThenBitwiseXor(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering)
   }
 
 
-  @inline(__always) public func wrappingIncrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func wrappingIncrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering) &+ operand
   }
 
-  @inline(__always) public func wrappingDecrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func wrappingDecrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering) &- operand
   }
 
-  @inline(__always) public func bitwiseAndThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func bitwiseAndThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseAnd(with: operand, at: _ptr, ordering: ordering) & operand
   }
 
-  @inline(__always) public func bitwiseOrThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func bitwiseOrThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseOr(with: operand, at: _ptr, ordering: ordering) | operand
   }
 
-  @inline(__always) public func bitwiseXorThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
+  @inline(__always)
+  public func bitwiseXorThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
   {
     return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering) ^ operand
   }
 
   
-  @inline(__always) public func wrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
+  @inline(__always)
+  public func wrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
   {
     _ = Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering)
   }
 
-  @inline(__always) public func wrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
+  @inline(__always)
+  public func wrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
   {
     _ = Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
   }
@@ -282,7 +318,8 @@ extension UnsafeAtomic where Value: AtomicInteger
 #else
 extension UnsafeMutablePointer
 {
-  @inline(__always) public func deallocate()
+  @inline(__always)
+  public func deallocate()
   {
     self.deallocate(capacity: 1)
   }
