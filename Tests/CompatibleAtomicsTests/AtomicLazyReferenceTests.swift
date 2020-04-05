@@ -11,12 +11,7 @@ import CompatibleAtomics
 
 public class AtomicLazyReferenceTests: XCTestCase
 {
-  class TestObject
-  {
-    deinit {
-      print(ObjectIdentifier(self))
-    }
-  }
+  class TestObject {}
 
   public func testAtomicLazyReference()
   {
@@ -38,5 +33,23 @@ public class AtomicLazyReferenceTests: XCTestCase
     XCTAssertEqual(ObjectIdentifier(o!), ObjectIdentifier(p))
 
     i.destroy()
+  }
+
+  public func testDeallocation()
+  {
+    class DeallocationWitness
+    {
+      let e: XCTestExpectation
+      init(_ expectation: XCTestExpectation) { e = expectation }
+      deinit {
+        e.fulfill()
+      }
+    }
+
+    let i = UnsafeAtomicLazyReference<DeallocationWitness>.create()
+    _ = i.storeIfNil(DeallocationWitness(expectation(description: #function)))
+
+    i.destroy()
+    waitForExpectations(timeout: 1.0)
   }
 }
