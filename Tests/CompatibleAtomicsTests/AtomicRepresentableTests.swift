@@ -35,6 +35,10 @@ class AtomicRepresentableTests: XCTestCase
     (s, j) = i.compareExchange(expected: j, desired: .e, ordering: .releasing, failureOrdering: .relaxed)
     XCTAssertEqual(s, true)
     XCTAssertEqual(j, .c)
+    repeat {
+      (s, j) = i.weakCompareExchange(expected: j, desired: .f, ordering: .releasing, failureOrdering: .relaxed)
+    } while s == false
+    XCTAssertEqual(j, .e)
 
     i.destroy()
   }

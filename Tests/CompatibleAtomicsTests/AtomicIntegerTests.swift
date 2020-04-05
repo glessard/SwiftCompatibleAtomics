@@ -75,7 +75,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -147,7 +147,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -219,7 +219,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -291,7 +291,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -363,7 +363,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -435,7 +435,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -507,7 +507,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -579,7 +579,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -651,7 +651,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
@@ -723,7 +723,7 @@ public class AtomicIntegerTests: XCTestCase
     s = false
     while s == false
     {
-      (s, j) = i.compareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r3, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     }
     XCTAssertEqual(r1, j)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
