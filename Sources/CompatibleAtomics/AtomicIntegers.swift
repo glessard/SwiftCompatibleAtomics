@@ -55,8 +55,20 @@ extension Int: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: Int, desired: Int,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -104,8 +116,20 @@ extension Int: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: Int, desired: Int,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -245,8 +269,20 @@ extension UInt: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: UInt, desired: UInt,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -294,8 +330,20 @@ extension UInt: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: UInt, desired: UInt,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -435,8 +483,20 @@ extension Int8: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int8)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: Int8, desired: Int8,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int8)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -484,8 +544,20 @@ extension Int8: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int8)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: Int8, desired: Int8,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int8)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -625,8 +697,20 @@ extension UInt8: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt8)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: UInt8, desired: UInt8,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt8)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -674,8 +758,20 @@ extension UInt8: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt8)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: UInt8, desired: UInt8,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt8)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -815,8 +911,20 @@ extension Int16: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int16)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: Int16, desired: Int16,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int16)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -864,8 +972,20 @@ extension Int16: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int16)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: Int16, desired: Int16,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int16)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -1005,8 +1125,20 @@ extension UInt16: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt16)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: UInt16, desired: UInt16,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt16)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -1054,8 +1186,20 @@ extension UInt16: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt16)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: UInt16, desired: UInt16,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt16)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -1195,8 +1339,20 @@ extension Int32: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int32)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: Int32, desired: Int32,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int32)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -1244,8 +1400,20 @@ extension Int32: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int32)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: Int32, desired: Int32,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int32)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -1385,8 +1553,20 @@ extension UInt32: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt32)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: UInt32, desired: UInt32,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt32)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -1434,8 +1614,20 @@ extension UInt32: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt32)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: UInt32, desired: UInt32,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt32)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -1575,8 +1767,20 @@ extension Int64: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int64)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: Int64, desired: Int64,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int64)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -1624,8 +1828,20 @@ extension Int64: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int64)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: Int64, desired: Int64,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Int64)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif
@@ -1765,8 +1981,20 @@ extension UInt64: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt64)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inlinable
+  public static func atomicWeakCompareExchange(expected: UInt64, desired: UInt64,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt64)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #else
@@ -1814,8 +2042,20 @@ extension UInt64: AtomicProtocol
                                            failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt64)
   {
     var expected = expected
-    let exchanged = CAtomicsCompareAndExchange(address, &expected, desired, .strong,
-                                               ordering._rawValue, failureOrdering._rawValue)
+    let exchanged = CAtomicsCompareAndExchangeStrong(address, &expected, desired,
+                                                     ordering._rawValue, failureOrdering._rawValue)
+    return (exchanged, expected)
+  }
+
+  @inline(__always)
+  public static func atomicWeakCompareExchange(expected: UInt64, desired: UInt64,
+                                               at address: UnsafeMutablePointer<AtomicStorage>,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: UInt64)
+  {
+    var expected = expected
+    let exchanged = CAtomicsCompareAndExchangeWeak(address, &expected, desired,
+                                                   ordering._rawValue, failureOrdering._rawValue)
     return (exchanged, expected)
   }
 #endif

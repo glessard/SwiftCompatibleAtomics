@@ -73,6 +73,14 @@ extension UnsafeAtomic
     return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr,
                                        ordering: ordering, failureOrdering: failureOrdering)
   }
+
+  ${inlinable} public func weakCompareExchange(expected: Value, desired: Value,
+                                               ordering: AtomicUpdateOrdering,
+                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
+  {
+    return Value.atomicWeakCompareExchange(expected: expected, desired: desired, at: _ptr,
+                                           ordering: ordering, failureOrdering: failureOrdering)
+  }
 }
 
 extension UnsafeAtomic where Value: AtomicInteger

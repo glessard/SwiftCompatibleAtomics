@@ -44,7 +44,7 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   {
     let value = Unmanaged.passRetained(desired)
     var existing = UnsafeRawPointer(bitPattern: 0)
-    let success = CAtomicsCompareAndExchange(_ptr, &existing, value.toOpaque(), .strong, .acqrel, .acquire)
+    let success = CAtomicsCompareAndExchangeStrong(_ptr, &existing, value.toOpaque(), .acqrel, .acquire)
     if !success
     {
       value.release()
@@ -96,7 +96,7 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   {
     let value = Unmanaged.passRetained(desired)
     var existing = UnsafeRawPointer(bitPattern: 0)
-    let success = CAtomicsCompareAndExchange(_ptr, &existing, value.toOpaque(), .strong, .acqrel, .acquire)
+    let success = CAtomicsCompareAndExchangeStrong(_ptr, &existing, value.toOpaque(), .acqrel, .acquire)
     if !success
     {
       value.release()

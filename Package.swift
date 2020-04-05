@@ -9,7 +9,7 @@ let package = Package(
     .library(name: "CompatibleAtomics", targets: ["CompatibleAtomics"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/glessard/swift-atomics", from: "6.0.0")
+    .package(url: "https://github.com/glessard/swift-atomics", from: "6.2.0")
   ],
   targets: [
     .target(name: "CompatibleAtomics", dependencies: ["CAtomics"]),
