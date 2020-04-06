@@ -4,16 +4,16 @@
 import PackageDescription
 
 let package = Package(
-  name: "CompatibleAtomics",
+  name: "SwiftCompatibleAtomics",
   products: [
-    .library(name: "CompatibleAtomics", targets: ["CompatibleAtomics"]),
+    .library(name: "SwiftCompatibleAtomics", targets: ["SwiftCompatibleAtomics"]),
   ],
   dependencies: [
     .package(url: "https://github.com/glessard/swift-atomics", from: "6.2.0")
   ],
   targets: [
-    .target(name: "CompatibleAtomics", dependencies: ["CAtomics"]),
-    .testTarget(name: "CompatibleAtomicsTests", dependencies: ["CompatibleAtomics"]),
+    .target(name: "SwiftCompatibleAtomics", dependencies: ["CAtomics"]),
+    .testTarget(name: "SwiftCompatibleAtomicsTests", dependencies: ["SwiftCompatibleAtomics"]),
   ],
   swiftLanguageVersions: [.v3, .v4, .v4_2, .version("5")]
 )

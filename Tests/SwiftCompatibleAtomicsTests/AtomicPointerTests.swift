@@ -2,12 +2,12 @@
 //  AtomicPointerTests.swift
 //
 //  Copyright © 2020 Guillaume Lessard. All rights reserved.
-//  This file is distributed under the BSD 3-clause license. See LICENSE for details.
+//  Licensed under Apache License v2.0
 //
 
 import XCTest
 
-import CompatibleAtomics
+import SwiftCompatibleAtomics
 
 public class AtomicPointerTests: XCTestCase
 {

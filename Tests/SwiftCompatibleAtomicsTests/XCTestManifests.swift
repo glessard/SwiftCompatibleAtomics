@@ -26,6 +26,7 @@ extension AtomicLazyReferenceTests {
     // to regenerate.
     static let __allTests__AtomicLazyReferenceTests = [
         ("testAtomicLazyReference", testAtomicLazyReference),
+        ("testDeallocation", testDeallocation),
     ]
 }
 

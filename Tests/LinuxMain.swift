@@ -1,8 +1,8 @@
 import XCTest
 
-import CompatibleAtomicsTests
+import SwiftCompatibleAtomicsTests
 
 var tests = [XCTestCaseEntry]()
-tests += CompatibleAtomicsTests.__allTests()
+tests += SwiftCompatibleAtomicsTests.__allTests()
 
 XCTMain(tests)

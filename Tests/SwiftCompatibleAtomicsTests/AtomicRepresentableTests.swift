@@ -1,13 +1,13 @@
 //
-//  File.swift
+//  AtomicRepresentableTests.swift
 //  
-//
-//  Created by Guillaume Lessard on 4/1/20.
+//  Copyright © 2020 Guillaume Lessard. All rights reserved.
+//  Licensed under Apache License v2.0
 //
 
 import XCTest
 
-import CompatibleAtomics
+import SwiftCompatibleAtomics
 
 enum TestEnum: UInt32, AtomicProtocol
 {
