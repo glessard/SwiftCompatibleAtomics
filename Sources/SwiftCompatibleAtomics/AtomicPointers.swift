@@ -18,7 +18,10 @@ extension UnsafePointer: AtomicProtocol
   }
 
   @inlinable
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafePointer
@@ -79,7 +82,10 @@ extension UnsafePointer: AtomicProtocol
   }
 
   @inline(__always)
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafePointer
@@ -147,7 +153,10 @@ extension UnsafePointer: NullableAtomic
   }
 
   @inlinable
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafePointer?
@@ -208,7 +217,10 @@ extension UnsafePointer: NullableAtomic
   }
 
   @inline(__always)
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafePointer?
@@ -276,7 +288,10 @@ extension UnsafeRawPointer: AtomicProtocol
   }
 
   @inlinable
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeRawPointer
@@ -337,7 +352,10 @@ extension UnsafeRawPointer: AtomicProtocol
   }
 
   @inline(__always)
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeRawPointer
@@ -405,7 +423,10 @@ extension UnsafeRawPointer: NullableAtomic
   }
 
   @inlinable
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeRawPointer?
@@ -466,7 +487,10 @@ extension UnsafeRawPointer: NullableAtomic
   }
 
   @inline(__always)
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeRawPointer?
@@ -534,7 +558,10 @@ extension UnsafeMutablePointer: AtomicProtocol
   }
 
   @inlinable
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutablePointer
@@ -595,7 +622,10 @@ extension UnsafeMutablePointer: AtomicProtocol
   }
 
   @inline(__always)
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutablePointer
@@ -663,7 +693,10 @@ extension UnsafeMutablePointer: NullableAtomic
   }
 
   @inlinable
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutablePointer?
@@ -724,7 +757,10 @@ extension UnsafeMutablePointer: NullableAtomic
   }
 
   @inline(__always)
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutablePointer?
@@ -792,7 +828,10 @@ extension UnsafeMutableRawPointer: AtomicProtocol
   }
 
   @inlinable
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutableRawPointer
@@ -853,7 +892,10 @@ extension UnsafeMutableRawPointer: AtomicProtocol
   }
 
   @inline(__always)
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutableRawPointer
@@ -921,7 +963,10 @@ extension UnsafeMutableRawPointer: NullableAtomic
   }
 
   @inlinable
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutableRawPointer?
@@ -982,7 +1027,10 @@ extension UnsafeMutableRawPointer: NullableAtomic
   }
 
   @inline(__always)
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> UnsafeMutableRawPointer?

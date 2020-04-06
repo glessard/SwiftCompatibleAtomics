@@ -24,7 +24,10 @@ extension ${PointerType}: AtomicProtocol
   }
 
   ${inlinable}
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   ${inlinable}
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}
@@ -96,7 +99,10 @@ extension ${PointerType}: NullableAtomic
   }
 
   ${inlinable}
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   ${inlinable}
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}?

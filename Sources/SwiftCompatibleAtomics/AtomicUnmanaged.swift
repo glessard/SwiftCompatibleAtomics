@@ -18,7 +18,10 @@ extension Unmanaged: AtomicProtocol
   }
 
   @inlinable
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> Unmanaged
@@ -79,7 +82,10 @@ extension Unmanaged: AtomicProtocol
   }
 
   @inline(__always)
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>) {}
+  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> Unmanaged
@@ -147,7 +153,10 @@ extension Unmanaged: NullableAtomic
   }
 
   @inlinable
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inlinable
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> Unmanaged?
@@ -208,7 +217,10 @@ extension Unmanaged: NullableAtomic
   }
 
   @inline(__always)
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>) {}
+  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
+  {
+    pointer.deinitialize(count: 1)
+  }
 
   @inline(__always)
   public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> Unmanaged?
