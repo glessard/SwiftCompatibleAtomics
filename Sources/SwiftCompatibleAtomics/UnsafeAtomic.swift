@@ -318,8 +318,8 @@ extension UnsafeAtomic where Value: AtomicInteger
 #else
 extension UnsafeMutablePointer
 {
-  @inline(__always)
-  public func deallocate()
+  @_versioned
+  func deallocate()
   {
     self.deallocate(capacity: 1)
   }

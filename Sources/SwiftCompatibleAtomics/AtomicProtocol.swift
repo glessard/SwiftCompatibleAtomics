@@ -191,3 +191,22 @@ extension AtomicProtocol where Self: RawRepresentable, Self.RawValue: AtomicProt
   }
 #endif
 }
+
+extension UnsafeMutablePointer
+{
+#if swift(>=4.2)
+  @inlinable
+  public func initialize<Value>(to value: Value)
+    where Value: AtomicProtocol, Value.AtomicStorage == Pointee
+  {
+    initialize(to: Value.atomicStorage(for: value))
+  }
+#else
+  @inline(__always)
+  public func initialize<Value>(to value: Value)
+    where Value: AtomicProtocol, Value.AtomicStorage == Pointee
+  {
+    initialize(to: Value.atomicStorage(for: value))
+  }
+#endif
+}

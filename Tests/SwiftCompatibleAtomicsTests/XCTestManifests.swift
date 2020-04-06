@@ -1,4 +1,4 @@
-#if !(os(macOS) || os(iOS) || os(tvOS) || os(watchOS))
+#if !canImport(ObjectiveC)
 import XCTest
 
 extension AtomicIntegerTests {
@@ -12,6 +12,7 @@ extension AtomicIntegerTests {
         ("testInt64", testInt64),
         ("testInt8", testInt8),
         ("testLoadAfterAtomic", testLoadAfterAtomic),
+        ("testSeparateAllocation", testSeparateAllocation),
         ("testUInt", testUInt),
         ("testUInt16", testUInt16),
         ("testUInt32", testUInt32),
