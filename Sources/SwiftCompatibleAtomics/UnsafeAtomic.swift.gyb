@@ -16,7 +16,7 @@ import Swift
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
 % end = '#else' if inlinable == '@inlinable' else '#endif'
-public struct UnsafeAtomic<Value: AtomicProtocol>
+public struct UnsafePointerToAtomic<Value: AtomicProtocol>
 {
   ${usableFromInline}
   internal let _ptr: UnsafeMutablePointer<Value.AtomicStorage>
@@ -28,11 +28,11 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   }
 
   ${inlinable}
-  public static func create(initialValue: Value) -> UnsafeAtomic
+  public static func create(initialValue: Value) -> UnsafePointerToAtomic
   {
     let ptr = UnsafeMutablePointer<Value.AtomicStorage>.allocate(capacity: 1)
     ptr.initialize(to: Value.atomicStorage(for: initialValue))
-    return UnsafeAtomic(at: ptr)
+    return UnsafePointerToAtomic(at: ptr)
   }
 
   ${inlinable}
@@ -43,7 +43,7 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   }
 }
 
-extension UnsafeAtomic
+extension UnsafePointerToAtomic
 {
   ${inlinable}
   public func load(ordering: AtomicLoadOrdering) -> Value
@@ -89,7 +89,7 @@ extension UnsafeAtomic
   }
 }
 
-extension UnsafeAtomic where Value: AtomicInteger
+extension UnsafePointerToAtomic where Value: AtomicInteger
 {
   ${inlinable}
   public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value

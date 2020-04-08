@@ -27,7 +27,7 @@ public class AtomicPointerTests: XCTestCase
     let r3 = Unsafe${Mutable}${Raw}Pointer${Pointee}(bitPattern: UInt.randomPositive())${bang}
 
 % qmark = '?' if Optional else ''
-    let i = UnsafeAtomic<Unsafe${Mutable}${Raw}Pointer${Pointee}${qmark}>.create(initialValue: r1)
+    let i = UnsafePointerToAtomic<Unsafe${Mutable}${Raw}Pointer${Pointee}${qmark}>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -71,7 +71,7 @@ public class AtomicPointerTests: XCTestCase
     let r3 = Unmanaged<TestObject>.passRetained(TestObject())
 % end # if Optional
 
-    let i = UnsafeAtomic<Unmanaged<TestObject>${qmark}>.create(initialValue: r1)
+    let i = UnsafePointerToAtomic<Unmanaged<TestObject>${qmark}>.create(initialValue: r1)
     XCTAssertEqual(r1${qmark}.toOpaque(), i.load(ordering: .relaxed)${qmark}.toOpaque())
 
     i.store(r2, ordering: .relaxed)

@@ -13,7 +13,7 @@
 import Swift
 
 #if swift(>=4.2)
-public struct UnsafeAtomic<Value: AtomicProtocol>
+public struct UnsafePointerToAtomic<Value: AtomicProtocol>
 {
   @usableFromInline
   internal let _ptr: UnsafeMutablePointer<Value.AtomicStorage>
@@ -25,11 +25,11 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   }
 
   @inlinable
-  public static func create(initialValue: Value) -> UnsafeAtomic
+  public static func create(initialValue: Value) -> UnsafePointerToAtomic
   {
     let ptr = UnsafeMutablePointer<Value.AtomicStorage>.allocate(capacity: 1)
     ptr.initialize(to: Value.atomicStorage(for: initialValue))
-    return UnsafeAtomic(at: ptr)
+    return UnsafePointerToAtomic(at: ptr)
   }
 
   @inlinable
@@ -40,7 +40,7 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   }
 }
 
-extension UnsafeAtomic
+extension UnsafePointerToAtomic
 {
   @inlinable
   public func load(ordering: AtomicLoadOrdering) -> Value
@@ -86,7 +86,7 @@ extension UnsafeAtomic
   }
 }
 
-extension UnsafeAtomic where Value: AtomicInteger
+extension UnsafePointerToAtomic where Value: AtomicInteger
 {
   @inlinable
   public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
@@ -163,7 +163,7 @@ extension UnsafeAtomic where Value: AtomicInteger
   }
 }
 #else
-public struct UnsafeAtomic<Value: AtomicProtocol>
+public struct UnsafePointerToAtomic<Value: AtomicProtocol>
 {
   @_versioned
   internal let _ptr: UnsafeMutablePointer<Value.AtomicStorage>
@@ -175,11 +175,11 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   }
 
   @inline(__always)
-  public static func create(initialValue: Value) -> UnsafeAtomic
+  public static func create(initialValue: Value) -> UnsafePointerToAtomic
   {
     let ptr = UnsafeMutablePointer<Value.AtomicStorage>.allocate(capacity: 1)
     ptr.initialize(to: Value.atomicStorage(for: initialValue))
-    return UnsafeAtomic(at: ptr)
+    return UnsafePointerToAtomic(at: ptr)
   }
 
   @inline(__always)
@@ -190,7 +190,7 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
   }
 }
 
-extension UnsafeAtomic
+extension UnsafePointerToAtomic
 {
   @inline(__always)
   public func load(ordering: AtomicLoadOrdering) -> Value
@@ -236,7 +236,7 @@ extension UnsafeAtomic
   }
 }
 
-extension UnsafeAtomic where Value: AtomicInteger
+extension UnsafePointerToAtomic where Value: AtomicInteger
 {
   @inline(__always)
   public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value

@@ -15,7 +15,7 @@ public class AtomicLazyReferenceTests: XCTestCase
 
   public func testAtomicLazyReference()
   {
-    let i = UnsafeAtomicLazyReference<TestObject>.create()
+    let i = UnsafePointerToAtomicLazyReference<TestObject>.create()
 
     var o = i.load()
     XCTAssertNil(o)
@@ -46,7 +46,7 @@ public class AtomicLazyReferenceTests: XCTestCase
       }
     }
 
-    let i = UnsafeAtomicLazyReference<DeallocationWitness>.create()
+    let i = UnsafePointerToAtomicLazyReference<DeallocationWitness>.create()
     _ = i.storeIfNil(DeallocationWitness(expectation(description: #function)))
 
     i.destroy()

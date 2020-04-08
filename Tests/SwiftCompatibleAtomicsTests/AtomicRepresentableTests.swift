@@ -18,7 +18,7 @@ class AtomicRepresentableTests: XCTestCase
 {
   func testAtomicRepresentableEnum()
   {
-    let i = UnsafeAtomic<TestEnum>.create(initialValue: .a)
+    let i = UnsafePointerToAtomic<TestEnum>.create(initialValue: .a)
     XCTAssertEqual(i.load(ordering: .relaxed), .a)
 
     i.store(.b, ordering: .relaxed)
