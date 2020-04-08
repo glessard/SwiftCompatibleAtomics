@@ -10,9 +10,9 @@ If and when the pitch is accepted and its implementation merged, the correspondi
 
 In the meantime, use by adding the following dependency to your project's `Package.swift`:
 ```
-.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", from: "0.2.0")
+.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", from: "0.3.0")
 ```
 or, if you prefer to avoid source breaking changes:
 ```
-.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", .upToNextMinor(from: "0.2.0"))
+.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", .upToNextMinor(from: "0.3.0"))
 ```
