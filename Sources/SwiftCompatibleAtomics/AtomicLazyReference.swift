@@ -6,7 +6,7 @@
 
 import CAtomics
 
-public struct UnsafePointerToAtomicLazyReference<Instance: AnyObject>
+public struct UnsafeAtomicLazyReference<Instance: AnyObject>
 {
   public typealias AtomicStorage = CAtomics.AtomicOptionalRawPointer
 
@@ -21,11 +21,11 @@ public struct UnsafePointerToAtomicLazyReference<Instance: AnyObject>
   }
 
   @inlinable
-  public static func create() -> UnsafePointerToAtomicLazyReference<Instance>
+  public static func create() -> UnsafeAtomicLazyReference<Instance>
   {
     let ptr = UnsafeMutablePointer<AtomicStorage>.allocate(capacity: 1)
     ptr.initialize(to: AtomicOptionalRawPointer(nil))
-    return UnsafePointerToAtomicLazyReference(at: ptr)
+    return UnsafeAtomicLazyReference(at: ptr)
   }
 
   @inlinable
@@ -73,11 +73,11 @@ public struct UnsafePointerToAtomicLazyReference<Instance: AnyObject>
   }
 
   @inline(__always)
-  public static func create() -> UnsafePointerToAtomicLazyReference<Instance>
+  public static func create() -> UnsafeAtomicLazyReference<Instance>
   {
     let ptr = UnsafeMutablePointer<AtomicStorage>.allocate(capacity: 1)
     ptr.initialize(to: AtomicOptionalRawPointer(nil))
-    return UnsafePointerToAtomicLazyReference(at: ptr)
+    return UnsafeAtomicLazyReference(at: ptr)
   }
 
   @inline(__always)

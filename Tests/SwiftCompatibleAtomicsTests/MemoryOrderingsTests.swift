@@ -51,7 +51,7 @@ public class MemoryOrderingsTests: XCTestCase
 
   public func testCASOrderings()
   {
-    let i = UnsafePointerToAtomic<Int>.create(initialValue: 0)
+    let i = UnsafeAtomic<Int>.create(initialValue: 0)
     var (s, r) = (false, Int.min)
 
     (s, r) = i.compareExchange(expected: 0, desired: 1, ordering: .releasing)

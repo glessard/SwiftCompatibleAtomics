@@ -13,7 +13,7 @@ public class AtomicIntegerTests: XCTestCase
 {
   public func testInt()
   {
-    let i = UnsafePointerToAtomic<Int>.create(initialValue: 0)
+    let i = UnsafeAtomic<Int>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -85,7 +85,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testUInt()
   {
-    let i = UnsafePointerToAtomic<UInt>.create(initialValue: 0)
+    let i = UnsafeAtomic<UInt>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -157,7 +157,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testInt8()
   {
-    let i = UnsafePointerToAtomic<Int8>.create(initialValue: 0)
+    let i = UnsafeAtomic<Int8>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -229,7 +229,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testUInt8()
   {
-    let i = UnsafePointerToAtomic<UInt8>.create(initialValue: 0)
+    let i = UnsafeAtomic<UInt8>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -301,7 +301,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testInt16()
   {
-    let i = UnsafePointerToAtomic<Int16>.create(initialValue: 0)
+    let i = UnsafeAtomic<Int16>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -373,7 +373,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testUInt16()
   {
-    let i = UnsafePointerToAtomic<UInt16>.create(initialValue: 0)
+    let i = UnsafeAtomic<UInt16>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -445,7 +445,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testInt32()
   {
-    let i = UnsafePointerToAtomic<Int32>.create(initialValue: 0)
+    let i = UnsafeAtomic<Int32>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -517,7 +517,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testUInt32()
   {
-    let i = UnsafePointerToAtomic<UInt32>.create(initialValue: 0)
+    let i = UnsafeAtomic<UInt32>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -589,7 +589,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testInt64()
   {
-    let i = UnsafePointerToAtomic<Int64>.create(initialValue: 0)
+    let i = UnsafeAtomic<Int64>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -661,7 +661,7 @@ public class AtomicIntegerTests: XCTestCase
 
   public func testUInt64()
   {
-    let i = UnsafePointerToAtomic<UInt64>.create(initialValue: 0)
+    let i = UnsafeAtomic<UInt64>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
 #if swift(>=4.0)
@@ -733,7 +733,7 @@ public class AtomicIntegerTests: XCTestCase
 
   func testLoadAfterAtomic()
   {
-    let i = UnsafePointerToAtomic<UInt>.create(initialValue: 0)
+    let i = UnsafeAtomic<UInt>.create(initialValue: 0)
     var o, j, k: UInt
 
     o = UInt.randomPositive()
@@ -781,9 +781,9 @@ public class AtomicIntegerTests: XCTestCase
     let p = UnsafeMutablePointer<UInt.AtomicStorage>.allocate(capacity: 1)
     p.initialize(to: value)
 
-    let i = UnsafePointerToAtomic<UInt>(at: p).load(ordering: .relaxed)
+    let i = UnsafeAtomic<UInt>(at: p).load(ordering: .relaxed)
     XCTAssertEqual(value, i)
 
-    UnsafePointerToAtomic<UInt>(at: p).destroy()
+    UnsafeAtomic<UInt>(at: p).destroy()
   }
 }

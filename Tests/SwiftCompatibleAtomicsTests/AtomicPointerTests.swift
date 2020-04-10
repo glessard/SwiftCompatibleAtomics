@@ -17,7 +17,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafePointer<Int64>(bitPattern: UInt.randomPositive())!
     let r3 = UnsafePointer<Int64>(bitPattern: UInt.randomPositive())!
 
-    let i = UnsafePointerToAtomic<UnsafePointer<Int64>>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafePointer<Int64>>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -48,7 +48,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafePointer<Int64>(bitPattern: UInt.randomPositive())
     let r3 = UnsafePointer<Int64>(bitPattern: UInt.randomPositive())
 
-    let i = UnsafePointerToAtomic<UnsafePointer<Int64>?>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafePointer<Int64>?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -79,7 +79,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafeRawPointer(bitPattern: UInt.randomPositive())!
     let r3 = UnsafeRawPointer(bitPattern: UInt.randomPositive())!
 
-    let i = UnsafePointerToAtomic<UnsafeRawPointer>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafeRawPointer>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -110,7 +110,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafeRawPointer(bitPattern: UInt.randomPositive())
     let r3 = UnsafeRawPointer(bitPattern: UInt.randomPositive())
 
-    let i = UnsafePointerToAtomic<UnsafeRawPointer?>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafeRawPointer?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -141,7 +141,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafeMutablePointer<Int64>(bitPattern: UInt.randomPositive())!
     let r3 = UnsafeMutablePointer<Int64>(bitPattern: UInt.randomPositive())!
 
-    let i = UnsafePointerToAtomic<UnsafeMutablePointer<Int64>>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafeMutablePointer<Int64>>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -172,7 +172,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafeMutablePointer<Int64>(bitPattern: UInt.randomPositive())
     let r3 = UnsafeMutablePointer<Int64>(bitPattern: UInt.randomPositive())
 
-    let i = UnsafePointerToAtomic<UnsafeMutablePointer<Int64>?>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafeMutablePointer<Int64>?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -203,7 +203,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafeMutableRawPointer(bitPattern: UInt.randomPositive())!
     let r3 = UnsafeMutableRawPointer(bitPattern: UInt.randomPositive())!
 
-    let i = UnsafePointerToAtomic<UnsafeMutableRawPointer>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafeMutableRawPointer>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -234,7 +234,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = UnsafeMutableRawPointer(bitPattern: UInt.randomPositive())
     let r3 = UnsafeMutableRawPointer(bitPattern: UInt.randomPositive())
 
-    let i = UnsafePointerToAtomic<UnsafeMutableRawPointer?>.create(initialValue: r1)
+    let i = UnsafeAtomic<UnsafeMutableRawPointer?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r2, ordering: .relaxed)
@@ -267,7 +267,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = Unmanaged<TestObject>.passRetained(TestObject())
     let r3 = Unmanaged<TestObject>.passRetained(TestObject())
 
-    let i = UnsafePointerToAtomic<Unmanaged<TestObject>>.create(initialValue: r1)
+    let i = UnsafeAtomic<Unmanaged<TestObject>>.create(initialValue: r1)
     XCTAssertEqual(r1.toOpaque(), i.load(ordering: .relaxed).toOpaque())
 
     i.store(r2, ordering: .relaxed)
@@ -303,7 +303,7 @@ public class AtomicPointerTests: XCTestCase
     let r2 = Optional(Unmanaged<TestObject>.passRetained(TestObject()))
     let r3 = Optional(Unmanaged<TestObject>.passRetained(TestObject()))
 
-    let i = UnsafePointerToAtomic<Unmanaged<TestObject>?>.create(initialValue: r1)
+    let i = UnsafeAtomic<Unmanaged<TestObject>?>.create(initialValue: r1)
     XCTAssertEqual(r1?.toOpaque(), i.load(ordering: .relaxed)?.toOpaque())
 
     i.store(r2, ordering: .relaxed)
