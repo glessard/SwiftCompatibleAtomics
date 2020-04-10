@@ -778,8 +778,8 @@ public class AtomicIntegerTests: XCTestCase
   {
     let value = UInt.randomPositive()
 
-    let p = UnsafeMutablePointer<UInt.AtomicStorage>.allocate(capacity: 1)
-    p.initialize(to: value)
+    let p = UnsafeMutablePointer<UnsafeAtomic<UInt>.Storage>.allocate(capacity: 1)
+    p.initialize(to: UnsafeAtomic.Storage(value))
 
     let i = UnsafeAtomic<UInt>(at: p).load(ordering: .relaxed)
     XCTAssertEqual(value, i)
