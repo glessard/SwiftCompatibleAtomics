@@ -74,45 +74,43 @@ public class CAtomicsBasicTests: XCTestCase
   }
 
 % end
-% pointers = ['AtomicOptionalRawPointer', 'AtomicRawPointer', 'AtomicMutableRawPointer', 'AtomicOptionalMutableRawPointer', 'AtomicOpaquePointer', 'AtomicOptionalOpaquePointer']
+% pointers = ['AtomicRawPointer', 'AtomicOptionalRawPointer', 'AtomicMutableRawPointer', 'AtomicOptionalMutableRawPointer']
 % for type in pointers:
   public func test${type}()
   {
 % mutptr = 'Mutable' if 'Mutable' in type else ''
 % prefix = 'Unsafe' + mutptr + 'Raw'
-% native = prefix if 'RawPointer' in type else 'Opaque'
 % bang = '' if ('Optional' in type) else '!'
-    let r0 = ${native}Pointer(bitPattern: UInt.randomPositive())${bang}
-    let r1 = ${native}Pointer(bitPattern: UInt.randomPositive())${bang}
-    let r2 = ${native}Pointer(bitPattern: UInt.randomPositive())${bang}
-    let r3 = ${native}Pointer(bitPattern: UInt.randomPositive())${bang}
+% if ('Optional' in type):
+    let r0 = ${prefix}Pointer(bitPattern: 0)
+% else:
+    let r0 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
+% end # if Optional
+    let r1 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
+    let r2 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
+    let r3 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
 
-    var p = ${type}(r3)
-    XCTAssertEqual(CAtomicsLoad(&p, .relaxed), r3)
-    XCTAssertEqual(CAtomicsIsLockFree(&p), true)
+    var i = ${type}(r0)
+    XCTAssertEqual(r0, i.decode())
+    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
 
-    CAtomicsInitialize(&p, r0)
-    XCTAssertEqual(r0, CAtomicsLoad(&p, .relaxed))
+    CAtomicsStore(&i, ${type}(r1), .relaxed)
+    var j = CAtomicsLoad(&i, .relaxed)
+    XCTAssertEqual(i.decode(), j.decode())
 
-    CAtomicsStore(&p, r1, .relaxed)
-    XCTAssertEqual(r1, CAtomicsLoad(&p, .relaxed))
+    j = CAtomicsExchange(&i, ${type}(r2), .relaxed)
+    XCTAssertEqual(r1, j.decode())
+    XCTAssertEqual(r2, i.decode())
 
-    var j = CAtomicsExchange(&p, r2, .relaxed)
-    XCTAssertEqual(r1, j)
-    XCTAssertEqual(r2, CAtomicsLoad(&p, .relaxed))
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, ${type}(r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(r2, j.decode())
 
-    j = r2
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&p, &j, r3, .relaxed, .relaxed))
-    XCTAssertEqual(r3, CAtomicsLoad(&p, .relaxed))
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, ${type}(r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(r2, j.decode())
 
-    XCTAssertFalse(CAtomicsCompareAndExchangeStrong(&p, &j, r2, .relaxed, .relaxed))
-    j = r3
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&p, &j, r2, .relaxed, .relaxed))
-    j = CAtomicsLoad(&p, .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&p, &j, r1, .relaxed, .relaxed))
-    while !CAtomicsCompareAndExchangeWeak(&p, &j, r3, .relaxed, .relaxed) {}
-    XCTAssertEqual(r1, j)
-    XCTAssertEqual(r3, CAtomicsLoad(&p, .relaxed))
+    while !CAtomicsCompareAndExchangeWeak(&i, &j, ${type}(r1), .relaxed, .relaxed) {}
+    XCTAssertEqual(r3, j.decode())
+    XCTAssertEqual(r1, i.decode())
   }
 
 % end
