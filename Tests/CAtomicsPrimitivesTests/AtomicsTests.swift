@@ -4,7 +4,7 @@
 
 import XCTest
 
-import C11Atomics
+import CAtomicsPrimitives
 
 class AtomicsTests: XCTestCase
 {

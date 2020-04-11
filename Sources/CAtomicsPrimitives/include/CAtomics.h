@@ -25,12 +25,6 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#ifdef __SSE2__
-#include <immintrin.h>
-#else
-#include <sched.h>
-#endif
-
 #if __has_attribute(enum_extensibility)
 #define SWIFT_ENUM(_name,extensibility) enum __attribute__((enum_extensibility(extensibility))) _name
 #else
@@ -392,14 +386,6 @@ CLANG_ATOMICS_ATOMIC_TAGGED_POINTER_GENERATE(AtomicTaggedMutableRawPointer, Tagg
 CLANG_ATOMICS_TAGGED_POINTER_GENERATE(TaggedOptionalMutableRawPointer, void*, _Nullable)
 CLANG_ATOMICS_ATOMIC_TAGGED_POINTER_GENERATE(AtomicTaggedOptionalMutableRawPointer, TaggedOptionalMutableRawPointer, _Alignof(_Atomic(__UNION_TYPE)))
 
-// fence
-
-static __inline__ __attribute__((__always_inline__))
-void CAtomicsThreadFence(enum MemoryOrder order)
-{
-  atomic_thread_fence(order);
-}
-
 // define struct + functions for handling of Swift.Unmanaged
 
 CLANG_ATOMICS_STRUCT(OpaqueUnmanagedHelper, atomic_uintptr_t, a, _Alignof(atomic_uintptr_t))
@@ -420,4 +406,13 @@ _Bool CAtomicsCompareAndExchangeStrong(OpaqueUnmanagedHelper *_Nonnull atomic,
   return atomic_compare_exchange_strong_explicit(&(atomic->a), &pointer, (uintptr_t)future, order, memory_order_relaxed);
 }
 */
+
+// fence
+
+static __inline__ __attribute__((__always_inline__))
+void CAtomicsThreadFence(enum MemoryOrder order)
+{
+  atomic_thread_fence(order);
+}
+
 #endif
