@@ -2,7 +2,7 @@
 //  CAtomics.h
 //
 //  Created by Guillaume Lessard on 2015-05-21.
-//  Copyright (c) 2015-2018 Guillaume Lessard. All rights reserved.
+//  Copyright (c) 2015-2020 Guillaume Lessard. All rights reserved.
 //  This file is distributed under the BSD 3-clause license. See LICENSE for details.
 //
 // See: http://clang.llvm.org/doxygen/stdatomic_8h_source.html
