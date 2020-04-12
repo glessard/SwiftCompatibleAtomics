@@ -37,16 +37,13 @@ public class AtomicLazyReferenceTests: XCTestCase
 
   public func testAtomicLazyReferenceInitializer()
   {
-    let u = UnsafeMutablePointer<UnsafeAtomic<Unmanaged<TestObject>?>.Storage>.allocate(capacity: 1)
-    u.initialize(to: .init(nil))
-
-    let a = UnsafeAtomic(at: u)
-    a.store(nil, ordering: .relaxed)
+    let u = UnsafeMutablePointer<UnsafeAtomicLazyReference<TestObject>.Storage>.allocate(capacity: 1)
+    u.initialize(to: .init())
 
     let l = UnsafeAtomicLazyReference(at: u)
     let o = TestObject()
 
-    _ = l.storeIfNil(o)
+    XCTAssertEqual(ObjectIdentifier(o), ObjectIdentifier(l.storeIfNil(o)))
     XCTAssertEqual(ObjectIdentifier(o), ObjectIdentifier(l.load()!))
   }
 
