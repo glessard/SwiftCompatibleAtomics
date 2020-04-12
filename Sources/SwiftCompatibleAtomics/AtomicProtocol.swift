@@ -25,49 +25,49 @@ extension AtomicProtocol where Self: RawRepresentable, Self.RawValue: AtomicProt
 {
 #if swift(>=4.2)
   @inlinable
-  static func prepareAtomicStorage(for value: Self) -> RawValue.AtomicStorage
+  public static func prepareAtomicStorage(for value: Self) -> RawValue.AtomicStorage
   {
     return RawValue.prepareAtomicStorage(for: value.rawValue)
   }
 
   @inlinable
-  static func disposeAtomicStorage(_ storage: inout AtomicStorage) -> Self
+  public static func disposeAtomicStorage(_ storage: inout RawValue.AtomicStorage) -> Self
   {
     return Self(rawValue: RawValue.disposeAtomicStorage(&storage))!
   }
 
   @inlinable
-  static func encodeAtomicStorage(for value: Self) -> AtomicStorage
+  public static func encodeAtomicStorage(for value: Self) -> RawValue.AtomicStorage
   {
     return RawValue.encodeAtomicStorage(for: value.rawValue)
   }
 
   @inlinable
-  static func decodeAtomicStorage(_ storage: AtomicStorage) -> Self
+  public static func decodeAtomicStorage(_ storage: RawValue.AtomicStorage) -> Self
   {
     return Self(rawValue: RawValue.decodeAtomicStorage(storage))!
   }
 #else
   @inline(__always)
-  static func prepareAtomicStorage(for value: Self) -> RawValue.AtomicStorage
+  public static func prepareAtomicStorage(for value: Self) -> RawValue.AtomicStorage
   {
     return RawValue.prepareAtomicStorage(for: value.rawValue)
   }
 
   @inline(__always)
-  static func disposeAtomicStorage(_ storage: inout AtomicStorage) -> Self
+  public static func disposeAtomicStorage(_ storage: inout RawValue.AtomicStorage) -> Self
   {
     return Self(rawValue: RawValue.disposeAtomicStorage(&storage))!
   }
 
   @inline(__always)
-  static func encodeAtomicStorage(for value: Self) -> AtomicStorage
+  public static func encodeAtomicStorage(for value: Self) -> RawValue.AtomicStorage
   {
     return RawValue.encodeAtomicStorage(for: value.rawValue)
   }
 
   @inline(__always)
-  static func decodeAtomicStorage(_ storage: AtomicStorage) -> Self
+  public static func decodeAtomicStorage(_ storage: RawValue.AtomicStorage) -> Self
   {
     return Self(rawValue: RawValue.decodeAtomicStorage(storage))!
   }

@@ -27,25 +27,25 @@ extension AtomicProtocol where Self: RawRepresentable, Self.RawValue: AtomicProt
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
-  static func prepareAtomicStorage(for value: Self) -> RawValue.AtomicStorage
+  public static func prepareAtomicStorage(for value: Self) -> RawValue.AtomicStorage
   {
     return RawValue.prepareAtomicStorage(for: value.rawValue)
   }
 
   ${inlinable}
-  static func disposeAtomicStorage(_ storage: inout AtomicStorage) -> Self
+  public static func disposeAtomicStorage(_ storage: inout RawValue.AtomicStorage) -> Self
   {
     return Self(rawValue: RawValue.disposeAtomicStorage(&storage))!
   }
 
   ${inlinable}
-  static func encodeAtomicStorage(for value: Self) -> AtomicStorage
+  public static func encodeAtomicStorage(for value: Self) -> RawValue.AtomicStorage
   {
     return RawValue.encodeAtomicStorage(for: value.rawValue)
   }
 
   ${inlinable}
-  static func decodeAtomicStorage(_ storage: AtomicStorage) -> Self
+  public static func decodeAtomicStorage(_ storage: RawValue.AtomicStorage) -> Self
   {
     return Self(rawValue: RawValue.decodeAtomicStorage(storage))!
   }
