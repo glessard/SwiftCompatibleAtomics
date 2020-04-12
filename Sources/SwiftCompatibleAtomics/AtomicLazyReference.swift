@@ -8,16 +8,26 @@ import CAtomicsPrimitives
 
 public struct UnsafeAtomicLazyReference<Instance: AnyObject>
 {
-  public typealias Storage = UnsafeAtomic<Unmanaged<Instance>?>.Storage
-
 #if swift(>=4.2)
+  public struct Storage
+  {
+    @usableFromInline
+    internal let value: UnsafeAtomic<Unmanaged<Instance>?>.Storage
+
+    @inlinable
+    public init()
+    {
+      value = UnsafeAtomic.Storage(nil)
+    }
+  }
+
   @usableFromInline
   internal let atomic: UnsafeAtomic<Unmanaged<Instance>?>
 
   @inlinable
   public init(at pointer: UnsafeMutablePointer<Storage>)
   {
-    atomic = UnsafeAtomic(at: pointer)
+    atomic = UnsafeAtomic(at: UnsafeMutableRawPointer(pointer).assumingMemoryBound(to: UnsafeAtomic.Storage.self))
   }
 
   @usableFromInline
@@ -66,13 +76,25 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
     return nil
   }
 #else
+  public struct Storage
+  {
+    @_versioned
+    internal let value: UnsafeAtomic<Unmanaged<Instance>?>.Storage
+
+    @inline(__always)
+    public init()
+    {
+      value = UnsafeAtomic.Storage(nil)
+    }
+  }
+
   @_versioned
   internal let atomic: UnsafeAtomic<Unmanaged<Instance>?>
 
   @inline(__always)
   public init(at pointer: UnsafeMutablePointer<Storage>)
   {
-    atomic = UnsafeAtomic(at: pointer)
+    atomic = UnsafeAtomic(at: UnsafeMutableRawPointer(pointer).assumingMemoryBound(to: UnsafeAtomic.Storage.self))
   }
 
   @_versioned
