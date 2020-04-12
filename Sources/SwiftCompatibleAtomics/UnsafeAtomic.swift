@@ -21,13 +21,12 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
     internal var value: Value.AtomicStorage
 
     @inlinable
-    internal init(_ value: Value)
+    public init(_ value: Value)
     {
       self.value = Value.prepareAtomicStorage(for: value)
     }
 
-    @inlinable
-    @discardableResult
+    @inlinable @discardableResult
     public mutating func dispose() -> Value
     {
       return Value.disposeAtomicStorage(&value)
@@ -73,13 +72,12 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
     internal var value: Value.AtomicStorage
 
     @inline(__always)
-    internal init(_ value: Value)
+    public init(_ value: Value)
     {
       self.value = Value.prepareAtomicStorage(for: value)
     }
 
-    @inline(__always)
-    @discardableResult
+    @inline(__always) @discardableResult
     public mutating func dispose() -> Value
     {
       return Value.disposeAtomicStorage(&value)

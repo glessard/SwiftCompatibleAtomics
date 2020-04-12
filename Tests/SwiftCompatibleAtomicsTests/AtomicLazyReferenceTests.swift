@@ -35,6 +35,21 @@ public class AtomicLazyReferenceTests: XCTestCase
     i.destroy()
   }
 
+  public func testAtomicLazyReferenceInitializer()
+  {
+    let u = UnsafeMutablePointer<UnsafeAtomic<Unmanaged<TestObject>?>.Storage>.allocate(capacity: 1)
+    u.initialize(to: .init(nil))
+
+    let a = UnsafeAtomic(at: u)
+    a.store(nil, ordering: .relaxed)
+
+    let l = UnsafeAtomicLazyReference(at: u)
+    let o = TestObject()
+
+    _ = l.storeIfNil(o)
+    XCTAssertEqual(ObjectIdentifier(o), ObjectIdentifier(l.load()!))
+  }
+
   public func testDeallocation()
   {
     class DeallocationWitness
@@ -51,5 +66,8 @@ public class AtomicLazyReferenceTests: XCTestCase
 
     i.destroy()
     waitForExpectations(timeout: 1.0)
+
+    let j = UnsafeAtomicLazyReference<TestObject>.create()
+    XCTAssertNil(j.destroy())
   }
 }
