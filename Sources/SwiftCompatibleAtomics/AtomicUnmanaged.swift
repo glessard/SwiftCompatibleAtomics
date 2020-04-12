@@ -4,7 +4,7 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomics
+import CAtomicsPrimitives
 
 extension Unmanaged: AtomicProtocol
 {

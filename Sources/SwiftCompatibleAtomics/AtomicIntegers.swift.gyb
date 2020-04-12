@@ -4,7 +4,7 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomics
+import CAtomicsPrimitives
 % for IntType in ['Int', 'UInt', 'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64']:
 
 extension ${IntType}: AtomicProtocol

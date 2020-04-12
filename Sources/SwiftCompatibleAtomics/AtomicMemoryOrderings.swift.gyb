@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import CAtomics
+import CAtomicsPrimitives
 
 public struct AtomicLoadOrdering: Equatable, Hashable
 {
