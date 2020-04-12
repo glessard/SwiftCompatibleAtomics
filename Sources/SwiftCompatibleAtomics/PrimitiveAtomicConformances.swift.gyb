@@ -1,0 +1,61 @@
+//
+//  PrimitiveAtomicConformances.swift
+//  
+//  Licensed under Apache License v2.0
+//
+
+import CAtomicsPrimitives
+% for PointerType in ['AtomicOptionalRawPointer', 'AtomicOptionalMutableRawPointer']:
+
+extension ${PointerType}: PrimitiveAtomic
+{
+#if swift(>=4.2)
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${inlinable}
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<${PointerType}>, ordering: AtomicLoadOrdering) -> ${PointerType}
+  {
+    return CAtomicsLoad(pointer, ordering._rawValue)
+  }
+
+  ${inlinable}
+  public static func atomicStore(_ desired: ${PointerType}, at pointer: UnsafeMutablePointer<${PointerType}>, ordering: AtomicStoreOrdering)
+  {
+    CAtomicsStore(pointer, desired, ordering._rawValue)
+  }
+
+  ${inlinable}
+  public static func atomicExchange(_ desired: ${PointerType}, at pointer: UnsafeMutablePointer<${PointerType}>, ordering: AtomicUpdateOrdering) -> ${PointerType}
+  {
+    return CAtomicsExchange(pointer, desired, ordering._rawValue)
+  }
+
+  ${inlinable}
+  public static func atomicCompareExchange(expected: ${PointerType}, desired: ${PointerType}, at pointer: UnsafeMutablePointer<${PointerType}>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: ${PointerType})
+  {
+    return atomicCompareExchange(expected: expected, desired: desired, at: pointer, ordering: ordering, failureOrdering: ordering.asLoadOrdering())
+  }
+
+  ${inlinable}
+  public static func atomicCompareExchange(expected: ${PointerType}, desired: ${PointerType}, at pointer: UnsafeMutablePointer<${PointerType}>, ordering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType})
+  {
+    var expected = expected
+    let success = withUnsafeMutablePointer(to: &expected) {
+      CAtomicsCompareAndExchangeStrong(pointer, $0, desired, ordering._rawValue, failureOrdering._rawValue)
+    }
+    return (success, expected)
+  }
+
+  ${inlinable}
+  public static func atomicWeakCompareExchange(expected: ${PointerType}, desired: __owned ${PointerType}, at pointer: UnsafeMutablePointer<${PointerType}>, ordering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType})
+  {
+    var expected = expected
+    let success = withUnsafeMutablePointer(to: &expected) {
+      CAtomicsCompareAndExchangeWeak(pointer, $0, desired, ordering._rawValue, failureOrdering._rawValue)
+    }
+    return (success, expected)
+  }
+${end}
+% end # inlinable
+}
+% end # for PointerType

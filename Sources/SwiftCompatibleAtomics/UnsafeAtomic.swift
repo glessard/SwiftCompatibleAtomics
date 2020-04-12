@@ -51,7 +51,7 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
     return UnsafeAtomic(at: pointer)
   }
 
-  @inlinable
+  @inlinable @discardableResult
   public func destroy() -> Value
   {
     let returned = storage.pointee.dispose()
@@ -103,7 +103,7 @@ public struct UnsafeAtomic<Value: AtomicProtocol>
     return UnsafeAtomic(at: pointer)
   }
 
-  @inline(__always)
+  @inline(__always) @discardableResult
   public func destroy() -> Value
   {
     let returned = storage.pointee.dispose()

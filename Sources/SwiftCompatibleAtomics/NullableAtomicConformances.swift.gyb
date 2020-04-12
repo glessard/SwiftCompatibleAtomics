@@ -1,0 +1,31 @@
+//
+//  NullableAtomicConformances.swift
+//  
+//  Licensed under Apache License v2.0
+//
+
+import CAtomicsPrimitives
+% for PointerType in ['AtomicOptionalRawPointer', 'AtomicOptionalMutableRawPointer']:
+
+extension ${PointerType}: PrimitiveAtomicOptional
+{
+#if swift(>=4.2)
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  public var isNil: Bool {
+    ${inlinable}
+    get {
+      return decode() == nil
+    }
+  }
+
+  public static var nilValue: ${PointerType} {
+    ${inlinable}
+    get {
+      return ${PointerType}(nil)
+    }
+  }
+${end}
+% end
+}
+% end # for PointerType

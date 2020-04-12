@@ -10,13 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol NullableAtomic: PrimitiveAtomic
+public protocol PrimitiveAtomicOptional: PrimitiveAtomic
 {
   var isNil: Bool { get }
   static var nilValue: Self { get }
 }
 
-extension Optional: AtomicProtocol where Wrapped: AtomicProtocol, Wrapped.AtomicStorage: NullableAtomic
+extension Optional: AtomicProtocol where Wrapped: AtomicProtocol, Wrapped.AtomicStorage: PrimitiveAtomicOptional
 {
   public typealias AtomicStorage = Wrapped.AtomicStorage
 
