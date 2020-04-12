@@ -12,62 +12,102 @@
 
 import Swift
 
+public struct UnsafeAtomic<Value: AtomicProtocol>
+{
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
 % end = '#else' if inlinable == '@inlinable' else '#endif'
-public struct UnsafeAtomic<Value: AtomicProtocol>
-{
+  public struct Storage
+  {
+    ${usableFromInline}
+    internal var value: Value.AtomicStorage
+
+    ${inlinable}
+    internal init(_ value: Value)
+    {
+      self.value = Value.prepareAtomicStorage(for: value)
+    }
+
+    ${inlinable}
+    @discardableResult
+    public mutating func dispose() -> Value
+    {
+      return Value.disposeAtomicStorage(&value)
+    }
+  }
+
   ${usableFromInline}
-  internal let _ptr: UnsafeMutablePointer<Value.AtomicStorage>
+  internal let storage: UnsafeMutablePointer<Storage>
 
   ${inlinable}
-  public init(at pointer: UnsafeMutablePointer<Value.AtomicStorage>)
+  public init(at pointer: UnsafeMutablePointer<Storage>)
   {
-    self._ptr = pointer
+    storage = pointer
   }
 
   ${inlinable}
   public static func create(initialValue: Value) -> UnsafeAtomic
   {
-    let ptr = UnsafeMutablePointer<Value.AtomicStorage>.allocate(capacity: 1)
-    ptr.initialize(to: Value.atomicStorage(for: initialValue))
-    return UnsafeAtomic(at: ptr)
+    let pointer = UnsafeMutablePointer<Storage>.allocate(capacity: 1)
+    pointer.initialize(to: Storage(initialValue))
+    return UnsafeAtomic(at: pointer)
   }
 
   ${inlinable}
-  public func destroy()
+  public func destroy() -> Value
   {
-    Value.deinitializeAtomicStorage(at: _ptr)
-    _ptr.deallocate()
+    let returned = storage.pointee.dispose()
+    storage.deallocate()
+    return returned
   }
+
+  ${usableFromInline}
+  internal var _ptr: UnsafeMutablePointer<Value.AtomicStorage> {
+    ${inlinable}
+    get { // Storage is layout-compatible with its single property
+      return UnsafeMutableRawPointer(storage).assumingMemoryBound(to: Value.AtomicStorage.self)
+    }
+  }
+${end}
+% end
 }
 
 extension UnsafeAtomic
 {
+#if swift(>=4.2)
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
   public func load(ordering: AtomicLoadOrdering) -> Value
   {
-    return Value.atomicLoad(at: _ptr, ordering: ordering)
+    let encoded = Value.AtomicStorage.atomicLoad(at: _ptr, ordering: ordering)
+    return Value.decodeAtomicStorage(encoded)
   }
 
   ${inlinable}
   public func store(_ desired: Value, ordering: AtomicStoreOrdering)
   {
-    Value.atomicStore(desired, at: _ptr, ordering: ordering)
+    Value.AtomicStorage.atomicStore(Value.encodeAtomicStorage(for: desired),
+                                    at: _ptr, ordering: ordering)
   }
 
   ${inlinable}
   public func exchange(_ desired: Value, ordering: AtomicUpdateOrdering) -> Value
   {
-    return Value.atomicExchange(desired, at: _ptr, ordering: ordering)
+    let encoded = Value.AtomicStorage.atomicExchange(Value.encodeAtomicStorage(for: desired),
+                                                     at: _ptr, ordering: ordering)
+    return Value.decodeAtomicStorage(encoded)
   }
 
   ${inlinable}
   public func compareExchange(expected: Value, desired: Value,
                               ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Value)
   {
-    return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr, ordering: ordering)
+    let (e, v) = Value.AtomicStorage.atomicCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
+                                                           desired: Value.encodeAtomicStorage(for: desired),
+                                                           at: _ptr, ordering: ordering)
+    return (e, Value.decodeAtomicStorage(v))
   }
 
   ${inlinable}
@@ -75,8 +115,10 @@ extension UnsafeAtomic
                               ordering: AtomicUpdateOrdering,
                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
-    return Value.atomicCompareExchange(expected: expected, desired: desired, at: _ptr,
-                                       ordering: ordering, failureOrdering: failureOrdering)
+    let (e, v) = Value.AtomicStorage.atomicCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
+                                                           desired: Value.encodeAtomicStorage(for: desired),
+                                                           at: _ptr, ordering: ordering, failureOrdering: failureOrdering)
+    return (e, Value.decodeAtomicStorage(v))
   }
 
   ${inlinable}
@@ -84,13 +126,20 @@ extension UnsafeAtomic
                                   ordering: AtomicUpdateOrdering,
                                   failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
-    return Value.atomicWeakCompareExchange(expected: expected, desired: desired, at: _ptr,
-                                           ordering: ordering, failureOrdering: failureOrdering)
+    let (e, v) = Value.AtomicStorage.atomicWeakCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
+                                                               desired: Value.encodeAtomicStorage(for: desired),
+                                                               at: _ptr, ordering: ordering, failureOrdering: failureOrdering)
+    return (e, Value.decodeAtomicStorage(v))
   }
+${end}
+% end
 }
 
 extension UnsafeAtomic where Value: AtomicInteger
 {
+#if swift(>=4.2)
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
   public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
@@ -121,7 +170,6 @@ extension UnsafeAtomic where Value: AtomicInteger
     return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering)
   }
 
-
   ${inlinable}
   public func wrappingIncrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
@@ -151,7 +199,6 @@ extension UnsafeAtomic where Value: AtomicInteger
   {
     return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering) ^ operand
   }
-
   
   ${inlinable}
   public func wrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
@@ -164,9 +211,9 @@ extension UnsafeAtomic where Value: AtomicInteger
   {
     _ = Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
   }
-}
 ${end}
 % end
+}
 
 #if swift(>=4.1)
 #else
