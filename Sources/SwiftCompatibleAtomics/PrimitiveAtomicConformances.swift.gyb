@@ -35,25 +35,25 @@ extension Atomic${Type}: PrimitiveAtomic
   ${inlinable}
   public static func atomicCompareExchange(expected: Atomic${Type}, desired: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: Atomic${Type})
   {
-    return atomicCompareExchange(expected: expected, desired: desired, at: pointer, ordering: ordering, failureOrdering: ordering.asLoadOrdering())
+    return atomicCompareExchange(expected: expected, desired: desired, at: pointer, successOrdering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   ${inlinable}
-  public static func atomicCompareExchange(expected: Atomic${Type}, desired: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Atomic${Type})
+  public static func atomicCompareExchange(expected: Atomic${Type}, desired: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Atomic${Type})
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
-      CAtomicsCompareAndExchangeStrong(pointer, $0, desired, ordering._rawValue, failureOrdering._rawValue)
+      CAtomicsCompareAndExchangeStrong(pointer, $0, desired, successOrdering._rawValue, failureOrdering._rawValue)
     }
     return (success, expected)
   }
 
   ${inlinable}
-  public static func atomicWeakCompareExchange(expected: Atomic${Type}, desired: __owned Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Atomic${Type})
+  public static func atomicWeakCompareExchange(expected: Atomic${Type}, desired: __owned Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Atomic${Type})
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
-      CAtomicsCompareAndExchangeWeak(pointer, $0, desired, ordering._rawValue, failureOrdering._rawValue)
+      CAtomicsCompareAndExchangeWeak(pointer, $0, desired, successOrdering._rawValue, failureOrdering._rawValue)
     }
     return (success, expected)
   }

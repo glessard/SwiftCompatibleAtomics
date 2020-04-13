@@ -156,23 +156,23 @@ extension UnsafeAtomic
 
   @inlinable
   public func compareExchange(expected: Value, desired: Value,
-                              ordering: AtomicUpdateOrdering,
+                              successOrdering: AtomicUpdateOrdering,
                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     let (e, v) = Value.AtomicStorage.atomicCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
                                                            desired: Value.encodeAtomicStorage(for: desired),
-                                                           at: _ptr, ordering: ordering, failureOrdering: failureOrdering)
+                                                           at: _ptr, successOrdering: successOrdering, failureOrdering: failureOrdering)
     return (e, Value.decodeAtomicStorage(v))
   }
 
   @inlinable
   public func weakCompareExchange(expected: Value, desired: Value,
-                                  ordering: AtomicUpdateOrdering,
+                                  successOrdering: AtomicUpdateOrdering,
                                   failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     let (e, v) = Value.AtomicStorage.atomicWeakCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
                                                                desired: Value.encodeAtomicStorage(for: desired),
-                                                               at: _ptr, ordering: ordering, failureOrdering: failureOrdering)
+                                                               at: _ptr, successOrdering: successOrdering, failureOrdering: failureOrdering)
     return (e, Value.decodeAtomicStorage(v))
   }
 #else
@@ -210,23 +210,23 @@ extension UnsafeAtomic
 
   @inline(__always)
   public func compareExchange(expected: Value, desired: Value,
-                              ordering: AtomicUpdateOrdering,
+                              successOrdering: AtomicUpdateOrdering,
                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     let (e, v) = Value.AtomicStorage.atomicCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
                                                            desired: Value.encodeAtomicStorage(for: desired),
-                                                           at: _ptr, ordering: ordering, failureOrdering: failureOrdering)
+                                                           at: _ptr, successOrdering: successOrdering, failureOrdering: failureOrdering)
     return (e, Value.decodeAtomicStorage(v))
   }
 
   @inline(__always)
   public func weakCompareExchange(expected: Value, desired: Value,
-                                  ordering: AtomicUpdateOrdering,
+                                  successOrdering: AtomicUpdateOrdering,
                                   failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Value)
   {
     let (e, v) = Value.AtomicStorage.atomicWeakCompareExchange(expected: Value.encodeAtomicStorage(for: expected),
                                                                desired: Value.encodeAtomicStorage(for: desired),
-                                                               at: _ptr, ordering: ordering, failureOrdering: failureOrdering)
+                                                               at: _ptr, successOrdering: successOrdering, failureOrdering: failureOrdering)
     return (e, Value.decodeAtomicStorage(v))
   }
 #endif

@@ -56,7 +56,7 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   {
     let value = Unmanaged.passRetained(desired)
     let (_, existing) = atomic.compareExchange(expected: nil, desired: value,
-                                               ordering: .acquiringAndReleasing,
+                                               successOrdering: .acquiringAndReleasing,
                                                failureOrdering: .acquiring)
     if let existing = existing
     {
@@ -123,7 +123,7 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   {
     let value = Unmanaged.passRetained(desired)
     let (_, existing) = atomic.compareExchange(expected: nil, desired: value,
-                                               ordering: .acquiringAndReleasing,
+                                               successOrdering: .acquiringAndReleasing,
                                                failureOrdering: .acquiring)
     if let existing = existing
     {
