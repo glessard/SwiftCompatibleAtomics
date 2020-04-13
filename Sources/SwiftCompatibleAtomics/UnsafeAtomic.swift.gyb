@@ -139,76 +139,44 @@ extension UnsafeAtomic where Value: AtomicInteger
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % end = '#else' if inlinable == '@inlinable' else '#endif'
+%{
+  rmwOperations = [
+    ('WrappingIncrement', 'by',   '&+', ' = 1'),
+    ('WrappingDecrement', 'by',   '&-', ' = 1'),
+    ('BitwiseAnd',        'with', '&',  ''),
+    ('BitwiseOr',         'with', '|',  ''),
+    ('BitwiseXor',        'with', '^',  ''),
+  ]
+}%
+% for (operation, label, operator, default) in rmwOperations:
+% lowerOperation = operation[0].lower() + operation[1:]
   ${inlinable}
-  public func loadThenWrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  public func loadThen${operation}(${label} operand: Value${default}, ordering: AtomicUpdateOrdering) -> Value
   {
-    return Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering)
+    let operand = Value.encodeAtomicStorage(for: operand)
+    let encoded = Value.AtomicStorage.atomicLoadThen${operation}(${label}: operand, at: _ptr, ordering: ordering)
+    return Value.decodeAtomicStorage(encoded)
   }
 
   ${inlinable}
-  public func loadThenWrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
+  public func ${lowerOperation}ThenLoad(${label} operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
   {
-    return Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
+    return loadThen${operation}(${label}: operand, ordering: ordering) ${operator} operand
   }
 
-  ${inlinable}
-  public func loadThenBitwiseAnd(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenBitwiseAnd(with: operand, at: _ptr, ordering: ordering)
-  }
-
-  ${inlinable}
-  public func loadThenBitwiseOr(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenBitwiseOr(with: operand, at: _ptr, ordering: ordering)
-  }
-
-  ${inlinable}
-  public func loadThenBitwiseXor(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering)
-  }
-
-  ${inlinable}
-  public func wrappingIncrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering) &+ operand
-  }
-
-  ${inlinable}
-  public func wrappingDecrementThenLoad(by operand: Value = 1, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering) &- operand
-  }
-
-  ${inlinable}
-  public func bitwiseAndThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenBitwiseAnd(with: operand, at: _ptr, ordering: ordering) & operand
-  }
-
-  ${inlinable}
-  public func bitwiseOrThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenBitwiseOr(with: operand, at: _ptr, ordering: ordering) | operand
-  }
-
-  ${inlinable}
-  public func bitwiseXorThenLoad(with operand: Value, ordering: AtomicUpdateOrdering) -> Value
-  {
-    return Value.atomicLoadThenBitwiseXor(with: operand, at: _ptr, ordering: ordering) ^ operand
-  }
-  
+% end # rmwOperations
   ${inlinable}
   public func wrappingIncrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
   {
-    _ = Value.atomicLoadThenWrappingIncrement(by: operand, at: _ptr, ordering: ordering)
+    _ = Value.AtomicStorage.atomicLoadThenWrappingIncrement(by: Value.encodeAtomicStorage(for: operand),
+                                                            at: _ptr, ordering: ordering)
   }
 
   ${inlinable}
   public func wrappingDecrement(by operand: Value = 1, ordering: AtomicUpdateOrdering)
   {
-    _ = Value.atomicLoadThenWrappingDecrement(by: operand, at: _ptr, ordering: ordering)
+    _ = Value.AtomicStorage.atomicLoadThenWrappingDecrement(by: Value.encodeAtomicStorage(for: operand),
+                                                            at: _ptr, ordering: ordering)
   }
 ${end}
 % end
