@@ -23,20 +23,21 @@ public class AtomicPointerTests: XCTestCase
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -51,23 +52,28 @@ public class AtomicPointerTests: XCTestCase
     let i = UnsafeAtomic<UnsafePointer<Int64>?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
+    let j = UnsafeAtomic.create(initialValue: r2)
+    XCTAssertEqual(r2, j.load(ordering: .relaxed))
+    j.destroy()
+
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -85,20 +91,21 @@ public class AtomicPointerTests: XCTestCase
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -113,23 +120,28 @@ public class AtomicPointerTests: XCTestCase
     let i = UnsafeAtomic<UnsafeRawPointer?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
+    let j = UnsafeAtomic.create(initialValue: r2)
+    XCTAssertEqual(r2, j.load(ordering: .relaxed))
+    j.destroy()
+
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -147,20 +159,21 @@ public class AtomicPointerTests: XCTestCase
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -175,23 +188,28 @@ public class AtomicPointerTests: XCTestCase
     let i = UnsafeAtomic<UnsafeMutablePointer<Int64>?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
+    let j = UnsafeAtomic.create(initialValue: r2)
+    XCTAssertEqual(r2, j.load(ordering: .relaxed))
+    j.destroy()
+
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -209,20 +227,21 @@ public class AtomicPointerTests: XCTestCase
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
@@ -237,23 +256,28 @@ public class AtomicPointerTests: XCTestCase
     let i = UnsafeAtomic<UnsafeMutableRawPointer?>.create(initialValue: r1)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
+    let j = UnsafeAtomic.create(initialValue: r2)
+    XCTAssertEqual(r2, j.load(ordering: .relaxed))
+    j.destroy()
+
     i.store(r2, ordering: .relaxed)
     XCTAssertEqual(r2, i.load(ordering: .relaxed))
 
-    var j = i.exchange(r1, ordering: .acquiringAndReleasing)
-    XCTAssertEqual(r2, j)
+    var r = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(r2, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.store(r1, ordering: .releasing)
-    var (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
+    var s = false
+    (s, r) = i.compareExchange(expected: r1, desired: r3, ordering: .acquiring)
     XCTAssertEqual(true, s)
     XCTAssertEqual(r1, r)
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
-    XCTAssertEqual(r3, j)
+    XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
 
     i.destroy()
