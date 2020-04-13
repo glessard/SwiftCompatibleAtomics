@@ -10,59 +10,58 @@ class AtomicsTests: XCTestCase
 {
   func testAtomicTypeShape()
   {
-    let v = Int.randomPositive()
+    let v = UInt.randomPositive()
 
-    let a = AtomicInt(v)
+    let a = AtomicUInt(v)
     let i = a.decode()
     XCTAssertEqual(i, v)
   }
 
   func testAtomicFunctionShapes()
   {
-    var a = AtomicInt(Int.randomPositive())
+    var a = AtomicUInt(UInt.randomPositive())
     var b = CAtomicsLoad(&a, .relaxed)
     XCTAssertEqual(a.decode(), b.decode())
 
-    a = AtomicInt(Int.randomPositive())
+    a = AtomicUInt(UInt.randomPositive())
     CAtomicsStore(&b, a, .relaxed)
     XCTAssertEqual(a.decode(), b.decode())
 
-    var c = CAtomicsExchange(&a, AtomicInt(0), .relaxed)
+    var c = CAtomicsExchange(&a, AtomicUInt(0), .relaxed)
     XCTAssertEqual(a.decode(), 0)
     XCTAssertEqual(b.decode(), c.decode())
 
-    c = CAtomicsAdd(&a, AtomicInt(1), .relaxed)
+    c = CAtomicsAdd(&a, AtomicUInt(1), .relaxed)
     XCTAssertEqual(c.decode(), 0)
     XCTAssertEqual(a.decode(), 1)
 
-    b = CAtomicsSubtract(&a, AtomicInt(1), .relaxed)
+    b = CAtomicsSubtract(&a, AtomicUInt(1), .relaxed)
     XCTAssertEqual(a.decode(), 0)
     XCTAssertEqual(b.decode(), 1)
 
-    a = AtomicInt(0b11)
-    b = AtomicInt(0b00)
+    a = AtomicUInt(0b11)
+    b = AtomicUInt(0b00)
     CAtomicsBitwiseOr(&b, a, .relaxed)
     XCTAssertEqual(b.decode(), 0b11)
 
-    a = AtomicInt(0b01)
-    b = AtomicInt(0b11)
+    a = AtomicUInt(0b01)
+    b = AtomicUInt(0b11)
     CAtomicsBitwiseAnd(&b, a, .relaxed)
     XCTAssertEqual(b.decode(), 0b01)
 
-    a = AtomicInt(0x1001)
-    b = AtomicInt(0x0001)
+    a = AtomicUInt(0x1001)
+    b = AtomicUInt(0x0001)
     CAtomicsBitwiseXor(&b, a, .relaxed)
-    print(b.decode(), 0b1000)
 
-    a = AtomicInt(1)
-    b = AtomicInt(7)
+    a = AtomicUInt(1)
+    b = AtomicUInt(7)
     c = a
     let s = CAtomicsCompareAndExchangeStrong(&a, &c, b, .relaxed, .relaxed)
     XCTAssertEqual(s, true)
     XCTAssertEqual(a.decode(), b.decode())
 
-    while !CAtomicsCompareAndExchangeWeak(&a, &c, AtomicInt(Int.min), .relaxed, .relaxed) {}
-    XCTAssertEqual(a.decode(), Int.min)
+    while !CAtomicsCompareAndExchangeWeak(&a, &c, AtomicUInt(UInt.min), .relaxed, .relaxed) {}
+    XCTAssertEqual(a.decode(), UInt.min)
 
     XCTAssertTrue(CAtomicsIsLockFree(&a))
   }

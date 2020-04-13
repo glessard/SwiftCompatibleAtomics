@@ -49,16 +49,14 @@ class AtomicRepresentableTests: XCTestCase
     {
       let rawValue: UInt
       init(rawValue: UInt) { self.rawValue = rawValue }
-      init() { self.rawValue = .random(in: 1..<(.max>>2)) }
+      init() { self.rawValue = UInt.randomPositive() }
     }
 
     let initial = AtomickableState()
     let p = UnsafeMutablePointer<UnsafeAtomic<AtomickableState>.Storage>.allocate(capacity: 1)
     p.initialize(to: UnsafeAtomic.Storage(initial))
 
-
     let i = UnsafeAtomic<AtomickableState>(at: p)
-
     let value = i.exchange(AtomickableState(), ordering: .relaxed)
     XCTAssertEqual(value, initial)
 

@@ -15,13 +15,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testInt()
   {
     let r1 = Int(0)
-#if swift(>=4.0)
     let r2 = Int.randomPositive()
     let r3 = Int.randomPositive()
-#else
-    let r2 = Int(UInt.randomPositive())
-    let r3 = Int(UInt.randomPositive())
-#endif
 
     var i = AtomicInt(r1)
     XCTAssertEqual(r1, i.decode())
@@ -74,13 +69,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testUInt()
   {
     let r1 = UInt(0)
-#if swift(>=4.0)
     let r2 = UInt.randomPositive()
     let r3 = UInt.randomPositive()
-#else
-    let r2 = UInt(UInt.randomPositive())
-    let r3 = UInt(UInt.randomPositive())
-#endif
 
     var i = AtomicUInt(r1)
     XCTAssertEqual(r1, i.decode())
@@ -133,13 +123,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testInt8()
   {
     let r1 = Int8(0)
-#if swift(>=4.0)
     let r2 = Int8.randomPositive()
     let r3 = Int8.randomPositive()
-#else
-    let r2 = Int8(UInt.randomPositive())
-    let r3 = Int8(UInt.randomPositive())
-#endif
 
     var i = AtomicInt8(r1)
     XCTAssertEqual(r1, i.decode())
@@ -192,13 +177,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testUInt8()
   {
     let r1 = UInt8(0)
-#if swift(>=4.0)
     let r2 = UInt8.randomPositive()
     let r3 = UInt8.randomPositive()
-#else
-    let r2 = UInt8(UInt.randomPositive())
-    let r3 = UInt8(UInt.randomPositive())
-#endif
 
     var i = AtomicUInt8(r1)
     XCTAssertEqual(r1, i.decode())
@@ -251,13 +231,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testInt16()
   {
     let r1 = Int16(0)
-#if swift(>=4.0)
     let r2 = Int16.randomPositive()
     let r3 = Int16.randomPositive()
-#else
-    let r2 = Int16(UInt.randomPositive())
-    let r3 = Int16(UInt.randomPositive())
-#endif
 
     var i = AtomicInt16(r1)
     XCTAssertEqual(r1, i.decode())
@@ -310,13 +285,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testUInt16()
   {
     let r1 = UInt16(0)
-#if swift(>=4.0)
     let r2 = UInt16.randomPositive()
     let r3 = UInt16.randomPositive()
-#else
-    let r2 = UInt16(UInt.randomPositive())
-    let r3 = UInt16(UInt.randomPositive())
-#endif
 
     var i = AtomicUInt16(r1)
     XCTAssertEqual(r1, i.decode())
@@ -369,13 +339,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testInt32()
   {
     let r1 = Int32(0)
-#if swift(>=4.0)
     let r2 = Int32.randomPositive()
     let r3 = Int32.randomPositive()
-#else
-    let r2 = Int32(UInt.randomPositive())
-    let r3 = Int32(UInt.randomPositive())
-#endif
 
     var i = AtomicInt32(r1)
     XCTAssertEqual(r1, i.decode())
@@ -428,13 +393,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testUInt32()
   {
     let r1 = UInt32(0)
-#if swift(>=4.0)
     let r2 = UInt32.randomPositive()
     let r3 = UInt32.randomPositive()
-#else
-    let r2 = UInt32(UInt.randomPositive())
-    let r3 = UInt32(UInt.randomPositive())
-#endif
 
     var i = AtomicUInt32(r1)
     XCTAssertEqual(r1, i.decode())
@@ -487,13 +447,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testInt64()
   {
     let r1 = Int64(0)
-#if swift(>=4.0)
     let r2 = Int64.randomPositive()
     let r3 = Int64.randomPositive()
-#else
-    let r2 = Int64(UInt.randomPositive())
-    let r3 = Int64(UInt.randomPositive())
-#endif
 
     var i = AtomicInt64(r1)
     XCTAssertEqual(r1, i.decode())
@@ -546,13 +501,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func testUInt64()
   {
     let r1 = UInt64(0)
-#if swift(>=4.0)
     let r2 = UInt64.randomPositive()
     let r3 = UInt64.randomPositive()
-#else
-    let r2 = UInt64(UInt.randomPositive())
-    let r3 = UInt64(UInt.randomPositive())
-#endif
 
     var i = AtomicUInt64(r1)
     XCTAssertEqual(r1, i.decode())

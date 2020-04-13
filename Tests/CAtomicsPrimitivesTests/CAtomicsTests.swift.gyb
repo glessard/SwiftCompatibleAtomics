@@ -17,13 +17,8 @@ public class CAtomicsBasicTests: XCTestCase
   public func test${i}()
   {
     let r1 = ${i}(0)
-#if swift(>=4.0)
     let r2 = ${i}.randomPositive()
     let r3 = ${i}.randomPositive()
-#else
-    let r2 = ${i}(UInt.randomPositive())
-    let r3 = ${i}(UInt.randomPositive())
-#endif
 
     var i = Atomic${i}(r1)
     XCTAssertEqual(r1, i.decode())
