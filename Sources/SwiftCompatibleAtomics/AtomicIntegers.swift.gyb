@@ -7,7 +7,7 @@
 import CAtomicsPrimitives
 % for Type in ['Int', 'UInt', 'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64']:
 
-extension ${Type}: AtomicProtocol
+extension ${Type}: AtomicInteger
 {
   public typealias AtomicStorage = Atomic${Type}
 
@@ -37,37 +37,6 @@ extension ${Type}: AtomicProtocol
   {
     return storage.decode()
   }
-${end}
-% end # inlinable
-}
-
-%{
-  rmwOperations = [
-    ('WrappingDecrement', 'Subtract',  'by'),
-    ('BitwiseAnd',        'BitwiseAnd', 'with'),
-    ('BitwiseOr',         'BitwiseOr',  'with'),
-    ('BitwiseXor',        'BitwiseXor', 'with'),
-  ]
-}%
-
-extension ${Type}: AtomicInteger
-{
-#if swift(>=4.2)
-% for inlinable in ['@inlinable', '@inline(__always)']:
-% end = '#else' if inlinable == '@inlinable' else '#endif'
-  ${inlinable}
-  public static func atomicLoadThenWrappingIncrement(by operand: ${Type}, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> ${Type}
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-% for (sname, pname, label) in rmwOperations:
-
-  ${inlinable}
-  public static func atomicLoadThen${sname}(${label} operand: ${Type}, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> ${Type}
-  {
-    return CAtomics${pname}(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-% end # rmwOperations
 ${end}
 % end # inlinable
 }
