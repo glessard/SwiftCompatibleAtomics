@@ -20,7 +20,7 @@ public class AtomicLazyReferenceTests: XCTestCase
     var o = i.load()
     XCTAssertNil(o)
 
-    let p = i.storeIfNil(TestObject())
+    let p = i.storeIfNilThenLoad(TestObject())
     XCTAssertNotNil(p)
 
     o = i.load()
@@ -28,7 +28,7 @@ public class AtomicLazyReferenceTests: XCTestCase
     XCTAssertEqual(ObjectIdentifier(o!), ObjectIdentifier(p))
 
     let n = TestObject()
-    o = i.storeIfNil(n)
+    o = i.storeIfNilThenLoad(n)
     XCTAssertNotNil(o)
     XCTAssertEqual(ObjectIdentifier(o!), ObjectIdentifier(p))
 
@@ -43,7 +43,7 @@ public class AtomicLazyReferenceTests: XCTestCase
     let l = UnsafeAtomicLazyReference(at: u)
     let o = TestObject()
 
-    XCTAssertEqual(ObjectIdentifier(o), ObjectIdentifier(l.storeIfNil(o)))
+    XCTAssertEqual(ObjectIdentifier(o), ObjectIdentifier(l.storeIfNilThenLoad(o)))
     XCTAssertEqual(ObjectIdentifier(o), ObjectIdentifier(l.load()!))
   }
 
@@ -59,7 +59,7 @@ public class AtomicLazyReferenceTests: XCTestCase
     }
 
     let i = UnsafeAtomicLazyReference<DeallocationWitness>.create()
-    _ = i.storeIfNil(DeallocationWitness(expectation(description: #function)))
+    _ = i.storeIfNilThenLoad(DeallocationWitness(expectation(description: #function)))
 
     i.destroy()
     waitForExpectations(timeout: 1.0)
