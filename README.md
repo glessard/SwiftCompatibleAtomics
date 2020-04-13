@@ -16,3 +16,11 @@ or, if you prefer to avoid source breaking changes:
 ```
 .package(url: "https://github.com/glessard/SwiftCompatibleAtomics", .upToNextMinor(from: "0.3.0"))
 ```
+
+### Version History
+
+0.1.0 Initial version
+
+0.2.0 Fixed a source compatibility issue
+
+0.3.0 Renamed 'UnsafeAtomic' to 'UnsafePointerToAtomic', matching pitched implementation as of April 7th
