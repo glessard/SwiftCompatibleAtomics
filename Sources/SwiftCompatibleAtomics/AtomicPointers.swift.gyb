@@ -4,7 +4,7 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomics
+import CAtomicsPrimitives
 % for PointerType in ['UnsafePointer', 'UnsafeRawPointer', 'UnsafeMutablePointer', 'UnsafeMutableRawPointer']:
 % Mutable = 'Mutable' if ('Mutable' in PointerType or PointerType == 'Unmanaged') else ''
 % Raw = 'Raw' if ('Raw' in PointerType) else ''
@@ -12,150 +12,69 @@ import CAtomics
 
 extension ${PointerType}: AtomicProtocol
 {
-  public typealias AtomicStorage = CAtomics.Atomic${Mutable}RawPointer
+  public typealias AtomicStorage = AtomicOptional${Mutable}RawPointer
 
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
-  public static func atomicStorage(for value: ${PointerType}) -> AtomicStorage
+  public static func prepareAtomicStorage(for value: ${PointerType}) -> AtomicOptional${Mutable}RawPointer
   {
-    return AtomicStorage(value)
+    return encodeAtomicStorage(for: value)
   }
 
   ${inlinable}
-  public static func deinitializeAtomicStorage(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  public static func disposeAtomicStorage(_ storage: inout AtomicOptional${Mutable}RawPointer) -> ${PointerType}
   {
-    pointer.deinitialize(count: 1)
+    return decodeAtomicStorage(storage)
   }
 
   ${inlinable}
-  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}
+  public static func encodeAtomicStorage(for value: ${PointerType}) -> AtomicOptional${Mutable}RawPointer
   {
-    return CAtomicsLoad(pointer, ordering._rawValue)${binding}
+    return AtomicOptional${Mutable}RawPointer(value)
   }
 
   ${inlinable}
-  public static func atomicStore(_ desired: ${PointerType}, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicStoreOrdering)
+  public static func decodeAtomicStorage(_ storage: AtomicOptional${Mutable}RawPointer) -> ${PointerType}
   {
-    CAtomicsStore(pointer, desired, ordering._rawValue)
-  }
-
-  ${inlinable}
-  public static func atomicExchange(_ desired: ${PointerType}, at pointer: UnsafeMutablePointer<AtomicStorage>,
-                                    ordering: AtomicUpdateOrdering) -> ${PointerType}
-  {
-    return CAtomicsExchange(pointer, desired, ordering._rawValue)${binding}
-  }
-
-  ${inlinable}
-  public static func atomicCompareExchange(expected: ${PointerType}, desired: ${PointerType},
-                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
-                                           ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: ${PointerType})
-  {
-    return atomicCompareExchange(expected: expected, desired: desired, at: pointer,
-                                 ordering: ordering, failureOrdering: ordering.asLoadOrdering())
-  }
-
-  ${inlinable}
-  public static func atomicCompareExchange(expected: ${PointerType}, desired: ${PointerType},
-                                           at pointer: UnsafeMutablePointer<AtomicStorage>,
-                                           ordering: AtomicUpdateOrdering,
-                                           failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType})
-  {
-    var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeStrong(pointer, &expected, desired,
-                                                     ordering._rawValue, failureOrdering._rawValue)
-    return (exchanged, expected${binding})
-  }
-
-  ${inlinable}
-  public static func atomicWeakCompareExchange(expected: ${PointerType}, desired: ${PointerType},
-                                               at pointer: UnsafeMutablePointer<AtomicStorage>,
-                                               ordering: AtomicUpdateOrdering,
-                                               failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType})
-  {
-    var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeWeak(pointer, &expected, desired,
-                                                   ordering._rawValue, failureOrdering._rawValue)
-    return (exchanged, expected${binding})
-  }
-${end}
-% end # inlinable
-}
-
-% optionalbinding = '?' + binding if (Raw == '') else ''
-extension ${PointerType}: NullableAtomic
-{
-  public typealias NullableAtomicStorage = CAtomics.AtomicOptional${Mutable}RawPointer
-
-#if swift(>=4.2)
-% for inlinable in ['@inlinable', '@inline(__always)']:
-% end = '#else' if inlinable == '@inlinable' else '#endif'
-  ${inlinable}
-  public static func nullableAtomicStorage(for value: ${PointerType}?) -> NullableAtomicStorage
-  {
-    return NullableAtomicStorage(value)
-  }
-
-  ${inlinable}
-  public static func deinitializeNullableAtomicStorage(at pointer: UnsafeMutablePointer<NullableAtomicStorage>)
-  {
-    pointer.deinitialize(count: 1)
-  }
-
-  ${inlinable}
-  public static func atomicOptionalLoad(at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicLoadOrdering) -> ${PointerType}?
-  {
-    return CAtomicsLoad(pointer, ordering._rawValue)${optionalbinding}
-  }
-
-  ${inlinable}
-  public static func atomicOptionalStore(_ desired: ${PointerType}?, at pointer: UnsafeMutablePointer<NullableAtomicStorage>, ordering: AtomicStoreOrdering)
-  {
-    CAtomicsStore(pointer, desired, ordering._rawValue)
-  }
-
-  ${inlinable}
-  public static func atomicOptionalExchange(_ desired: ${PointerType}?, at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
-                                            ordering: AtomicUpdateOrdering) -> ${PointerType}?
-  {
-    return CAtomicsExchange(pointer, desired, ordering._rawValue)${optionalbinding}
-  }
-
-  ${inlinable}
-  public static func atomicOptionalCompareExchange(expected: ${PointerType}?, desired: ${PointerType}?,
-                                                   at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
-                                                   ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: ${PointerType}?)
-  {
-    return atomicOptionalCompareExchange(expected: expected, desired: desired, at: pointer,
-                                         ordering: ordering, failureOrdering: ordering.asLoadOrdering())
-  }
-
-  ${inlinable}
-  public static func atomicOptionalCompareExchange(expected: ${PointerType}?, desired: ${PointerType}?,
-                                                   at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
-                                                   ordering: AtomicUpdateOrdering,
-                                                   failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType}?)
-  {
-    var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeStrong(pointer, &expected, desired,
-                                                     ordering._rawValue, failureOrdering._rawValue)
-    return (exchanged, expected${optionalbinding})
-  }
-
-  ${inlinable}
-  public static func atomicOptionalWeakCompareExchange(expected: ${PointerType}?, desired: ${PointerType}?,
-                                                       at pointer: UnsafeMutablePointer<NullableAtomicStorage>,
-                                                       ordering: AtomicUpdateOrdering,
-                                                       failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: ${PointerType}?)
-  {
-    var expected = Unsafe${Mutable}RawPointer(expected)
-    let exchanged = CAtomicsCompareAndExchangeWeak(pointer, &expected, desired,
-                                                   ordering._rawValue, failureOrdering._rawValue)
-    return (exchanged, expected${optionalbinding})
+    return storage.decode()!${binding}
   }
 ${end}
 % end # inlinable
 }
 % end # for PointerType
+
+extension Unmanaged: AtomicProtocol
+{
+  public typealias AtomicStorage = AtomicOptionalMutableRawPointer
+
+#if swift(>=4.2)
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${inlinable}
+  public static func prepareAtomicStorage(for value: Unmanaged) -> AtomicOptionalMutableRawPointer
+  {
+    return encodeAtomicStorage(for: value)
+  }
+
+  ${inlinable}
+  public static func disposeAtomicStorage(_ storage: inout AtomicOptionalMutableRawPointer) -> Unmanaged
+  {
+    return decodeAtomicStorage(storage)
+  }
+
+  ${inlinable}
+  public static func encodeAtomicStorage(for value: Unmanaged) -> AtomicOptionalMutableRawPointer
+  {
+    return AtomicOptionalMutableRawPointer(value.toOpaque())
+  }
+
+  ${inlinable}
+  public static func decodeAtomicStorage(_ storage: AtomicOptionalMutableRawPointer) -> Unmanaged
+  {
+    return Unmanaged.fromOpaque(storage.decode()!)
+  }
+${end}
+% end # inlinable
+}

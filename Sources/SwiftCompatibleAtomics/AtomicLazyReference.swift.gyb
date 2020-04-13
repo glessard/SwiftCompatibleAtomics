@@ -4,54 +4,67 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomics
+import CAtomicsPrimitives
 
 public struct UnsafeAtomicLazyReference<Instance: AnyObject>
 {
-  public typealias AtomicStorage = CAtomics.AtomicOptionalRawPointer
-
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
 % end = '#else' if inlinable == '@inlinable' else '#endif'
-  ${usableFromInline}
-  internal let _ptr: UnsafeMutablePointer<AtomicStorage>
-
-  ${inlinable}
-  public init(at pointer: UnsafeMutablePointer<AtomicStorage>)
+  public struct Storage
   {
-    self._ptr = pointer
-  }
+    ${usableFromInline}
+    internal let value: UnsafeAtomic<Unmanaged<Instance>?>.Storage
 
-  ${inlinable}
-  public static func create() -> UnsafeAtomicLazyReference<Instance>
-  {
-    let ptr = UnsafeMutablePointer<AtomicStorage>.allocate(capacity: 1)
-    ptr.initialize(to: AtomicOptionalRawPointer(nil))
-    return UnsafeAtomicLazyReference(at: ptr)
-  }
-
-  ${inlinable}
-  public func destroy()
-  {
-    if let unmanaged = CAtomicsLoad(_ptr, .acquire).map(Unmanaged<Instance>.fromOpaque(_:))
+    ${inlinable}
+    public init()
     {
-      unmanaged.release()
+      value = UnsafeAtomic.Storage(nil)
     }
-    _ptr.deinitialize(count: 1)
-    _ptr.deallocate()
+  }
+
+  ${usableFromInline}
+  internal let atomic: UnsafeAtomic<Unmanaged<Instance>?>
+
+  ${inlinable}
+  public init(at pointer: UnsafeMutablePointer<Storage>)
+  {
+    atomic = UnsafeAtomic(at: UnsafeMutableRawPointer(pointer).assumingMemoryBound(to: UnsafeAtomic.Storage.self))
+  }
+
+  ${usableFromInline}
+  internal init()
+  {
+    atomic = UnsafeAtomic.create(initialValue: nil)
+  }
+
+  ${inlinable}
+  public static func create() -> UnsafeAtomicLazyReference
+  {
+    return UnsafeAtomicLazyReference()
+  }
+
+  ${inlinable} @discardableResult
+  public func destroy() -> Instance?
+  {
+    guard let unmanaged = atomic.destroy()
+      else { return nil }
+
+    return unmanaged.takeRetainedValue()
   }
 
   ${inlinable}
   public func storeIfNil(_ desired: Instance) -> Instance
   {
     let value = Unmanaged.passRetained(desired)
-    var existing = UnsafeRawPointer(bitPattern: 0)
-    let success = CAtomicsCompareAndExchangeStrong(_ptr, &existing, value.toOpaque(), .acqrel, .acquire)
-    if !success
+    let (_, existing) = atomic.compareExchange(expected: nil, desired: value,
+                                               ordering: .acquiringAndReleasing,
+                                               failureOrdering: .acquiring)
+    if let existing = existing
     {
       value.release()
-      return Unmanaged.fromOpaque(existing!).takeUnretainedValue()
+      return existing.takeUnretainedValue()
     }
     return desired
   }
@@ -59,9 +72,9 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   ${inlinable}
   public func load() -> Instance?
   {
-    if let unmanaged = CAtomicsLoad(_ptr, .acquire).map(Unmanaged<Instance>.fromOpaque(_:))
+    if let existing = atomic.load(ordering: .acquiring)
     {
-      return unmanaged.takeUnretainedValue()
+      return existing.takeUnretainedValue()
     }
     return nil
   }
