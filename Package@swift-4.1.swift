@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
   name: "SwiftCompatibleAtomics",
   products: [
-    .library(name: "SwiftCompatibleAtomics", targets: ["SwiftCompatibleAtomics"]),
+    .library(name: "SwiftCompatibleAtomics", type: .static, targets: ["SwiftCompatibleAtomics"]),
     .library(name: "CAtomicsPrimitives", type: .static, targets: ["CAtomicsPrimitives"]),
   ],
   targets: [
