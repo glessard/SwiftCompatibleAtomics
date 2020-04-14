@@ -43,14 +43,14 @@
 
 // memory order
 
-SWIFT_ENUM(MemoryOrder, open)
+SWIFT_ENUM(UpdateMemoryOrder, open)
 {
-  MemoryOrder_relaxed =    __ATOMIC_RELAXED,
-  // MemoryOrder_consume = __ATOMIC_CONSUME,
-  MemoryOrder_acquire =    __ATOMIC_ACQUIRE,
-  MemoryOrder_release =    __ATOMIC_RELEASE,
-  MemoryOrder_acqrel  =    __ATOMIC_ACQ_REL,
-  MemoryOrder_sequential = __ATOMIC_SEQ_CST
+  UpdateMemoryOrder_relaxed =    __ATOMIC_RELAXED,
+  // UpdateMemoryOrder_consume = __ATOMIC_CONSUME,
+  UpdateMemoryOrder_acquire =    __ATOMIC_ACQUIRE,
+  UpdateMemoryOrder_release =    __ATOMIC_RELEASE,
+  UpdateMemoryOrder_acqrel  =    __ATOMIC_ACQ_REL,
+  UpdateMemoryOrder_sequential = __ATOMIC_SEQ_CST
 };
 
 SWIFT_ENUM(LoadMemoryOrder, open)
@@ -85,13 +85,13 @@ SWIFT_ENUM(StoreMemoryOrder, open)
         static __inline__ __attribute__((__always_inline__)) \
         SWIFT_NAME(swiftType.decode(self:)) \
         parameterType swiftType##Decode(swiftType s) \
-        { return s.a; }
+        { return (parameterType) s.a; }
 
-#define CLANG_ATOMICS_CREATE(swiftType, parameterType) \
+#define CLANG_ATOMICS_CREATE(swiftType, parameterType, compatibleType) \
         static __inline__ __attribute__((__always_inline__)) \
         SWIFT_NAME(swiftType.init(_:)) \
         swiftType swiftType##Create(parameterType value) \
-        { swiftType s; s.a = value; return s; }
+        { swiftType s; s.a = (compatibleType) value; return s; }
 
 #define CLANG_ATOMICS_LOAD(swiftType) \
         static __inline__ __attribute__((__always_inline__)) \
@@ -108,13 +108,13 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 #define CLANG_ATOMICS_SWAP(swiftType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        swiftType CAtomicsExchange(swiftType *_Nonnull atomic, swiftType value, enum MemoryOrder order) \
+        swiftType CAtomicsExchange(swiftType *_Nonnull atomic, swiftType value, enum UpdateMemoryOrder order) \
         { swiftType s; s.a = atomic_exchange_explicit(&(atomic->a), value.a, order); return s; }
 
 #define CLANG_ATOMICS_RMW(swiftType, pName, op, opName) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        swiftType CAtomics##opName(swiftType *_Nonnull atomic, swiftType pName, enum MemoryOrder order) \
+        swiftType CAtomics##opName(swiftType *_Nonnull atomic, swiftType pName, enum UpdateMemoryOrder order) \
         { swiftType s; s.a = atomic_##op##_explicit(&(atomic->a), pName.a, order); return s; }
 
 #define CLANG_ATOMICS_WEAK_CAS(swiftType, parameterType) \
@@ -122,7 +122,7 @@ SWIFT_ENUM(StoreMemoryOrder, open)
         __attribute__((overloadable)) \
         _Bool CAtomicsCompareAndExchangeWeak(swiftType *_Nonnull atomic, \
                                              swiftType *_Nonnull current, swiftType future, \
-                                             enum MemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
+                                             enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
           assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
           assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
@@ -137,7 +137,7 @@ SWIFT_ENUM(StoreMemoryOrder, open)
         __attribute__((overloadable)) \
         _Bool CAtomicsCompareAndExchangeStrong(swiftType *_Nonnull atomic, \
                                                swiftType *_Nonnull current, swiftType future, \
-                                               enum MemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
+                                               enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
           assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
           assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
@@ -149,21 +149,29 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 
 // macro to generate atomic struct + functions
 
-#define CLANG_ATOMICS_GENERATE(swiftType, atomicType, parameterType) \
+#define CLANG_ATOMICS_GENERATE(swiftType, atomicType, parameterType, compatibleType) \
         CLANG_ATOMICS_STRUCT(swiftType, atomicType) \
         CLANG_ATOMICS_IS_LOCK_FREE(swiftType) \
         CLANG_ATOMICS_DECODE(swiftType, parameterType) \
-        CLANG_ATOMICS_CREATE(swiftType, parameterType) \
+        CLANG_ATOMICS_CREATE(swiftType, parameterType, compatibleType) \
         CLANG_ATOMICS_LOAD(swiftType) \
         CLANG_ATOMICS_STORE(swiftType) \
         CLANG_ATOMICS_SWAP(swiftType) \
-        CLANG_ATOMICS_STRONG_CAS(swiftType, parameterType) \
-        CLANG_ATOMICS_WEAK_CAS(swiftType, parameterType)
+        CLANG_ATOMICS_STRONG_CAS(swiftType, compatibleType) \
+        CLANG_ATOMICS_WEAK_CAS(swiftType, compatibleType)
+
+// generate atomic pointer types + functions
+
+CLANG_ATOMICS_GENERATE(AtomicOptionalRawPointer, atomic_uintptr_t, const void* _Nullable, uintptr_t)
+CLANG_ATOMICS_GENERATE(AtomicOptionalMutableRawPointer, atomic_uintptr_t, void* _Nullable, uintptr_t)
+
+// CLANG_ATOMICS_GENERATE(AtomicRawPointer, atomic_uintptr_t, const void* _Nonnull, uintptr_t)
+// CLANG_ATOMICS_GENERATE(AtomicMutableRawPointer, atomic_uintptr_t, void* _Nonnull, uintptr_t)
 
 // macro to generate atomic struct + functions for integer types
 
 #define CLANG_ATOMICS_INT_GENERATE(swiftType, atomicType, parameterType) \
-        CLANG_ATOMICS_GENERATE(swiftType, atomicType, parameterType) \
+        CLANG_ATOMICS_GENERATE(swiftType, atomicType, parameterType, parameterType) \
         CLANG_ATOMICS_RMW(swiftType, increment, fetch_add, Add) \
         CLANG_ATOMICS_RMW(swiftType, increment, fetch_sub, Subtract) \
         CLANG_ATOMICS_RMW(swiftType, bits, fetch_or, BitwiseOr) \
@@ -186,89 +194,6 @@ CLANG_ATOMICS_INT_GENERATE(AtomicUInt32, atomic_uint, unsigned int)
 
 CLANG_ATOMICS_INT_GENERATE(AtomicInt64, atomic_llong, long long)
 CLANG_ATOMICS_INT_GENERATE(AtomicUInt64, atomic_ullong, unsigned long long)
-
-// macros for atomic function generation, specific to pointer types
-
-#define CLANG_ATOMICS_POINTER_DECODE(swiftType, parameterType, nullability) \
-        static __inline__ __attribute__((__always_inline__)) \
-        SWIFT_NAME(swiftType.decode(self:)) \
-        parameterType nullability swiftType##Decode(swiftType s) \
-        { return (parameterType nullability) s.a; }
-
-#define CLANG_ATOMICS_POINTER_CREATE(swiftType, parameterType, nullability) \
-        static __inline__ __attribute__((__always_inline__)) \
-        SWIFT_NAME(swiftType.init(_:)) \
-        swiftType swiftType##Create(parameterType nullability value) \
-        { swiftType s; s.a = (uintptr_t)value; return s; }
-
-#define CLANG_ATOMICS_POINTER_LOAD(swiftType) \
-        static __inline__ __attribute__((__always_inline__)) \
-        __attribute__((overloadable)) \
-        swiftType CAtomicsLoad(swiftType *_Nonnull atomic, enum LoadMemoryOrder order) \
-        { swiftType s; s.a = atomic_load_explicit(&(atomic->a), order); return s; }
-
-#define CLANG_ATOMICS_POINTER_STORE(swiftType) \
-        static __inline__ __attribute__((__always_inline__)) \
-        __attribute__((overloadable)) \
-        void CAtomicsStore(swiftType *_Nonnull atomic, swiftType value, enum StoreMemoryOrder order) \
-        { atomic_store_explicit(&(atomic->a), value.a, order); }
-
-#define CLANG_ATOMICS_POINTER_SWAP(swiftType) \
-        static __inline__ __attribute__((__always_inline__)) \
-        __attribute__((overloadable)) \
-        swiftType CAtomicsExchange(swiftType *_Nonnull atomic, swiftType value, enum MemoryOrder order) \
-        { swiftType s; s.a = atomic_exchange_explicit(&(atomic->a), value.a, order); return s; }
-
-#define CLANG_ATOMICS_POINTER_WEAK_CAS(swiftType) \
-        static __inline__ __attribute__((__always_inline__)) \
-        __attribute__((overloadable)) \
-        _Bool CAtomicsCompareAndExchangeWeak(swiftType *_Nonnull atomic, \
-                                             swiftType *_Nonnull current, swiftType future, \
-                                             enum MemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
-        { \
-          assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
-          assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
-          uintptr_t c = current->a; \
-          _Bool b =  atomic_compare_exchange_weak_explicit(&(atomic->a), &c, future.a, orderSwap, orderLoad); \
-          current->a = c; \
-          return b; \
-        }
-
-#define CLANG_ATOMICS_POINTER_STRONG_CAS(swiftType) \
-        static __inline__ __attribute__((__always_inline__)) \
-        __attribute__((overloadable)) \
-        _Bool CAtomicsCompareAndExchangeStrong(swiftType *_Nonnull atomic, \
-                                               swiftType *_Nonnull current, swiftType future, \
-                                               enum MemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
-        { \
-          assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
-          assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
-          uintptr_t c = current->a; \
-          _Bool b =  atomic_compare_exchange_weak_explicit(&(atomic->a), &c, future.a, orderSwap, orderLoad); \
-          current->a = c; \
-          return b; \
-        }
-
-// macro to generate atomic struct + functions for pointer types
-
-#define CLANG_ATOMICS_POINTER_GENERATE(swiftType, atomicType, parameterType, nullability) \
-        CLANG_ATOMICS_STRUCT(swiftType, atomicType) \
-        CLANG_ATOMICS_IS_LOCK_FREE(swiftType) \
-        CLANG_ATOMICS_POINTER_DECODE(swiftType, parameterType, nullability) \
-        CLANG_ATOMICS_POINTER_CREATE(swiftType, parameterType, nullability) \
-        CLANG_ATOMICS_POINTER_LOAD(swiftType) \
-        CLANG_ATOMICS_POINTER_STORE(swiftType) \
-        CLANG_ATOMICS_POINTER_SWAP(swiftType) \
-        CLANG_ATOMICS_POINTER_STRONG_CAS(swiftType) \
-        CLANG_ATOMICS_POINTER_WEAK_CAS(swiftType)
-
-// generate atomic pointer types + functions
-
-CLANG_ATOMICS_POINTER_GENERATE(AtomicMutableRawPointer, atomic_uintptr_t, void*, _Nonnull)
-CLANG_ATOMICS_POINTER_GENERATE(AtomicOptionalMutableRawPointer, atomic_uintptr_t, void*, _Nullable)
-
-CLANG_ATOMICS_POINTER_GENERATE(AtomicRawPointer, atomic_uintptr_t, const void*, _Nonnull)
-CLANG_ATOMICS_POINTER_GENERATE(AtomicOptionalRawPointer, atomic_uintptr_t, const void*, _Nullable)
 
 // tagged pointers -- double-word load, store and CAS
 /*
@@ -326,14 +251,14 @@ CLANG_ATOMICS_POINTER_GENERATE(AtomicOptionalRawPointer, atomic_uintptr_t, const
 #define CLANG_ATOMICS_TAGGED_POINTER_SWAP(atomicType, structType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        structType CAtomicsExchange(atomicType *_Nonnull atomic, structType value, enum MemoryOrder order) \
+        structType CAtomicsExchange(atomicType *_Nonnull atomic, structType value, enum UpdateMemoryOrder order) \
         { structType rp; rp.tag_ptr = atomic_exchange_explicit(&(atomic->a), value.tag_ptr, order); return rp; }
 
 #define CLANG_ATOMICS_TAGGED_POINTER_WEAK_CAS(swiftType, structType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
         _Bool CAtomicsCompareAndExchangeWeak(swiftType *_Nonnull atomic, structType *_Nonnull current, structType future, \
-                                             enum MemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
+                                             enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
           assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
           assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
@@ -344,7 +269,7 @@ CLANG_ATOMICS_POINTER_GENERATE(AtomicOptionalRawPointer, atomic_uintptr_t, const
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
         _Bool CAtomicsCompareAndExchangeStrong(swiftType *_Nonnull atomic, structType *_Nonnull current, structType future, \
-                                               enum MemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
+                                               enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
           assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
           assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
@@ -400,7 +325,7 @@ static __inline__ __attribute__((__always_inline__)) \
 __attribute__((overloadable)) \
 _Bool CAtomicsCompareAndExchangeStrong(OpaqueUnmanagedHelper *_Nonnull atomic,
                                        const void *_Nullable current, const void *_Nullable future,
-                                       enum MemoryOrder order)
+                                       enum UpdateMemoryOrder order)
 {
   uintptr_t pointer = (uintptr_t) current;
   return atomic_compare_exchange_strong_explicit(&(atomic->a), &pointer, (uintptr_t)future, order, memory_order_relaxed);
@@ -410,7 +335,7 @@ _Bool CAtomicsCompareAndExchangeStrong(OpaqueUnmanagedHelper *_Nonnull atomic,
 // fence
 
 static __inline__ __attribute__((__always_inline__))
-void CAtomicsThreadFence(enum MemoryOrder order)
+void CAtomicsThreadFence(enum UpdateMemoryOrder order)
 {
   atomic_thread_fence(order);
 }

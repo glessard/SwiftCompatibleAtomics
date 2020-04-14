@@ -69,7 +69,7 @@ public class CAtomicsBasicTests: XCTestCase
   }
 
 % end
-% pointers = ['AtomicRawPointer', 'AtomicOptionalRawPointer', 'AtomicMutableRawPointer', 'AtomicOptionalMutableRawPointer']
+% pointers = ['AtomicOptionalRawPointer', 'AtomicOptionalMutableRawPointer']
 % for type in pointers:
   public func test${type}()
   {
