@@ -19,12 +19,24 @@ or, if you prefer to avoid source breaking changes:
 
 ### Version History
 
-0.1.0 Initial version
+* 0.1.0
 
-0.2.0 Fixed a source compatibility issue
+	Initial version
 
-0.3.0 Renamed 'UnsafeAtomic' to 'UnsafePointerToAtomic', matching pitched implementation as of April 7th
+* 0.2.0
 
-0.4.0 Implemented the solution in two protocol layers, matching pitched implementation as of April 10th
+	Fixed a source compatibility issue
 
-0.5.0 API tweaks, layout improvements for 'AtomicInteger'
+* 0.3.0
+
+	Renamed 'UnsafeAtomic' to 'UnsafePointerToAtomic', matching pitched implementation as of April 7th
+
+* 0.4.0
+	
+	Implemented the solution in two protocol layers, matching pitched implementation as of April 10th
+
+	This version fixes the compilation issue with downloadable Swift 5.1 toolchains.
+
+* 0.5.0
+
+	API tweaks, layout improvements for 'AtomicInteger'
