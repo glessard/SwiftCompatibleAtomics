@@ -84,16 +84,16 @@ public struct AtomicUpdateOrdering: Equatable, Hashable
 {
 #if swift(>=4.2)
   @usableFromInline
-  internal var _rawValue: MemoryOrder
+  internal var _rawValue: UpdateMemoryOrder
 
   @inlinable
-  internal init(_rawValue: MemoryOrder) { self._rawValue = _rawValue }
+  internal init(_rawValue: UpdateMemoryOrder) { self._rawValue = _rawValue }
 #else
   @_versioned
-  internal var _rawValue: MemoryOrder
+  internal var _rawValue: UpdateMemoryOrder
 
   @inline(__always)
-  internal init(_rawValue: MemoryOrder) { self._rawValue = _rawValue }
+  internal init(_rawValue: UpdateMemoryOrder) { self._rawValue = _rawValue }
 #endif
 
   public static var relaxed: AtomicUpdateOrdering                { return .init(_rawValue: .relaxed) }

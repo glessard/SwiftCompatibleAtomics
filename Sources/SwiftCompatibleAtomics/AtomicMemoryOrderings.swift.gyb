@@ -83,10 +83,10 @@ public struct AtomicUpdateOrdering: Equatable, Hashable
 % usableFromInline = '@usableFromInline' if inlinable == '@inlinable' else '@_versioned'
 % end = '#else' if inlinable == '@inlinable' else '#endif'
   ${usableFromInline}
-  internal var _rawValue: MemoryOrder
+  internal var _rawValue: UpdateMemoryOrder
 
   ${inlinable}
-  internal init(_rawValue: MemoryOrder) { self._rawValue = _rawValue }
+  internal init(_rawValue: UpdateMemoryOrder) { self._rawValue = _rawValue }
 ${end}
 % end
 
