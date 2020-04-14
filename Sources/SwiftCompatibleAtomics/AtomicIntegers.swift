@@ -6,7 +6,7 @@
 
 import CAtomicsPrimitives
 
-extension Int: AtomicProtocol
+extension Int: AtomicInteger
 {
   public typealias AtomicStorage = AtomicInt
 
@@ -61,73 +61,7 @@ extension Int: AtomicProtocol
 #endif
 }
 
-
-extension Int: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: Int, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension UInt: AtomicProtocol
+extension UInt: AtomicInteger
 {
   public typealias AtomicStorage = AtomicUInt
 
@@ -182,73 +116,7 @@ extension UInt: AtomicProtocol
 #endif
 }
 
-
-extension UInt: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: UInt, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension Int8: AtomicProtocol
+extension Int8: AtomicInteger
 {
   public typealias AtomicStorage = AtomicInt8
 
@@ -303,73 +171,7 @@ extension Int8: AtomicProtocol
 #endif
 }
 
-
-extension Int8: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: Int8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int8
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension UInt8: AtomicProtocol
+extension UInt8: AtomicInteger
 {
   public typealias AtomicStorage = AtomicUInt8
 
@@ -424,73 +226,7 @@ extension UInt8: AtomicProtocol
 #endif
 }
 
-
-extension UInt8: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: UInt8, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt8
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension Int16: AtomicProtocol
+extension Int16: AtomicInteger
 {
   public typealias AtomicStorage = AtomicInt16
 
@@ -545,73 +281,7 @@ extension Int16: AtomicProtocol
 #endif
 }
 
-
-extension Int16: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: Int16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int16
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension UInt16: AtomicProtocol
+extension UInt16: AtomicInteger
 {
   public typealias AtomicStorage = AtomicUInt16
 
@@ -666,73 +336,7 @@ extension UInt16: AtomicProtocol
 #endif
 }
 
-
-extension UInt16: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: UInt16, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt16
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension Int32: AtomicProtocol
+extension Int32: AtomicInteger
 {
   public typealias AtomicStorage = AtomicInt32
 
@@ -787,73 +391,7 @@ extension Int32: AtomicProtocol
 #endif
 }
 
-
-extension Int32: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: Int32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int32
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension UInt32: AtomicProtocol
+extension UInt32: AtomicInteger
 {
   public typealias AtomicStorage = AtomicUInt32
 
@@ -908,73 +446,7 @@ extension UInt32: AtomicProtocol
 #endif
 }
 
-
-extension UInt32: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: UInt32, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt32
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension Int64: AtomicProtocol
+extension Int64: AtomicInteger
 {
   public typealias AtomicStorage = AtomicInt64
 
@@ -1029,73 +501,7 @@ extension Int64: AtomicProtocol
 #endif
 }
 
-
-extension Int64: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: Int64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> Int64
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#endif
-}
-
-extension UInt64: AtomicProtocol
+extension UInt64: AtomicInteger
 {
   public typealias AtomicStorage = AtomicUInt64
 
@@ -1146,72 +552,6 @@ extension UInt64: AtomicProtocol
   public static func decodeAtomicStorage(_ storage: AtomicUInt64) -> UInt64
   {
     return storage.decode()
-  }
-#endif
-}
-
-
-extension UInt64: AtomicInteger
-{
-#if swift(>=4.2)
-  @inlinable
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseOr(with operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inlinable
-  public static func atomicLoadThenBitwiseXor(with operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-#else
-  @inline(__always)
-  public static func atomicLoadThenWrappingIncrement(by operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsAdd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenWrappingDecrement(by operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsSubtract(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseAnd(with operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsBitwiseAnd(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseOr(with operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsBitwiseOr(pointer, AtomicStorage(operand), ordering._rawValue).decode()
-  }
-
-  @inline(__always)
-  public static func atomicLoadThenBitwiseXor(with operand: UInt64, at pointer: UnsafeMutablePointer<AtomicStorage>, ordering: AtomicUpdateOrdering) -> UInt64
-  {
-    return CAtomicsBitwiseXor(pointer, AtomicStorage(operand), ordering._rawValue).decode()
   }
 #endif
 }

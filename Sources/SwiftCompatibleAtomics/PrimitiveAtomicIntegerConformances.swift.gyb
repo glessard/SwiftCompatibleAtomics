@@ -1,0 +1,40 @@
+//
+//  PrimitiveAtomicIntegerConformances.swift
+//
+//  Licensed under Apache License v2.0
+//
+
+import CAtomicsPrimitives
+% IntegerTypes = ['Int', 'UInt', 'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64']
+% for Type in IntegerTypes:
+%{
+  rmwOperations = [
+    ('WrappingDecrement', 'Subtract',  'by'),
+    ('BitwiseAnd',        'BitwiseAnd', 'with'),
+    ('BitwiseOr',         'BitwiseOr',  'with'),
+    ('BitwiseXor',        'BitwiseXor', 'with'),
+  ]
+}%
+
+extension Atomic${Type}: PrimitiveAtomicInteger
+{
+#if swift(>=4.2)
+% for inlinable in ['@inlinable', '@inline(__always)']:
+% end = '#else' if inlinable == '@inlinable' else '#endif'
+  ${inlinable}
+  public static func atomicLoadThenWrappingIncrement(by operand: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering) -> Atomic${Type}
+  {
+    return CAtomicsAdd(pointer, operand, ordering._rawValue)
+  }
+% for (sname, pname, label) in rmwOperations:
+
+  ${inlinable}
+  public static func atomicLoadThen${sname}(${label} operand: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering) -> Atomic${Type}
+  {
+    return CAtomics${pname}(pointer, operand, ordering._rawValue)
+  }
+% end # rmwOperations
+${end}
+% end # inlinable
+}
+% end # for

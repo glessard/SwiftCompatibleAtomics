@@ -31,12 +31,12 @@ public protocol PrimitiveAtomic
   static func atomicCompareExchange(expected: Self,
                                     desired: Self,
                                     at pointer: UnsafeMutablePointer<Self>,
-                                    ordering: AtomicUpdateOrdering,
+                                    successOrdering: AtomicUpdateOrdering,
                                     failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Self)
 
   static func atomicWeakCompareExchange(expected: Self,
                                         desired: __owned Self,
                                         at pointer: UnsafeMutablePointer<Self>,
-                                        ordering: AtomicUpdateOrdering,
+                                        successOrdering: AtomicUpdateOrdering,
                                         failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: Self)
 }

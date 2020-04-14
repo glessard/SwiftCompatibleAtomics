@@ -35,7 +35,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -71,7 +71,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -103,7 +103,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -139,7 +139,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -171,7 +171,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -207,7 +207,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -239,7 +239,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -275,7 +275,7 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r3, i.load(ordering: .relaxed))
 
     repeat {
-      (s, r) = i.weakCompareExchange(expected: r, desired: r1, ordering: .acquiringAndReleasing, failureOrdering: .relaxed)
+      (s, r) = i.weakCompareExchange(expected: r, desired: r1, successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r3, r)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
@@ -306,12 +306,12 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r1.toOpaque(), r.toOpaque())
     XCTAssertEqual(r3.toOpaque(), i.load(ordering: .relaxed).toOpaque())
 
-    (s, j) = i.compareExchange(expected: j, desired: r1, ordering: .sequentiallyConsistent, failureOrdering: .relaxed)
+    (s, j) = i.compareExchange(expected: j, desired: r1, successOrdering: .sequentiallyConsistent, failureOrdering: .relaxed)
     XCTAssertEqual(s, false)
     XCTAssertEqual(r3.toOpaque(), j.toOpaque())
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .sequentiallyConsistent, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r1, successOrdering: .sequentiallyConsistent, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r1.toOpaque(), i.load(ordering: .relaxed).toOpaque())
 
@@ -342,12 +342,12 @@ public class AtomicPointerTests: XCTestCase
     XCTAssertEqual(r1?.toOpaque(), r?.toOpaque())
     XCTAssertEqual(r3?.toOpaque(), i.load(ordering: .relaxed)?.toOpaque())
 
-    (s, j) = i.compareExchange(expected: j, desired: r1, ordering: .sequentiallyConsistent, failureOrdering: .relaxed)
+    (s, j) = i.compareExchange(expected: j, desired: r1, successOrdering: .sequentiallyConsistent, failureOrdering: .relaxed)
     XCTAssertEqual(s, false)
     XCTAssertEqual(r3?.toOpaque(), j?.toOpaque())
 
     repeat {
-      (s, j) = i.weakCompareExchange(expected: j, desired: r1, ordering: .sequentiallyConsistent, failureOrdering: .relaxed)
+      (s, j) = i.weakCompareExchange(expected: j, desired: r1, successOrdering: .sequentiallyConsistent, failureOrdering: .relaxed)
     } while s == false
     XCTAssertEqual(r1?.toOpaque(), i.load(ordering: .relaxed)?.toOpaque())
 

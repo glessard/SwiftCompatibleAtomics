@@ -52,11 +52,11 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   }
 
   @inlinable
-  public func storeIfNil(_ desired: Instance) -> Instance
+  public func storeIfNilThenLoad(_ desired: Instance) -> Instance
   {
     let value = Unmanaged.passRetained(desired)
     let (_, existing) = atomic.compareExchange(expected: nil, desired: value,
-                                               ordering: .acquiringAndReleasing,
+                                               successOrdering: .acquiringAndReleasing,
                                                failureOrdering: .acquiring)
     if let existing = existing
     {
@@ -119,11 +119,11 @@ public struct UnsafeAtomicLazyReference<Instance: AnyObject>
   }
 
   @inline(__always)
-  public func storeIfNil(_ desired: Instance) -> Instance
+  public func storeIfNilThenLoad(_ desired: Instance) -> Instance
   {
     let value = Unmanaged.passRetained(desired)
     let (_, existing) = atomic.compareExchange(expected: nil, desired: value,
-                                               ordering: .acquiringAndReleasing,
+                                               successOrdering: .acquiringAndReleasing,
                                                failureOrdering: .acquiring)
     if let existing = existing
     {
