@@ -26,3 +26,5 @@ or, if you prefer to avoid source breaking changes:
 0.3.0 Renamed 'UnsafeAtomic' to 'UnsafePointerToAtomic', matching pitched implementation as of April 7th
 
 0.4.0 Implemented the solution in two protocol layers, matching pitched implementation as of April 10th
+
+0.5.0 API tweaks, layout improvements for 'AtomicInteger'
