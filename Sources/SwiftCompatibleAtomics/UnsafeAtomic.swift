@@ -404,15 +404,3 @@ extension UnsafeAtomic where Value: AtomicInteger
   }
 #endif
 }
-
-#if swift(>=4.1)
-#else
-extension UnsafeMutablePointer
-{
-  @_versioned
-  func deallocate()
-  {
-    self.deallocate(capacity: 1)
-  }
-}
-#endif

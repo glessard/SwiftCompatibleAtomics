@@ -17,16 +17,9 @@ public class AtomicIntegerTests: XCTestCase
     let i = UnsafeAtomic<${IntType}>.create(initialValue: 0)
     XCTAssertEqual(i.load(ordering: .relaxed), 0)
 
-#if swift(>=4.0)
     let r1 = ${IntType}.randomPositive()
     let r2 = ${IntType}.randomPositive()
     let r3 = ${IntType}.randomPositive()
-#else
-% truncating = '' if (IntType == 'Int' or IntType == 'UInt' or IntType == 'Int64' or IntType == 'UInt64') else 'truncatingBitPattern: '
-    let r1 = ${IntType}(${truncating}UInt.randomPositive())
-    let r2 = ${IntType}(${truncating}UInt.randomPositive())
-    let r3 = ${IntType}(${truncating}UInt.randomPositive())
-#endif
 
     i.store(r1, ordering: .relaxed)
     XCTAssertEqual(r1, i.load(ordering: .relaxed))
