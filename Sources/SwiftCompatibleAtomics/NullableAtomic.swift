@@ -16,7 +16,7 @@ public protocol PrimitiveAtomicOptional: PrimitiveAtomic
   static var nilValue: Self { get }
 }
 
-extension Optional: AtomicProtocol where Wrapped: AtomicProtocol, Wrapped.AtomicStorage: PrimitiveAtomicOptional
+extension Optional: AtomicValue where Wrapped: AtomicValue, Wrapped.AtomicStorage: PrimitiveAtomicOptional
 {
   public typealias AtomicStorage = Wrapped.AtomicStorage
 

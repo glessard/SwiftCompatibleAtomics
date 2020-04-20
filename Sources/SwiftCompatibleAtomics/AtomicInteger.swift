@@ -10,5 +10,5 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol AtomicInteger: AtomicProtocol, FixedWidthInteger
+public protocol AtomicInteger: AtomicValue, FixedWidthInteger
   where AtomicStorage: PrimitiveAtomicInteger {}

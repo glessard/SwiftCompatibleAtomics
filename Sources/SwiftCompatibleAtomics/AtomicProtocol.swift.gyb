@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol AtomicProtocol
+public protocol AtomicValue
 {
   associatedtype AtomicStorage: PrimitiveAtomic
 
@@ -21,7 +21,7 @@ public protocol AtomicProtocol
   static func decodeAtomicStorage(_ storage: AtomicStorage) -> Self
 }
 
-extension AtomicProtocol where Self: RawRepresentable, Self.RawValue: AtomicProtocol, Self.RawValue.AtomicStorage == AtomicStorage
+extension AtomicValue where Self: RawRepresentable, Self.RawValue: AtomicValue, Self.RawValue.AtomicStorage == AtomicStorage
 {
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:

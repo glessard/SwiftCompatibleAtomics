@@ -12,7 +12,7 @@
 
 import Swift
 
-public struct UnsafeAtomic<Value: AtomicProtocol>
+public struct UnsafeAtomic<Value: AtomicValue>
 {
 #if swift(>=4.2)
   public struct Storage

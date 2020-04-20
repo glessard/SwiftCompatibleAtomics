@@ -6,7 +6,7 @@
 
 import CAtomicsPrimitives
 
-extension UnsafePointer: AtomicProtocol
+extension UnsafePointer: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptionalRawPointer
 
@@ -61,7 +61,7 @@ extension UnsafePointer: AtomicProtocol
 #endif
 }
 
-extension UnsafeRawPointer: AtomicProtocol
+extension UnsafeRawPointer: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptionalRawPointer
 
@@ -116,7 +116,7 @@ extension UnsafeRawPointer: AtomicProtocol
 #endif
 }
 
-extension UnsafeMutablePointer: AtomicProtocol
+extension UnsafeMutablePointer: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptionalMutableRawPointer
 
@@ -171,7 +171,7 @@ extension UnsafeMutablePointer: AtomicProtocol
 #endif
 }
 
-extension UnsafeMutableRawPointer: AtomicProtocol
+extension UnsafeMutableRawPointer: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptionalMutableRawPointer
 
@@ -226,7 +226,7 @@ extension UnsafeMutableRawPointer: AtomicProtocol
 #endif
 }
 
-extension Unmanaged: AtomicProtocol
+extension Unmanaged: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptionalMutableRawPointer
 

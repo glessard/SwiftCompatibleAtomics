@@ -9,7 +9,7 @@ import XCTest
 
 import SwiftCompatibleAtomics
 
-enum TestEnum: UInt32, AtomicProtocol
+enum TestEnum: UInt32, AtomicValue
 {
   case a = 0, b, c, d, e, f, g, h
 }
@@ -45,7 +45,7 @@ class AtomicRepresentableTests: XCTestCase
 
   func testCustomAtomicRawRepresentable()
   {
-    struct AtomickableState: RawRepresentable, Equatable, AtomicProtocol
+    struct AtomickableState: RawRepresentable, Equatable, AtomicValue
     {
       let rawValue: UInt
       init(rawValue: UInt) { self.rawValue = rawValue }

@@ -10,7 +10,7 @@ import CAtomicsPrimitives
 % Raw = 'Raw' if ('Raw' in PointerType) else ''
 % binding = '.assumingMemoryBound(to: Pointee.self)' if (Raw == '' and PointerType != 'Unmanaged') else ''
 
-extension ${PointerType}: AtomicProtocol
+extension ${PointerType}: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptional${Mutable}RawPointer
 
@@ -45,7 +45,7 @@ ${end}
 }
 % end # for PointerType
 
-extension Unmanaged: AtomicProtocol
+extension Unmanaged: AtomicValue
 {
   public typealias AtomicStorage = AtomicOptionalMutableRawPointer
 
