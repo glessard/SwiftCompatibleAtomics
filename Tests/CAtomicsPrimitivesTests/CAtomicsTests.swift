@@ -658,6 +658,36 @@ extension CAtomicsBasicTests
     XCTAssertEqual(r0.tag &+ 1, r1.tag)
   }
 
+  public func testAtomicTaggedRawPointer()
+  {
+    let r0 = TaggedRawPointer(nil, tag: 0)
+    let r1 = TaggedRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: 1)
+    let r2 = TaggedRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: 2)
+    let r3 = TaggedRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: 3)
+
+    var i = AtomicTaggedRawPointer(r0)
+    XCTAssertEqual(r0, i.decode())
+    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+
+    CAtomicsStore(&i, AtomicTaggedRawPointer(r1), .relaxed)
+    var j = CAtomicsLoad(&i, .relaxed)
+    XCTAssertEqual(i.decode(), j.decode())
+
+    j = CAtomicsExchange(&i, AtomicTaggedRawPointer(r2), .relaxed)
+    XCTAssertEqual(r1, j.decode())
+    XCTAssertEqual(r2, i.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicTaggedRawPointer(r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(r2, j.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicTaggedRawPointer(r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(r2, j.decode())
+
+    while !CAtomicsCompareAndExchangeWeak(&i, &j, AtomicTaggedRawPointer(r1), .relaxed, .relaxed) {}
+    XCTAssertEqual(r3, j.decode())
+    XCTAssertEqual(r1, i.decode())
+  }
+
   public func testTaggedMutableRawPointer()
   {
     let r0 = TaggedMutableRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: .randomPositive())
@@ -677,6 +707,36 @@ extension CAtomicsBasicTests
     XCTAssertEqual(nil, r1.ptr)
     XCTAssertNotEqual(r0.ptr, r1.ptr)
     XCTAssertEqual(r0.tag &+ 1, r1.tag)
+  }
+
+  public func testAtomicTaggedMutableRawPointer()
+  {
+    let r0 = TaggedMutableRawPointer(nil, tag: 0)
+    let r1 = TaggedMutableRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: 1)
+    let r2 = TaggedMutableRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: 2)
+    let r3 = TaggedMutableRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: 3)
+
+    var i = AtomicTaggedMutableRawPointer(r0)
+    XCTAssertEqual(r0, i.decode())
+    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+
+    CAtomicsStore(&i, AtomicTaggedMutableRawPointer(r1), .relaxed)
+    var j = CAtomicsLoad(&i, .relaxed)
+    XCTAssertEqual(i.decode(), j.decode())
+
+    j = CAtomicsExchange(&i, AtomicTaggedMutableRawPointer(r2), .relaxed)
+    XCTAssertEqual(r1, j.decode())
+    XCTAssertEqual(r2, i.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicTaggedMutableRawPointer(r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(r2, j.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicTaggedMutableRawPointer(r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(r2, j.decode())
+
+    while !CAtomicsCompareAndExchangeWeak(&i, &j, AtomicTaggedMutableRawPointer(r1), .relaxed, .relaxed) {}
+    XCTAssertEqual(r3, j.decode())
+    XCTAssertEqual(r1, i.decode())
   }
 
 }

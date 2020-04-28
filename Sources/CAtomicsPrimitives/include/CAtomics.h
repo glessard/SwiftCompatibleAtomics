@@ -221,9 +221,30 @@ CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt64, unsigned long long)
 #define __UNION_TYPE __int128
 #endif
 
-#define CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(unionType, pointerType) \
-        CATOMICS_PRIMITIVES_TAGGED_POINTER_STRUCT(unionType, __UNION_TYPE, pointerType) \
-        CATOMICS_PRIMITIVES_TAGGED_POINTER_CREATE(unionType, pointerType)
+#define CATOMICS_PRIMITIVES_TAGGED_POINTER_ENCODE(swiftCompatibleType) \
+        static __inline__ __attribute__((__always_inline__)) \
+        SWIFT_NAME(Atomic##swiftCompatibleType.init(_:)) \
+        Atomic##swiftCompatibleType Atomic##swiftCompatibleType##Create(swiftCompatibleType value) \
+        { Atomic##swiftCompatibleType s; s.a = value.tag_ptr; return s; }
+
+#define CATOMICS_PRIMITIVES_TAGGED_POINTER_DECODE(swiftCompatibleType) \
+        static __inline__ __attribute__((__always_inline__)) \
+        SWIFT_NAME(Atomic##swiftCompatibleType.decode(self:)) \
+        swiftCompatibleType Atomic##swiftCompatibleType##Decode(Atomic##swiftCompatibleType s) \
+        { swiftCompatibleType u; u.tag_ptr = s.a; return u; }
+
+#define CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(swiftCompatibleType, pointerType) \
+        CATOMICS_PRIMITIVES_STRUCT(Atomic##swiftCompatibleType, _Atomic(__UNION_TYPE)) \
+        CATOMICS_PRIMITIVES_IS_LOCK_FREE(Atomic##swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_TAGGED_POINTER_STRUCT(swiftCompatibleType, __UNION_TYPE, pointerType) \
+        CATOMICS_PRIMITIVES_TAGGED_POINTER_CREATE(swiftCompatibleType, pointerType) \
+        CATOMICS_PRIMITIVES_TAGGED_POINTER_ENCODE(swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_TAGGED_POINTER_DECODE(swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_LOAD(Atomic##swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_STORE(Atomic##swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_SWAP(Atomic##swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_STRONG_CAS(Atomic##swiftCompatibleType, __UNION_TYPE) \
+        CATOMICS_PRIMITIVES_WEAK_CAS(Atomic##swiftCompatibleType, __UNION_TYPE)
 
 CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(TaggedRawPointer, const void* _Nullable)
 CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(TaggedMutableRawPointer, void* _Nullable)
@@ -231,6 +252,9 @@ CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(TaggedMutableRawPointer, void* _Null
 #undef CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE
 #undef CATOMICS_PRIMITIVES_TAGGED_POINTER_STRUCT
 #undef CATOMICS_PRIMITIVES_TAGGED_POINTER_CREATE
+#undef CATOMICS_PRIMITIVES_TAGGED_POINTER_ENCODE
+#undef CATOMICS_PRIMITIVES_TAGGED_POINTER_DECODE
+
 #undef __UNION_TYPE
 
 // fence

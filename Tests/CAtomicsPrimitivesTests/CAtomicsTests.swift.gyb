@@ -148,5 +148,35 @@ extension CAtomicsBasicTests
     XCTAssertEqual(r0.tag &+ 1, r1.tag)
   }
 
+  public func testAtomic${taggedPointer}()
+  {
+    let r0 = ${taggedPointer}(nil, tag: 0)
+    let r1 = ${taggedPointer}(Unsafe${mutable}RawPointer(bitPattern: UInt.randomPositive()), tag: 1)
+    let r2 = ${taggedPointer}(Unsafe${mutable}RawPointer(bitPattern: UInt.randomPositive()), tag: 2)
+    let r3 = ${taggedPointer}(Unsafe${mutable}RawPointer(bitPattern: UInt.randomPositive()), tag: 3)
+
+    var i = Atomic${taggedPointer}(r0)
+    XCTAssertEqual(r0, i.decode())
+    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+
+    CAtomicsStore(&i, Atomic${taggedPointer}(r1), .relaxed)
+    var j = CAtomicsLoad(&i, .relaxed)
+    XCTAssertEqual(i.decode(), j.decode())
+
+    j = CAtomicsExchange(&i, Atomic${taggedPointer}(r2), .relaxed)
+    XCTAssertEqual(r1, j.decode())
+    XCTAssertEqual(r2, i.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, Atomic${taggedPointer}(r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(r2, j.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, Atomic${taggedPointer}(r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(r2, j.decode())
+
+    while !CAtomicsCompareAndExchangeWeak(&i, &j, Atomic${taggedPointer}(r1), .relaxed, .relaxed) {}
+    XCTAssertEqual(r3, j.decode())
+    XCTAssertEqual(r1, i.decode())
+  }
+
 % end # for
 }

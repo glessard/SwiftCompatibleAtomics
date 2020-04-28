@@ -18,6 +18,8 @@ extension CAtomicsBasicTests {
     static let __allTests__CAtomicsBasicTests = [
         ("testAtomicMutableRawPointer", testAtomicMutableRawPointer),
         ("testAtomicRawPointer", testAtomicRawPointer),
+        ("testAtomicTaggedMutableRawPointer", testAtomicTaggedMutableRawPointer),
+        ("testAtomicTaggedRawPointer", testAtomicTaggedRawPointer),
         ("testFence", testFence),
         ("testInt", testInt),
         ("testInt16", testInt16),
