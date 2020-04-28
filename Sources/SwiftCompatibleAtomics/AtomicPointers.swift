@@ -26,7 +26,7 @@ extension UnsafePointer: AtomicValue
   @inlinable
   public static func encodeAtomicStorage(for value: UnsafePointer) -> AtomicRawPointer
   {
-    return AtomicRawPointer(value)
+    return AtomicRawPointer(encoding: value)
   }
 
   @inlinable
@@ -50,7 +50,7 @@ extension UnsafePointer: AtomicValue
   @inline(__always)
   public static func encodeAtomicStorage(for value: UnsafePointer) -> AtomicRawPointer
   {
-    return AtomicRawPointer(value)
+    return AtomicRawPointer(encoding: value)
   }
 
   @inline(__always)
@@ -81,7 +81,7 @@ extension UnsafeRawPointer: AtomicValue
   @inlinable
   public static func encodeAtomicStorage(for value: UnsafeRawPointer) -> AtomicRawPointer
   {
-    return AtomicRawPointer(value)
+    return AtomicRawPointer(encoding: value)
   }
 
   @inlinable
@@ -105,7 +105,7 @@ extension UnsafeRawPointer: AtomicValue
   @inline(__always)
   public static func encodeAtomicStorage(for value: UnsafeRawPointer) -> AtomicRawPointer
   {
-    return AtomicRawPointer(value)
+    return AtomicRawPointer(encoding: value)
   }
 
   @inline(__always)
@@ -136,7 +136,7 @@ extension UnsafeMutablePointer: AtomicValue
   @inlinable
   public static func encodeAtomicStorage(for value: UnsafeMutablePointer) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value)
+    return AtomicMutableRawPointer(encoding: value)
   }
 
   @inlinable
@@ -160,7 +160,7 @@ extension UnsafeMutablePointer: AtomicValue
   @inline(__always)
   public static func encodeAtomicStorage(for value: UnsafeMutablePointer) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value)
+    return AtomicMutableRawPointer(encoding: value)
   }
 
   @inline(__always)
@@ -191,7 +191,7 @@ extension UnsafeMutableRawPointer: AtomicValue
   @inlinable
   public static func encodeAtomicStorage(for value: UnsafeMutableRawPointer) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value)
+    return AtomicMutableRawPointer(encoding: value)
   }
 
   @inlinable
@@ -215,7 +215,7 @@ extension UnsafeMutableRawPointer: AtomicValue
   @inline(__always)
   public static func encodeAtomicStorage(for value: UnsafeMutableRawPointer) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value)
+    return AtomicMutableRawPointer(encoding: value)
   }
 
   @inline(__always)
@@ -246,7 +246,7 @@ extension Unmanaged: AtomicValue
   @inlinable
   public static func encodeAtomicStorage(for value: Unmanaged) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value.toOpaque())
+    return AtomicMutableRawPointer(encoding: value.toOpaque())
   }
 
   @inlinable
@@ -270,7 +270,7 @@ extension Unmanaged: AtomicValue
   @inline(__always)
   public static func encodeAtomicStorage(for value: Unmanaged) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value.toOpaque())
+    return AtomicMutableRawPointer(encoding: value.toOpaque())
   }
 
   @inline(__always)

@@ -22,7 +22,7 @@ extension ${PointerType}: PrimitiveAtomicOptional
   public static var nilValue: ${PointerType} {
     ${inlinable}
     get {
-      return ${PointerType}(nil)
+      return ${PointerType}(encoding: nil)
     }
   }
 ${end}

@@ -19,7 +19,7 @@ extension AtomicRawPointer: PrimitiveAtomicOptional
   public static var nilValue: AtomicRawPointer {
     @inlinable
     get {
-      return AtomicRawPointer(nil)
+      return AtomicRawPointer(encoding: nil)
     }
   }
 #else
@@ -33,7 +33,7 @@ extension AtomicRawPointer: PrimitiveAtomicOptional
   public static var nilValue: AtomicRawPointer {
     @inline(__always)
     get {
-      return AtomicRawPointer(nil)
+      return AtomicRawPointer(encoding: nil)
     }
   }
 #endif
@@ -52,7 +52,7 @@ extension AtomicMutableRawPointer: PrimitiveAtomicOptional
   public static var nilValue: AtomicMutableRawPointer {
     @inlinable
     get {
-      return AtomicMutableRawPointer(nil)
+      return AtomicMutableRawPointer(encoding: nil)
     }
   }
 #else
@@ -66,7 +66,7 @@ extension AtomicMutableRawPointer: PrimitiveAtomicOptional
   public static var nilValue: AtomicMutableRawPointer {
     @inline(__always)
     get {
-      return AtomicMutableRawPointer(nil)
+      return AtomicMutableRawPointer(encoding: nil)
     }
   }
 #endif

@@ -32,7 +32,7 @@ extension ${PointerType}: AtomicValue
   ${inlinable}
   public static func encodeAtomicStorage(for value: ${PointerType}) -> Atomic${Mutable}RawPointer
   {
-    return Atomic${Mutable}RawPointer(value)
+    return Atomic${Mutable}RawPointer(encoding: value)
   }
 
   ${inlinable}
@@ -67,7 +67,7 @@ extension Unmanaged: AtomicValue
   ${inlinable}
   public static func encodeAtomicStorage(for value: Unmanaged) -> AtomicMutableRawPointer
   {
-    return AtomicMutableRawPointer(value.toOpaque())
+    return AtomicMutableRawPointer(encoding: value.toOpaque())
   }
 
   ${inlinable}

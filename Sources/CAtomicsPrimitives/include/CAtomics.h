@@ -70,78 +70,72 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 
 // macro for atomic type generation
 
-#define CATOMICS_PRIMITIVES_STRUCT(swiftType, atomicType) \
-        typedef struct { volatile atomicType a; } swiftType;
+#define CATOMICS_PRIMITIVES_STRUCT(primitiveAtomicType, c11AtomicType) \
+        typedef struct { volatile c11AtomicType a; } primitiveAtomicType;
 
 // macros for atomic function generation
 
-#define CATOMICS_PRIMITIVES_IS_LOCK_FREE(swiftType) \
+#define CATOMICS_PRIMITIVES_IS_LOCK_FREE(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        _Bool CAtomicsIsLockFree(swiftType *_Nonnull atomic) \
+        _Bool CAtomicsIsLockFree(primitiveAtomicType *_Nonnull atomic) \
         { return atomic_is_lock_free(&(atomic->a)); }
 
-#define CATOMICS_PRIMITIVES_DECODE(swiftType, parameterType) \
+#define CATOMICS_PRIMITIVES_ENCODE(primitiveAtomicType, swiftCompatibleType, conversionType) \
         static __inline__ __attribute__((__always_inline__)) \
-        SWIFT_NAME(swiftType.decode(self:)) \
-        parameterType swiftType##Decode(swiftType s) \
-        { return (parameterType) s.a; }
+        SWIFT_NAME(primitiveAtomicType.init(encoding:)) \
+        primitiveAtomicType primitiveAtomicType##Encode(swiftCompatibleType value) \
+        { primitiveAtomicType s; s.a = (conversionType) value; return s; }
 
-#define CATOMICS_PRIMITIVES_CREATE(swiftType, parameterType, compatibleType) \
+#define CATOMICS_PRIMITIVES_DECODE(primitiveAtomicType, swiftCompatibleType) \
         static __inline__ __attribute__((__always_inline__)) \
-        SWIFT_NAME(swiftType.init(_:)) \
-        swiftType swiftType##Create(parameterType value) \
-        { swiftType s; s.a = (compatibleType) value; return s; }
+        SWIFT_NAME(primitiveAtomicType.decode(self:)) \
+        swiftCompatibleType primitiveAtomicType##Decode(primitiveAtomicType s) \
+        { return (swiftCompatibleType) s.a; }
 
-#define CATOMICS_PRIMITIVES_LOAD(swiftType) \
+#define CATOMICS_PRIMITIVES_LOAD(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        swiftType CAtomicsLoad(swiftType *_Nonnull atomic, enum LoadMemoryOrder order) \
-        { swiftType s; s.a = atomic_load_explicit(&(atomic->a), order); return s; }
+        primitiveAtomicType CAtomicsLoad(primitiveAtomicType *_Nonnull atomic, enum LoadMemoryOrder order) \
+        { primitiveAtomicType s; s.a = atomic_load_explicit(&(atomic->a), order); return s; }
 
-#define CATOMICS_PRIMITIVES_STORE(swiftType) \
+#define CATOMICS_PRIMITIVES_STORE(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        void CAtomicsStore(swiftType *_Nonnull atomic, swiftType value, enum StoreMemoryOrder order) \
+        void CAtomicsStore(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType value, enum StoreMemoryOrder order) \
         { atomic_store_explicit(&(atomic->a), value.a, order); }
 
-#define CATOMICS_PRIMITIVES_SWAP(swiftType) \
+#define CATOMICS_PRIMITIVES_SWAP(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        swiftType CAtomicsExchange(swiftType *_Nonnull atomic, swiftType value, enum UpdateMemoryOrder order) \
-        { swiftType s; s.a = atomic_exchange_explicit(&(atomic->a), value.a, order); return s; }
+        primitiveAtomicType CAtomicsExchange(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType value, enum UpdateMemoryOrder order) \
+        { primitiveAtomicType s; s.a = atomic_exchange_explicit(&(atomic->a), value.a, order); return s; }
 
-#define CATOMICS_PRIMITIVES_RMW(swiftType, pName, op, opName) \
+#define CATOMICS_PRIMITIVES_WEAK_CAS(primitiveAtomicType, conversionType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        swiftType CAtomics##opName(swiftType *_Nonnull atomic, swiftType pName, enum UpdateMemoryOrder order) \
-        { swiftType s; s.a = atomic_##op##_explicit(&(atomic->a), pName.a, order); return s; }
-
-#define CATOMICS_PRIMITIVES_WEAK_CAS(swiftType, parameterType) \
-        static __inline__ __attribute__((__always_inline__)) \
-        __attribute__((overloadable)) \
-        _Bool CAtomicsCompareAndExchangeWeak(swiftType *_Nonnull atomic, \
-                                             swiftType *_Nonnull current, swiftType future, \
+        _Bool CAtomicsCompareAndExchangeWeak(primitiveAtomicType *_Nonnull atomic, \
+                                             primitiveAtomicType *_Nonnull current, primitiveAtomicType future, \
                                              enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
           assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
           assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
-          parameterType c = current->a; \
+          conversionType c = current->a; \
           _Bool b = atomic_compare_exchange_weak_explicit(&(atomic->a), &c, future.a, orderSwap, orderLoad); \
           current->a = c; \
           return b; \
         }
 
-#define CATOMICS_PRIMITIVES_STRONG_CAS(swiftType, parameterType) \
+#define CATOMICS_PRIMITIVES_STRONG_CAS(primitiveAtomicType, conversionType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        _Bool CAtomicsCompareAndExchangeStrong(swiftType *_Nonnull atomic, \
-                                               swiftType *_Nonnull current, swiftType future, \
+        _Bool CAtomicsCompareAndExchangeStrong(primitiveAtomicType *_Nonnull atomic, \
+                                               primitiveAtomicType *_Nonnull current, primitiveAtomicType future, \
                                                enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
           assert((unsigned int)orderLoad <= (unsigned int)orderSwap); \
           assert(orderSwap == __ATOMIC_RELEASE ? orderLoad == __ATOMIC_RELAXED : true); \
-          parameterType c = current->a; \
+          conversionType c = current->a; \
           _Bool b = atomic_compare_exchange_strong_explicit(&(atomic->a), &c, future.a, orderSwap, orderLoad); \
           current->a = c; \
           return b; \
@@ -149,48 +143,60 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 
 // macro to generate atomic struct + functions
 
-#define CATOMICS_PRIMITIVES_GENERATE(swiftType, atomicType, parameterType, compatibleType) \
-        CATOMICS_PRIMITIVES_STRUCT(swiftType, atomicType) \
-        CATOMICS_PRIMITIVES_IS_LOCK_FREE(swiftType) \
-        CATOMICS_PRIMITIVES_DECODE(swiftType, parameterType) \
-        CATOMICS_PRIMITIVES_CREATE(swiftType, parameterType, compatibleType) \
-        CATOMICS_PRIMITIVES_LOAD(swiftType) \
-        CATOMICS_PRIMITIVES_STORE(swiftType) \
-        CATOMICS_PRIMITIVES_SWAP(swiftType) \
-        CATOMICS_PRIMITIVES_STRONG_CAS(swiftType, compatibleType) \
-        CATOMICS_PRIMITIVES_WEAK_CAS(swiftType, compatibleType)
+#define CATOMICS_PRIMITIVES_GENERATE(primitiveAtomicType, swiftCompatibleType, conversionType) \
+        CATOMICS_PRIMITIVES_STRUCT(primitiveAtomicType, _Atomic(conversionType)) \
+        CATOMICS_PRIMITIVES_IS_LOCK_FREE(primitiveAtomicType) \
+        CATOMICS_PRIMITIVES_ENCODE(primitiveAtomicType, swiftCompatibleType, conversionType) \
+        CATOMICS_PRIMITIVES_DECODE(primitiveAtomicType, swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_LOAD(primitiveAtomicType) \
+        CATOMICS_PRIMITIVES_STORE(primitiveAtomicType) \
+        CATOMICS_PRIMITIVES_SWAP(primitiveAtomicType) \
+        CATOMICS_PRIMITIVES_STRONG_CAS(primitiveAtomicType, conversionType) \
+        CATOMICS_PRIMITIVES_WEAK_CAS(primitiveAtomicType, conversionType)
 
 // generate atomic pointer types + functions
 
-CATOMICS_PRIMITIVES_GENERATE(AtomicRawPointer, atomic_uintptr_t, const void* _Nullable, uintptr_t)
-CATOMICS_PRIMITIVES_GENERATE(AtomicMutableRawPointer, atomic_uintptr_t, void* _Nullable, uintptr_t)
+CATOMICS_PRIMITIVES_GENERATE(AtomicRawPointer, const void* _Nullable, uintptr_t)
+CATOMICS_PRIMITIVES_GENERATE(AtomicMutableRawPointer, void* _Nullable, uintptr_t)
 
 // macro to generate atomic struct + functions for integer types
 
-#define CATOMICS_PRIMITIVES_INT_GENERATE(swiftType, atomicType, parameterType) \
-        CATOMICS_PRIMITIVES_GENERATE(swiftType, atomicType, parameterType, parameterType) \
-        CATOMICS_PRIMITIVES_RMW(swiftType, increment, fetch_add, Add) \
-        CATOMICS_PRIMITIVES_RMW(swiftType, increment, fetch_sub, Subtract) \
-        CATOMICS_PRIMITIVES_RMW(swiftType, bits, fetch_or, BitwiseOr) \
-        CATOMICS_PRIMITIVES_RMW(swiftType, bits, fetch_xor, BitwiseXor) \
-        CATOMICS_PRIMITIVES_RMW(swiftType, bits, fetch_and, BitwiseAnd)
+#define CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, pName, op, opName) \
+        static __inline__ __attribute__((__always_inline__)) \
+        __attribute__((overloadable)) \
+        primitiveAtomicType CAtomics##opName(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType pName, enum UpdateMemoryOrder order) \
+        { primitiveAtomicType s; s.a = atomic_##op##_explicit(&(atomic->a), pName.a, order); return s; }
+
+#define CATOMICS_PRIMITIVES_INT_GENERATE(primitiveAtomicType, swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_GENERATE(primitiveAtomicType, swiftCompatibleType, swiftCompatibleType) \
+        CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, increment, fetch_add, Add) \
+        CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, increment, fetch_sub, Subtract) \
+        CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, bits, fetch_or, BitwiseOr) \
+        CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, bits, fetch_xor, BitwiseXor) \
+        CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, bits, fetch_and, BitwiseAnd)
 
 // generate atomic integer types + functions
 
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt, atomic_intptr_t, intptr_t)
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt, atomic_uintptr_t, uintptr_t)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt, intptr_t)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt, uintptr_t)
 
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt8, atomic_schar, signed char)
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt8, atomic_uchar, unsigned char)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt8, signed char)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt8, unsigned char)
 
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt16, atomic_short, short)
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt16, atomic_ushort, unsigned short)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt16, short)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt16, unsigned short)
 
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt32, atomic_int, int)
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt32, atomic_uint, unsigned int)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt32, int)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt32, unsigned int)
 
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt64, atomic_llong, long long)
-CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt64, atomic_ullong, unsigned long long)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicInt64, long long)
+CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt64, unsigned long long)
+
+#undef CATOMICS_PRIMITIVES_ENCODE
+#undef CATOMICS_PRIMITIVES_DECODE
+#undef CATOMICS_PRIMITIVES_RMW
+#undef CATOMICS_PRIMITIVES_INT_GENERATE
+#undef CATOMICS_PRIMITIVES_GENERATE
 
 // fence
 
@@ -207,17 +213,10 @@ void CAtomicsThreadFence(enum UpdateMemoryOrder order)
 #undef CATOMICS_PRIMITIVES_STRUCT
 #undef CATOMICS_PRIMITIVES_IS_LOCK_FREE
 
-#undef CATOMICS_PRIMITIVES_DECODE
-#undef CATOMICS_PRIMITIVES_CREATE
-
 #undef CATOMICS_PRIMITIVES_LOAD
 #undef CATOMICS_PRIMITIVES_STORE
 #undef CATOMICS_PRIMITIVES_SWAP
-#undef CATOMICS_PRIMITIVES_RMW
 #undef CATOMICS_PRIMITIVES_WEAK_CAS
 #undef CATOMICS_PRIMITIVES_STRONG_CAS
-
-#undef CATOMICS_PRIMITIVES_GENERATE
-#undef CATOMICS_PRIMITIVES_INT_GENERATE
 
 #endif

@@ -20,49 +20,49 @@ public class CAtomicsBasicTests: XCTestCase
     let r2 = ${i}.randomPositive()
     let r3 = ${i}.randomPositive()
 
-    var i = Atomic${i}(r1)
+    var i = Atomic${i}(encoding: r1)
     XCTAssertEqual(r1, i.decode())
     XCTAssertEqual(CAtomicsIsLockFree(&i), true)
 
-    CAtomicsStore(&i, Atomic${i}(r1), .relaxed)
+    CAtomicsStore(&i, Atomic${i}(encoding: r1), .relaxed)
     var j = CAtomicsLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, Atomic${i}(r2), .relaxed)
+    j = CAtomicsExchange(&i, Atomic${i}(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, Atomic${i}(r1), .relaxed)
+    j = CAtomicsAdd(&i, Atomic${i}(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, Atomic${i}(r2), .relaxed)
+    j = CAtomicsSubtract(&i, Atomic${i}(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, Atomic${i}(r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, Atomic${i}(r2), .relaxed)
+    CAtomicsStore(&i, Atomic${i}(encoding: r1), .relaxed)
+    j = CAtomicsBitwiseOr(&i, Atomic${i}(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, Atomic${i}(r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, Atomic${i}(r1), .relaxed)
+    CAtomicsStore(&i, Atomic${i}(encoding: r2), .relaxed)
+    j = CAtomicsBitwiseXor(&i, Atomic${i}(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, Atomic${i}(r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, Atomic${i}(r2), .relaxed)
+    CAtomicsStore(&i, Atomic${i}(encoding: r1), .relaxed)
+    j = CAtomicsBitwiseAnd(&i, Atomic${i}(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
-    j = Atomic${i}(r1)
-    CAtomicsStore(&i, Atomic${i}(r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, Atomic${i}(r2), .relaxed, .relaxed))
+    j = Atomic${i}(encoding: r1)
+    CAtomicsStore(&i, Atomic${i}(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, Atomic${i}(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
-    j = Atomic${i}(r2)
-    CAtomicsStore(&i, Atomic${i}(r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, Atomic${i}(r3), .relaxed, .relaxed)) {}
+    j = Atomic${i}(encoding: r2)
+    CAtomicsStore(&i, Atomic${i}(encoding: r1), .relaxed)
+    while(!CAtomicsCompareAndExchangeWeak(&i, &j, Atomic${i}(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -80,25 +80,25 @@ public class CAtomicsBasicTests: XCTestCase
     let r2 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
     let r3 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
 
-    var i = ${type}(r0)
+    var i = ${type}(encoding: r0)
     XCTAssertEqual(r0, i.decode())
     XCTAssertEqual(CAtomicsIsLockFree(&i), true)
 
-    CAtomicsStore(&i, ${type}(r1), .relaxed)
+    CAtomicsStore(&i, ${type}(encoding: r1), .relaxed)
     var j = CAtomicsLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, ${type}(r2), .relaxed)
+    j = CAtomicsExchange(&i, ${type}(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, ${type}(r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, ${type}(encoding: r2), .relaxed, .relaxed), false)
     XCTAssertEqual(r2, j.decode())
 
-    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, ${type}(r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, ${type}(encoding: r3), .relaxed, .relaxed), true)
     XCTAssertEqual(r2, j.decode())
 
-    while !CAtomicsCompareAndExchangeWeak(&i, &j, ${type}(r1), .relaxed, .relaxed) {}
+    while !CAtomicsCompareAndExchangeWeak(&i, &j, ${type}(encoding: r1), .relaxed, .relaxed) {}
     XCTAssertEqual(r3, j.decode())
     XCTAssertEqual(r1, i.decode())
   }

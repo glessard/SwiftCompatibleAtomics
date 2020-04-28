@@ -26,7 +26,7 @@ extension Int: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: Int) -> AtomicInt
   {
-    return AtomicInt(value)
+    return AtomicInt(encoding: value)
   }
 
   @inlinable
@@ -50,7 +50,7 @@ extension Int: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: Int) -> AtomicInt
   {
-    return AtomicInt(value)
+    return AtomicInt(encoding: value)
   }
 
   @inline(__always)
@@ -81,7 +81,7 @@ extension UInt: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: UInt) -> AtomicUInt
   {
-    return AtomicUInt(value)
+    return AtomicUInt(encoding: value)
   }
 
   @inlinable
@@ -105,7 +105,7 @@ extension UInt: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: UInt) -> AtomicUInt
   {
-    return AtomicUInt(value)
+    return AtomicUInt(encoding: value)
   }
 
   @inline(__always)
@@ -136,7 +136,7 @@ extension Int8: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: Int8) -> AtomicInt8
   {
-    return AtomicInt8(value)
+    return AtomicInt8(encoding: value)
   }
 
   @inlinable
@@ -160,7 +160,7 @@ extension Int8: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: Int8) -> AtomicInt8
   {
-    return AtomicInt8(value)
+    return AtomicInt8(encoding: value)
   }
 
   @inline(__always)
@@ -191,7 +191,7 @@ extension UInt8: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: UInt8) -> AtomicUInt8
   {
-    return AtomicUInt8(value)
+    return AtomicUInt8(encoding: value)
   }
 
   @inlinable
@@ -215,7 +215,7 @@ extension UInt8: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: UInt8) -> AtomicUInt8
   {
-    return AtomicUInt8(value)
+    return AtomicUInt8(encoding: value)
   }
 
   @inline(__always)
@@ -246,7 +246,7 @@ extension Int16: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: Int16) -> AtomicInt16
   {
-    return AtomicInt16(value)
+    return AtomicInt16(encoding: value)
   }
 
   @inlinable
@@ -270,7 +270,7 @@ extension Int16: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: Int16) -> AtomicInt16
   {
-    return AtomicInt16(value)
+    return AtomicInt16(encoding: value)
   }
 
   @inline(__always)
@@ -301,7 +301,7 @@ extension UInt16: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: UInt16) -> AtomicUInt16
   {
-    return AtomicUInt16(value)
+    return AtomicUInt16(encoding: value)
   }
 
   @inlinable
@@ -325,7 +325,7 @@ extension UInt16: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: UInt16) -> AtomicUInt16
   {
-    return AtomicUInt16(value)
+    return AtomicUInt16(encoding: value)
   }
 
   @inline(__always)
@@ -356,7 +356,7 @@ extension Int32: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: Int32) -> AtomicInt32
   {
-    return AtomicInt32(value)
+    return AtomicInt32(encoding: value)
   }
 
   @inlinable
@@ -380,7 +380,7 @@ extension Int32: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: Int32) -> AtomicInt32
   {
-    return AtomicInt32(value)
+    return AtomicInt32(encoding: value)
   }
 
   @inline(__always)
@@ -411,7 +411,7 @@ extension UInt32: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: UInt32) -> AtomicUInt32
   {
-    return AtomicUInt32(value)
+    return AtomicUInt32(encoding: value)
   }
 
   @inlinable
@@ -435,7 +435,7 @@ extension UInt32: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: UInt32) -> AtomicUInt32
   {
-    return AtomicUInt32(value)
+    return AtomicUInt32(encoding: value)
   }
 
   @inline(__always)
@@ -466,7 +466,7 @@ extension Int64: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: Int64) -> AtomicInt64
   {
-    return AtomicInt64(value)
+    return AtomicInt64(encoding: value)
   }
 
   @inlinable
@@ -490,7 +490,7 @@ extension Int64: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: Int64) -> AtomicInt64
   {
-    return AtomicInt64(value)
+    return AtomicInt64(encoding: value)
   }
 
   @inline(__always)
@@ -521,7 +521,7 @@ extension UInt64: AtomicInteger
   @inlinable
   public static func encodeAtomicStorage(for value: UInt64) -> AtomicUInt64
   {
-    return AtomicUInt64(value)
+    return AtomicUInt64(encoding: value)
   }
 
   @inlinable
@@ -545,7 +545,7 @@ extension UInt64: AtomicInteger
   @inline(__always)
   public static func encodeAtomicStorage(for value: UInt64) -> AtomicUInt64
   {
-    return AtomicUInt64(value)
+    return AtomicUInt64(encoding: value)
   }
 
   @inline(__always)

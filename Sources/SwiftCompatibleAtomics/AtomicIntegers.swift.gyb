@@ -29,7 +29,7 @@ extension ${Type}: AtomicInteger
   ${inlinable}
   public static func encodeAtomicStorage(for value: ${Type}) -> Atomic${Type}
   {
-    return Atomic${Type}(value)
+    return Atomic${Type}(encoding: value)
   }
 
   ${inlinable}
