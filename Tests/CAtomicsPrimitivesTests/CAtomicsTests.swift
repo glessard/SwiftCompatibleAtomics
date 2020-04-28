@@ -618,3 +618,65 @@ public class CAtomicsBasicTests: XCTestCase
     CAtomicsThreadFence(.acquire)
   }
 }
+
+extension TaggedRawPointer: Equatable
+{
+  static public func ==(lhs: TaggedRawPointer, rhs: TaggedRawPointer) -> Bool
+  {
+    return (lhs.ptr == rhs.ptr) && (lhs.tag == rhs.tag)
+  }
+}
+
+extension TaggedMutableRawPointer: Equatable
+{
+  static public func ==(lhs: TaggedMutableRawPointer, rhs: TaggedMutableRawPointer) -> Bool
+  {
+    return (lhs.ptr == rhs.ptr) && (lhs.tag == rhs.tag)
+  }
+}
+
+extension CAtomicsBasicTests
+{
+  public func testTaggedRawPointer()
+  {
+    let r0 = TaggedRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: .randomPositive())
+    var r1 = TaggedRawPointer(nil, tag: 0)
+
+    XCTAssertNotEqual(r0, r1)
+
+    r1 = r0
+    XCTAssertEqual(r0, r1)
+
+    r1.tag += 1
+    XCTAssertNotEqual(r0, r1)
+    XCTAssertEqual(r0.ptr, r1.ptr)
+    XCTAssertEqual(r0.tag &+ 1, r1.tag)
+
+    r1.ptr = nil
+    XCTAssertEqual(nil, r1.ptr)
+    XCTAssertNotEqual(r0.ptr, r1.ptr)
+    XCTAssertEqual(r0.tag &+ 1, r1.tag)
+  }
+
+  public func testTaggedMutableRawPointer()
+  {
+    let r0 = TaggedMutableRawPointer(UnsafeMutableRawPointer(bitPattern: UInt.randomPositive()), tag: .randomPositive())
+    var r1 = TaggedMutableRawPointer(nil, tag: 0)
+
+    XCTAssertNotEqual(r0, r1)
+
+    r1 = r0
+    XCTAssertEqual(r0, r1)
+
+    r1.tag += 1
+    XCTAssertNotEqual(r0, r1)
+    XCTAssertEqual(r0.ptr, r1.ptr)
+    XCTAssertEqual(r0.tag &+ 1, r1.tag)
+
+    r1.ptr = nil
+    XCTAssertEqual(nil, r1.ptr)
+    XCTAssertNotEqual(r0.ptr, r1.ptr)
+    XCTAssertEqual(r0.tag &+ 1, r1.tag)
+  }
+
+}

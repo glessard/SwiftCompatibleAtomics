@@ -198,6 +198,41 @@ CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt64, unsigned long long)
 #undef CATOMICS_PRIMITIVES_INT_GENERATE
 #undef CATOMICS_PRIMITIVES_GENERATE
 
+// tagged pointers -- double-word load, store and CAS
+
+#define CATOMICS_PRIMITIVES_TAGGED_POINTER_STRUCT(unionType, translationType, pointerType) \
+        typedef union { \
+          translationType tag_ptr; \
+          struct { \
+            pointerType ptr; \
+            intptr_t tag; \
+          }; \
+        } unionType;
+
+#define CATOMICS_PRIMITIVES_TAGGED_POINTER_CREATE(unionType, pointerType) \
+        static __inline__ __attribute__((__always_inline__)) \
+        SWIFT_NAME(unionType.init(_:tag:)) \
+        unionType unionType##Create(pointerType p, intptr_t tag) \
+        { unionType s; s.tag = tag; s.ptr = p; return s; }
+
+#if defined(__has32bitPointer__)
+#define __UNION_TYPE long long
+#else
+#define __UNION_TYPE __int128
+#endif
+
+#define CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(unionType, pointerType) \
+        CATOMICS_PRIMITIVES_TAGGED_POINTER_STRUCT(unionType, __UNION_TYPE, pointerType) \
+        CATOMICS_PRIMITIVES_TAGGED_POINTER_CREATE(unionType, pointerType)
+
+CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(TaggedRawPointer, const void* _Nullable)
+CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE(TaggedMutableRawPointer, void* _Nullable)
+
+#undef CATOMICS_PRIMITIVES_TAGGED_POINTER_GENERATE
+#undef CATOMICS_PRIMITIVES_TAGGED_POINTER_STRUCT
+#undef CATOMICS_PRIMITIVES_TAGGED_POINTER_CREATE
+#undef __UNION_TYPE
+
 // fence
 
 static __inline__ __attribute__((__always_inline__))

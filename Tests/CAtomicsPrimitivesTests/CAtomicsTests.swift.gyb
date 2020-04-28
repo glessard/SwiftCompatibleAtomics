@@ -73,8 +73,8 @@ public class CAtomicsBasicTests: XCTestCase
 % for type in pointers:
   public func test${type}()
   {
-% mutptr = 'Mutable' if 'Mutable' in type else ''
-% prefix = 'Unsafe' + mutptr + 'Raw'
+% mutable = 'Mutable' if 'Mutable' in type else ''
+% prefix = 'Unsafe' + mutable + 'Raw'
     let r0 = ${prefix}Pointer(bitPattern: 0)
     let r1 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
     let r2 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
@@ -109,4 +109,44 @@ public class CAtomicsBasicTests: XCTestCase
     CAtomicsThreadFence(.release)
     CAtomicsThreadFence(.acquire)
   }
+}
+
+% taggedPointers = ['TaggedRawPointer', 'TaggedMutableRawPointer']
+% for taggedPointer in taggedPointers:
+extension ${taggedPointer}: Equatable
+{
+  static public func ==(lhs: ${taggedPointer}, rhs: ${taggedPointer}) -> Bool
+  {
+    return (lhs.ptr == rhs.ptr) && (lhs.tag == rhs.tag)
+  }
+}
+
+% end # for
+extension CAtomicsBasicTests
+{
+% taggedPointers = ['TaggedRawPointer', 'TaggedMutableRawPointer']
+% for taggedPointer in taggedPointers:
+% mutable = 'Mutable' if 'Mutable' in type else ''
+  public func test${taggedPointer}()
+  {
+    let r0 = ${taggedPointer}(Unsafe${mutable}RawPointer(bitPattern: UInt.randomPositive()), tag: .randomPositive())
+    var r1 = ${taggedPointer}(nil, tag: 0)
+
+    XCTAssertNotEqual(r0, r1)
+
+    r1 = r0
+    XCTAssertEqual(r0, r1)
+
+    r1.tag += 1
+    XCTAssertNotEqual(r0, r1)
+    XCTAssertEqual(r0.ptr, r1.ptr)
+    XCTAssertEqual(r0.tag &+ 1, r1.tag)
+
+    r1.ptr = nil
+    XCTAssertEqual(nil, r1.ptr)
+    XCTAssertNotEqual(r0.ptr, r1.ptr)
+    XCTAssertEqual(r0.tag &+ 1, r1.tag)
+  }
+
+% end # for
 }

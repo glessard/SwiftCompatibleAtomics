@@ -24,6 +24,8 @@ extension CAtomicsBasicTests {
         ("testInt32", testInt32),
         ("testInt64", testInt64),
         ("testInt8", testInt8),
+        ("testTaggedMutableRawPointer", testTaggedMutableRawPointer),
+        ("testTaggedRawPointer", testTaggedRawPointer),
         ("testUInt", testUInt),
         ("testUInt16", testUInt16),
         ("testUInt32", testUInt32),
