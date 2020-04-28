@@ -162,11 +162,8 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 
 // generate atomic pointer types + functions
 
-CATOMICS_PRIMITIVES_GENERATE(AtomicOptionalRawPointer, atomic_uintptr_t, const void* _Nullable, uintptr_t)
-CATOMICS_PRIMITIVES_GENERATE(AtomicOptionalMutableRawPointer, atomic_uintptr_t, void* _Nullable, uintptr_t)
-
-// CATOMICS_PRIMITIVES_GENERATE(AtomicRawPointer, atomic_uintptr_t, const void* _Nonnull, uintptr_t)
-// CATOMICS_PRIMITIVES_GENERATE(AtomicMutableRawPointer, atomic_uintptr_t, void* _Nonnull, uintptr_t)
+CATOMICS_PRIMITIVES_GENERATE(AtomicRawPointer, atomic_uintptr_t, const void* _Nullable, uintptr_t)
+CATOMICS_PRIMITIVES_GENERATE(AtomicMutableRawPointer, atomic_uintptr_t, void* _Nullable, uintptr_t)
 
 // macro to generate atomic struct + functions for integer types
 

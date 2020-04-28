@@ -69,21 +69,16 @@ public class CAtomicsBasicTests: XCTestCase
   }
 
 % end
-% pointers = ['AtomicOptionalRawPointer', 'AtomicOptionalMutableRawPointer']
+% pointers = ['AtomicRawPointer', 'AtomicMutableRawPointer']
 % for type in pointers:
   public func test${type}()
   {
 % mutptr = 'Mutable' if 'Mutable' in type else ''
 % prefix = 'Unsafe' + mutptr + 'Raw'
-% bang = '' if ('Optional' in type) else '!'
-% if ('Optional' in type):
     let r0 = ${prefix}Pointer(bitPattern: 0)
-% else:
-    let r0 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
-% end # if Optional
-    let r1 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
-    let r2 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
-    let r3 = ${prefix}Pointer(bitPattern: UInt.randomPositive())${bang}
+    let r1 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
+    let r2 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
+    let r3 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
 
     var i = ${type}(r0)
     XCTAssertEqual(r0, i.decode())

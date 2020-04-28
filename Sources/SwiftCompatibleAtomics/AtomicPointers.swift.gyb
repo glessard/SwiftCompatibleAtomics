@@ -12,31 +12,31 @@ import CAtomicsPrimitives
 
 extension ${PointerType}: AtomicValue
 {
-  public typealias AtomicStorage = AtomicOptional${Mutable}RawPointer
+  public typealias AtomicStorage = Atomic${Mutable}RawPointer
 
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
-  public static func prepareAtomicStorage(for value: ${PointerType}) -> AtomicOptional${Mutable}RawPointer
+  public static func prepareAtomicStorage(for value: ${PointerType}) -> Atomic${Mutable}RawPointer
   {
     return encodeAtomicStorage(for: value)
   }
 
   ${inlinable}
-  public static func disposeAtomicStorage(_ storage: inout AtomicOptional${Mutable}RawPointer) -> ${PointerType}
+  public static func disposeAtomicStorage(_ storage: inout Atomic${Mutable}RawPointer) -> ${PointerType}
   {
     return decodeAtomicStorage(storage)
   }
 
   ${inlinable}
-  public static func encodeAtomicStorage(for value: ${PointerType}) -> AtomicOptional${Mutable}RawPointer
+  public static func encodeAtomicStorage(for value: ${PointerType}) -> Atomic${Mutable}RawPointer
   {
-    return AtomicOptional${Mutable}RawPointer(value)
+    return Atomic${Mutable}RawPointer(value)
   }
 
   ${inlinable}
-  public static func decodeAtomicStorage(_ storage: AtomicOptional${Mutable}RawPointer) -> ${PointerType}
+  public static func decodeAtomicStorage(_ storage: Atomic${Mutable}RawPointer) -> ${PointerType}
   {
     return storage.decode()!${binding}
   }
@@ -47,31 +47,31 @@ ${end}
 
 extension Unmanaged: AtomicValue
 {
-  public typealias AtomicStorage = AtomicOptionalMutableRawPointer
+  public typealias AtomicStorage = AtomicMutableRawPointer
 
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
-  public static func prepareAtomicStorage(for value: Unmanaged) -> AtomicOptionalMutableRawPointer
+  public static func prepareAtomicStorage(for value: Unmanaged) -> AtomicMutableRawPointer
   {
     return encodeAtomicStorage(for: value)
   }
 
   ${inlinable}
-  public static func disposeAtomicStorage(_ storage: inout AtomicOptionalMutableRawPointer) -> Unmanaged
+  public static func disposeAtomicStorage(_ storage: inout AtomicMutableRawPointer) -> Unmanaged
   {
     return decodeAtomicStorage(storage)
   }
 
   ${inlinable}
-  public static func encodeAtomicStorage(for value: Unmanaged) -> AtomicOptionalMutableRawPointer
+  public static func encodeAtomicStorage(for value: Unmanaged) -> AtomicMutableRawPointer
   {
-    return AtomicOptionalMutableRawPointer(value.toOpaque())
+    return AtomicMutableRawPointer(value.toOpaque())
   }
 
   ${inlinable}
-  public static func decodeAtomicStorage(_ storage: AtomicOptionalMutableRawPointer) -> Unmanaged
+  public static func decodeAtomicStorage(_ storage: AtomicMutableRawPointer) -> Unmanaged
   {
     return Unmanaged.fromOpaque(storage.decode()!)
   }

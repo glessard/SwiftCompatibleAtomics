@@ -6,7 +6,7 @@
 
 import CAtomicsPrimitives
 
-extension AtomicOptionalRawPointer: PrimitiveAtomicOptional
+extension AtomicRawPointer: PrimitiveAtomicOptional
 {
 #if swift(>=4.2)
   public var isNil: Bool {
@@ -16,10 +16,10 @@ extension AtomicOptionalRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicOptionalRawPointer {
+  public static var nilValue: AtomicRawPointer {
     @inlinable
     get {
-      return AtomicOptionalRawPointer(nil)
+      return AtomicRawPointer(nil)
     }
   }
 #else
@@ -30,16 +30,16 @@ extension AtomicOptionalRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicOptionalRawPointer {
+  public static var nilValue: AtomicRawPointer {
     @inline(__always)
     get {
-      return AtomicOptionalRawPointer(nil)
+      return AtomicRawPointer(nil)
     }
   }
 #endif
 }
 
-extension AtomicOptionalMutableRawPointer: PrimitiveAtomicOptional
+extension AtomicMutableRawPointer: PrimitiveAtomicOptional
 {
 #if swift(>=4.2)
   public var isNil: Bool {
@@ -49,10 +49,10 @@ extension AtomicOptionalMutableRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicOptionalMutableRawPointer {
+  public static var nilValue: AtomicMutableRawPointer {
     @inlinable
     get {
-      return AtomicOptionalMutableRawPointer(nil)
+      return AtomicMutableRawPointer(nil)
     }
   }
 #else
@@ -63,10 +63,10 @@ extension AtomicOptionalMutableRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicOptionalMutableRawPointer {
+  public static var nilValue: AtomicMutableRawPointer {
     @inline(__always)
     get {
-      return AtomicOptionalMutableRawPointer(nil)
+      return AtomicMutableRawPointer(nil)
     }
   }
 #endif

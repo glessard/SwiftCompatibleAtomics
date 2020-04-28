@@ -6,35 +6,35 @@
 
 import CAtomicsPrimitives
 
-extension AtomicOptionalRawPointer: PrimitiveAtomic
+extension AtomicRawPointer: PrimitiveAtomic
 {
 #if swift(>=4.2)
   @inlinable
-  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicLoadOrdering) -> AtomicOptionalRawPointer
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicLoadOrdering) -> AtomicRawPointer
   {
     return CAtomicsLoad(pointer, ordering._rawValue)
   }
 
   @inlinable
-  public static func atomicStore(_ desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicStoreOrdering)
+  public static func atomicStore(_ desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicStoreOrdering)
   {
     CAtomicsStore(pointer, desired, ordering._rawValue)
   }
 
   @inlinable
-  public static func atomicExchange(_ desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicOptionalRawPointer
+  public static func atomicExchange(_ desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicRawPointer
   {
     return CAtomicsExchange(pointer, desired, ordering._rawValue)
   }
 
   @inlinable
-  public static func atomicCompareExchange(expected: AtomicOptionalRawPointer, desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicOptionalRawPointer)
+  public static func atomicCompareExchange(expected: AtomicRawPointer, desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicRawPointer)
   {
     return atomicCompareExchange(expected: expected, desired: desired, at: pointer, successOrdering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   @inlinable
-  public static func atomicCompareExchange(expected: AtomicOptionalRawPointer, desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalRawPointer)
+  public static func atomicCompareExchange(expected: AtomicRawPointer, desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -44,7 +44,7 @@ extension AtomicOptionalRawPointer: PrimitiveAtomic
   }
 
   @inlinable
-  public static func atomicWeakCompareExchange(expected: AtomicOptionalRawPointer, desired: __owned AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalRawPointer)
+  public static func atomicWeakCompareExchange(expected: AtomicRawPointer, desired: __owned AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -54,31 +54,31 @@ extension AtomicOptionalRawPointer: PrimitiveAtomic
   }
 #else
   @inline(__always)
-  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicLoadOrdering) -> AtomicOptionalRawPointer
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicLoadOrdering) -> AtomicRawPointer
   {
     return CAtomicsLoad(pointer, ordering._rawValue)
   }
 
   @inline(__always)
-  public static func atomicStore(_ desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicStoreOrdering)
+  public static func atomicStore(_ desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicStoreOrdering)
   {
     CAtomicsStore(pointer, desired, ordering._rawValue)
   }
 
   @inline(__always)
-  public static func atomicExchange(_ desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicOptionalRawPointer
+  public static func atomicExchange(_ desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicRawPointer
   {
     return CAtomicsExchange(pointer, desired, ordering._rawValue)
   }
 
   @inline(__always)
-  public static func atomicCompareExchange(expected: AtomicOptionalRawPointer, desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicOptionalRawPointer)
+  public static func atomicCompareExchange(expected: AtomicRawPointer, desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicRawPointer)
   {
     return atomicCompareExchange(expected: expected, desired: desired, at: pointer, successOrdering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   @inline(__always)
-  public static func atomicCompareExchange(expected: AtomicOptionalRawPointer, desired: AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalRawPointer)
+  public static func atomicCompareExchange(expected: AtomicRawPointer, desired: AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -88,7 +88,7 @@ extension AtomicOptionalRawPointer: PrimitiveAtomic
   }
 
   @inline(__always)
-  public static func atomicWeakCompareExchange(expected: AtomicOptionalRawPointer, desired: __owned AtomicOptionalRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalRawPointer)
+  public static func atomicWeakCompareExchange(expected: AtomicRawPointer, desired: __owned AtomicRawPointer, at pointer: UnsafeMutablePointer<AtomicRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -99,35 +99,35 @@ extension AtomicOptionalRawPointer: PrimitiveAtomic
 #endif
 }
 
-extension AtomicOptionalMutableRawPointer: PrimitiveAtomic
+extension AtomicMutableRawPointer: PrimitiveAtomic
 {
 #if swift(>=4.2)
   @inlinable
-  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicLoadOrdering) -> AtomicOptionalMutableRawPointer
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicLoadOrdering) -> AtomicMutableRawPointer
   {
     return CAtomicsLoad(pointer, ordering._rawValue)
   }
 
   @inlinable
-  public static func atomicStore(_ desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicStoreOrdering)
+  public static func atomicStore(_ desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicStoreOrdering)
   {
     CAtomicsStore(pointer, desired, ordering._rawValue)
   }
 
   @inlinable
-  public static func atomicExchange(_ desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicOptionalMutableRawPointer
+  public static func atomicExchange(_ desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicMutableRawPointer
   {
     return CAtomicsExchange(pointer, desired, ordering._rawValue)
   }
 
   @inlinable
-  public static func atomicCompareExchange(expected: AtomicOptionalMutableRawPointer, desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicOptionalMutableRawPointer)
+  public static func atomicCompareExchange(expected: AtomicMutableRawPointer, desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicMutableRawPointer)
   {
     return atomicCompareExchange(expected: expected, desired: desired, at: pointer, successOrdering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   @inlinable
-  public static func atomicCompareExchange(expected: AtomicOptionalMutableRawPointer, desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalMutableRawPointer)
+  public static func atomicCompareExchange(expected: AtomicMutableRawPointer, desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicMutableRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -137,7 +137,7 @@ extension AtomicOptionalMutableRawPointer: PrimitiveAtomic
   }
 
   @inlinable
-  public static func atomicWeakCompareExchange(expected: AtomicOptionalMutableRawPointer, desired: __owned AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalMutableRawPointer)
+  public static func atomicWeakCompareExchange(expected: AtomicMutableRawPointer, desired: __owned AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicMutableRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -147,31 +147,31 @@ extension AtomicOptionalMutableRawPointer: PrimitiveAtomic
   }
 #else
   @inline(__always)
-  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicLoadOrdering) -> AtomicOptionalMutableRawPointer
+  public static func atomicLoad(at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicLoadOrdering) -> AtomicMutableRawPointer
   {
     return CAtomicsLoad(pointer, ordering._rawValue)
   }
 
   @inline(__always)
-  public static func atomicStore(_ desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicStoreOrdering)
+  public static func atomicStore(_ desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicStoreOrdering)
   {
     CAtomicsStore(pointer, desired, ordering._rawValue)
   }
 
   @inline(__always)
-  public static func atomicExchange(_ desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicOptionalMutableRawPointer
+  public static func atomicExchange(_ desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicUpdateOrdering) -> AtomicMutableRawPointer
   {
     return CAtomicsExchange(pointer, desired, ordering._rawValue)
   }
 
   @inline(__always)
-  public static func atomicCompareExchange(expected: AtomicOptionalMutableRawPointer, desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicOptionalMutableRawPointer)
+  public static func atomicCompareExchange(expected: AtomicMutableRawPointer, desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, ordering: AtomicUpdateOrdering) -> (exchanged: Bool, original: AtomicMutableRawPointer)
   {
     return atomicCompareExchange(expected: expected, desired: desired, at: pointer, successOrdering: ordering, failureOrdering: ordering.asLoadOrdering())
   }
 
   @inline(__always)
-  public static func atomicCompareExchange(expected: AtomicOptionalMutableRawPointer, desired: AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalMutableRawPointer)
+  public static func atomicCompareExchange(expected: AtomicMutableRawPointer, desired: AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicMutableRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
@@ -181,7 +181,7 @@ extension AtomicOptionalMutableRawPointer: PrimitiveAtomic
   }
 
   @inline(__always)
-  public static func atomicWeakCompareExchange(expected: AtomicOptionalMutableRawPointer, desired: __owned AtomicOptionalMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicOptionalMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicOptionalMutableRawPointer)
+  public static func atomicWeakCompareExchange(expected: AtomicMutableRawPointer, desired: __owned AtomicMutableRawPointer, at pointer: UnsafeMutablePointer<AtomicMutableRawPointer>, successOrdering: AtomicUpdateOrdering, failureOrdering: AtomicLoadOrdering) -> (exchanged: Bool, original: AtomicMutableRawPointer)
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
