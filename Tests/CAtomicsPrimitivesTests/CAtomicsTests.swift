@@ -612,6 +612,15 @@ public class CAtomicsBasicTests: XCTestCase
     XCTAssertEqual(r1, i.decode())
   }
 
+  public func testAtomicDoubleWidth()
+  {
+    let r0 = DoubleWidth(0, .randomPositive())
+
+    var i = AtomicDoubleWidth(encoding: r0)
+    XCTAssertEqual(r0, i.decode())
+    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+  }
+
   public func testFence()
   {
     CAtomicsThreadFence(.release)

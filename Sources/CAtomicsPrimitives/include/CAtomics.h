@@ -227,6 +227,19 @@ SWIFT_NAME(DoubleWidth.init(_:_:))
 DoubleWidth DoubleWidthCreate(intptr_t v1, intptr_t v2)
 { DoubleWidth s; s.value1 = v1; s.value2 = v2; return s; }
 
+CATOMICS_PRIMITIVES_STRUCT(AtomicDoubleWidth, _Atomic(UNION_TYPE))
+CATOMICS_PRIMITIVES_IS_LOCK_FREE(AtomicDoubleWidth)
+
+static __inline__ __attribute__((__always_inline__))
+SWIFT_NAME(AtomicDoubleWidth.init(encoding:))
+AtomicDoubleWidth AtomicDoubleWidthEncode(DoubleWidth value)
+{ AtomicDoubleWidth s; s.a = value.value; return s; }
+
+static __inline__ __attribute__((__always_inline__))
+SWIFT_NAME(AtomicDoubleWidth.decode(self:))
+DoubleWidth AtomicDoubleWidthDecode(AtomicDoubleWidth s)
+{ DoubleWidth u; u.value = s.a; return u; }
+
 #undef SWIFT_ENUM
 #undef SWIFT_NAME
 #undef __has32bitPointer__
