@@ -615,10 +615,31 @@ public class CAtomicsBasicTests: XCTestCase
   public func testAtomicDoubleWidth()
   {
     let r0 = DoubleWidth(0, .randomPositive())
+    let r1 = DoubleWidth(.randomPositive(), 0)
+    let r2 = DoubleWidth(.randomPositive(), .randomPositive())
+    let r3 = DoubleWidth(.min, .max)
 
     var i = AtomicDoubleWidth(encoding: r0)
     XCTAssertEqual(r0, i.decode())
     XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+
+    CAtomicsStore(&i, AtomicDoubleWidth(encoding: r1), .relaxed)
+    var j = CAtomicsLoad(&i, .relaxed)
+    XCTAssertEqual(i.decode(), j.decode())
+
+    j = CAtomicsExchange(&i, AtomicDoubleWidth(encoding: r2), .relaxed)
+    XCTAssertEqual(r1, j.decode())
+    XCTAssertEqual(r2, i.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicDoubleWidth(encoding: r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(r2, j.decode())
+
+    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicDoubleWidth(encoding: r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(r2, j.decode())
+
+    while !CAtomicsCompareAndExchangeWeak(&i, &j, AtomicDoubleWidth(encoding: r1), .relaxed, .relaxed) {}
+    XCTAssertEqual(r3, j.decode())
+    XCTAssertEqual(r1, i.decode())
   }
 
   public func testFence()

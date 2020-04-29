@@ -69,16 +69,23 @@ public class CAtomicsBasicTests: XCTestCase
   }
 
 % end
-% pointers = ['AtomicRawPointer', 'AtomicMutableRawPointer']
+% pointers = ['AtomicRawPointer', 'AtomicMutableRawPointer', 'AtomicDoubleWidth']
 % for type in pointers:
   public func test${type}()
   {
+% if 'Pointer' in type:
 % mutptr = 'Mutable' if 'Mutable' in type else ''
 % prefix = 'Unsafe' + mutptr + 'Raw'
     let r0 = ${prefix}Pointer(bitPattern: 0)
     let r1 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
     let r2 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
     let r3 = ${prefix}Pointer(bitPattern: UInt.randomPositive())
+% elif type is 'AtomicDoubleWidth':
+    let r0 = DoubleWidth(0, .randomPositive())
+    let r1 = DoubleWidth(.randomPositive(), 0)
+    let r2 = DoubleWidth(.randomPositive(), .randomPositive())
+    let r3 = DoubleWidth(.min, .max)
+% end # if 'Pointer'
 
     var i = ${type}(encoding: r0)
     XCTAssertEqual(r0, i.decode())
@@ -104,15 +111,6 @@ public class CAtomicsBasicTests: XCTestCase
   }
 
 % end
-  public func testAtomicDoubleWidth()
-  {
-    let r0 = DoubleWidth(0, .randomPositive())
-
-    var i = AtomicDoubleWidth(encoding: r0)
-    XCTAssertEqual(r0, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
-  }
-
   public func testFence()
   {
     CAtomicsThreadFence(.release)

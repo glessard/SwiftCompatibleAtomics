@@ -240,6 +240,14 @@ SWIFT_NAME(AtomicDoubleWidth.decode(self:))
 DoubleWidth AtomicDoubleWidthDecode(AtomicDoubleWidth s)
 { DoubleWidth u; u.value = s.a; return u; }
 
+CATOMICS_PRIMITIVES_LOAD(AtomicDoubleWidth)
+CATOMICS_PRIMITIVES_STORE(AtomicDoubleWidth)
+CATOMICS_PRIMITIVES_SWAP(AtomicDoubleWidth)
+CATOMICS_PRIMITIVES_STRONG_CAS(AtomicDoubleWidth, UNION_TYPE)
+CATOMICS_PRIMITIVES_WEAK_CAS(AtomicDoubleWidth, UNION_TYPE)
+
+#undef UNION_TYPE
+
 #undef SWIFT_ENUM
 #undef SWIFT_NAME
 #undef __has32bitPointer__
