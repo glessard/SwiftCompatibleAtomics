@@ -206,6 +206,27 @@ void CAtomicsThreadFence(enum UpdateMemoryOrder order)
   atomic_thread_fence(order);
 }
 
+// untyped double-width atomics
+
+#if defined(__has32bitPointer__)
+#define UNION_TYPE long long
+#else
+#define UNION_TYPE __int128
+#endif
+
+typedef union {
+  UNION_TYPE value;
+  struct {
+    intptr_t value1;
+    intptr_t value2;
+  };
+} DoubleWidth;
+
+static __inline__ __attribute__((__always_inline__))
+SWIFT_NAME(DoubleWidth.init(_:_:))
+DoubleWidth DoubleWidthCreate(intptr_t v1, intptr_t v2)
+{ DoubleWidth s; s.value1 = v1; s.value2 = v2; return s; }
+
 #undef SWIFT_ENUM
 #undef SWIFT_NAME
 #undef __has32bitPointer__

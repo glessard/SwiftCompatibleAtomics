@@ -110,3 +110,34 @@ public class CAtomicsBasicTests: XCTestCase
     CAtomicsThreadFence(.acquire)
   }
 }
+
+extension DoubleWidth: Equatable
+{
+  static public func ==(lhs: DoubleWidth, rhs: DoubleWidth) -> Bool
+  {
+    return (lhs.value1 == rhs.value1) && (lhs.value2 == rhs.value2)
+  }
+}
+
+extension CAtomicsBasicTests
+{
+  public func testDoubleWidth()
+  {
+    let r0 = DoubleWidth(0, .randomPositive())
+    var r1 = DoubleWidth(.randomPositive(), 0)
+
+    XCTAssertNotEqual(r0, r1)
+
+    r1 = r0
+    XCTAssertEqual(r0, r1)
+
+    r1.value2 += 1
+    XCTAssertNotEqual(r0, r1)
+    XCTAssertEqual(r0.value1, r1.value1)
+    XCTAssertEqual(r0.value2 &+ 1, r1.value2)
+
+    r1.value1 = .randomPositive()
+    XCTAssertNotEqual(r0.value1, r1.value1)
+    XCTAssertEqual(r0.value2 &+ 1, r1.value2)
+  }
+}
