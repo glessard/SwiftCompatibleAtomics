@@ -1,0 +1,94 @@
+//
+//  AtomicPointerTests.swift
+//
+//  Copyright © 2020 Guillaume Lessard. All rights reserved.
+//  Licensed under Apache License v2.0
+//
+
+import XCTest
+
+import SwiftCompatibleAtomics
+
+%{
+  pairs = [
+    ('Int8',  'UInt8',  '8bitIntegers'),
+    ('Int16', 'UInt16', '16bitIntegers'),
+    ('Int32', 'UInt32', '32bitIntegers'),
+    ('Int',   'UInt',   'PointerWidthIntegers'),
+    ('UnsafeMutablePointer<Int>', 'UnsafePointer<Double>', 'TypedPointers'),
+    ('UnsafeMutableRawPointer',   'UnsafeRawPointer',      'RawPointers'),
+    ('Unmanaged<TestObject>',     'Bool',                  'UnmanagedAndBool'),
+    ('AtomickableEnum',           'AtomickableStruct',     'RawRepresentableTypes'),
+  ]
+}%
+
+private class TestObject {}
+
+private enum AtomickableEnum: UInt8, Equatable, AtomicPairElement
+{
+  case a = 0, b, c, d, e
+}
+
+private struct AtomickableStruct: RawRepresentable, Equatable, AtomicPairElement
+{
+  var rawValue: Int32
+  init(rawValue: Int32) { self.rawValue = rawValue }
+}
+
+public class AtomicPairTests: XCTestCase
+{
+% for (t1, t2, title) in pairs:
+  public func testUnsafePair${title}()
+  {
+% if 'Unsafe' in t1:
+    let r1 = (${t1}(bitPattern: UInt.randomPositive())!, ${t2}(bitPattern: 0))
+    let r2 = (${t1}(bitPattern: UInt.max)!, ${t2}(bitPattern: UInt.randomPositive()))
+% elif 'Unmanaged' in t1:
+    let r1 = (Optional<${t1}>.none, false)
+    let r2 = (Optional(${t1}.passRetained(TestObject())), true)
+% elif 'Atomickable' in t1:
+    let r1 = (${t1}(rawValue: 0)!, ${t2}(rawValue: .randomPositive()))
+    let r2 = (${t1}(rawValue: 4)!, ${t2}(rawValue: .min))
+% else:
+    let r1 = (${t1}(), ${t2}.randomPositive())
+    let r2 = (${t1}.randomPositive(), ${t2}.max)
+% end # if 'Unsafe'
+
+    let i = UnsafeAtomicPair.create(initialValues: r1)
+    XCTAssert(r1 == i.load(ordering: .relaxed))
+
+    i.store(r2, ordering: .relaxed)
+    XCTAssert(r2 == i.load(ordering: .relaxed))
+
+    var r3 = i.exchange(r1, ordering: .acquiringAndReleasing)
+    XCTAssert(r2 == r3)
+    XCTAssert(r1 == i.load(ordering: .relaxed))
+
+    i.store(r1, ordering: .releasing)
+    var s = false
+    (s, r3) = i.compareExchange(expected: r1, desired: r2, ordering: .acquiringAndReleasing)
+    XCTAssertEqual(true, s)
+    XCTAssert(r1 == r3)
+    XCTAssert(r2 == i.load(ordering: .relaxed))
+
+    repeat {
+      (s, r3) = i.weakCompareExchange(expected: r3, desired: r2,
+                                     successOrdering: .acquiringAndReleasing, failureOrdering: .relaxed)
+    } while s == false
+    XCTAssert(r2 == r3)
+    XCTAssert(r2 == i.destroy())
+% if 'Unmanaged' in t1:
+    r2.0?.release()
+% end # if 'Unmanaged'
+  }
+
+% end # for
+}
+
+extension Unmanaged: Equatable
+{
+  public static func ==(lhs: Unmanaged, rhs: Unmanaged) -> Bool
+  {
+    return lhs.toOpaque() == rhs.toOpaque()
+  }
+}
