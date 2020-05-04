@@ -10,11 +10,11 @@ If and when the pitch is accepted and its implementation merged, the correspondi
 
 In the meantime, use by adding the following dependency to your project's `Package.swift`:
 ```
-.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", from: "0.6.0")
+.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", from: "0.7.0")
 ```
 or, if you prefer to avoid source breaking changes:
 ```
-.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", .upToNextMinor(from: "0.6.0"))
+.package(url: "https://github.com/glessard/SwiftCompatibleAtomics", .upToNextMinor(from: "0.7.0"))
 ```
 
 ### Version History
@@ -46,3 +46,7 @@ or, if you prefer to avoid source breaking changes:
 	Clean up underlying interface to Clang's C11 atomics
 	
 	`AtomicProtocol` renamed to `AtomicValue`
+
+* 0.7.0
+
+  Further cleanup of the underlying interface to C11 atomics
