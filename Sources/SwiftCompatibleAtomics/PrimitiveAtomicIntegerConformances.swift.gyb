@@ -24,14 +24,14 @@ extension Atomic${Type}: PrimitiveAtomicInteger
   ${inlinable}
   public static func atomicLoadThenWrappingIncrement(by operand: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering) -> Atomic${Type}
   {
-    return CAtomicsAdd(pointer, operand, ordering._rawValue)
+    return CAtomicsPrimitivesAdd(pointer, operand, ordering._rawValue)
   }
 % for (sname, pname, label) in rmwOperations:
 
   ${inlinable}
   public static func atomicLoadThen${sname}(${label} operand: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering) -> Atomic${Type}
   {
-    return CAtomics${pname}(pointer, operand, ordering._rawValue)
+    return CAtomicsPrimitives${pname}(pointer, operand, ordering._rawValue)
   }
 % end # rmwOperations
 ${end}

@@ -17,19 +17,19 @@ extension Atomic${Type}: PrimitiveAtomic
   ${inlinable}
   public static func atomicLoad(at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicLoadOrdering) -> Atomic${Type}
   {
-    return CAtomicsLoad(pointer, ordering._rawValue)
+    return CAtomicsPrimitivesLoad(pointer, ordering._rawValue)
   }
 
   ${inlinable}
   public static func atomicStore(_ desired: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicStoreOrdering)
   {
-    CAtomicsStore(pointer, desired, ordering._rawValue)
+    CAtomicsPrimitivesStore(pointer, desired, ordering._rawValue)
   }
 
   ${inlinable}
   public static func atomicExchange(_ desired: Atomic${Type}, at pointer: UnsafeMutablePointer<Atomic${Type}>, ordering: AtomicUpdateOrdering) -> Atomic${Type}
   {
-    return CAtomicsExchange(pointer, desired, ordering._rawValue)
+    return CAtomicsPrimitivesExchange(pointer, desired, ordering._rawValue)
   }
 
   ${inlinable}
@@ -43,7 +43,7 @@ extension Atomic${Type}: PrimitiveAtomic
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
-      CAtomicsCompareAndExchangeStrong(pointer, $0, desired, successOrdering._rawValue, failureOrdering._rawValue)
+      CAtomicsPrimitivesCompareAndExchangeStrong(pointer, $0, desired, successOrdering._rawValue, failureOrdering._rawValue)
     }
     return (success, expected)
   }
@@ -53,7 +53,7 @@ extension Atomic${Type}: PrimitiveAtomic
   {
     var expected = expected
     let success = withUnsafeMutablePointer(to: &expected) {
-      CAtomicsCompareAndExchangeWeak(pointer, $0, desired, successOrdering._rawValue, failureOrdering._rawValue)
+      CAtomicsPrimitivesCompareAndExchangeWeak(pointer, $0, desired, successOrdering._rawValue, failureOrdering._rawValue)
     }
     return (success, expected)
   }

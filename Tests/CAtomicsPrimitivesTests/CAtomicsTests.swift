@@ -20,47 +20,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicInt(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicInt(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicInt(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicInt(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicInt(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicInt(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicInt(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicInt(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicInt(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicInt(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicInt(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicInt(encoding: r1)
-    CAtomicsStore(&i, AtomicInt(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicInt(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicInt(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicInt(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicInt(encoding: r2)
-    CAtomicsStore(&i, AtomicInt(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicInt(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicInt(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicInt(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -74,47 +74,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicUInt(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicUInt(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicUInt(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicUInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicUInt(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicUInt(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicUInt(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicUInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicUInt(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicUInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicUInt(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicUInt(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicUInt(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicUInt(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicUInt(encoding: r1)
-    CAtomicsStore(&i, AtomicUInt(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicUInt(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicUInt(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicUInt(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicUInt(encoding: r2)
-    CAtomicsStore(&i, AtomicUInt(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicUInt(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicUInt(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicUInt(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -128,47 +128,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicInt8(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicInt8(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt8(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicInt8(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicInt8(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicInt8(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicInt8(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicInt8(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicInt8(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt8(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt8(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicInt8(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt8(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicInt8(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt8(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicInt8(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt8(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicInt8(encoding: r1)
-    CAtomicsStore(&i, AtomicInt8(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicInt8(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicInt8(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicInt8(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicInt8(encoding: r2)
-    CAtomicsStore(&i, AtomicInt8(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicInt8(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicInt8(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicInt8(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -182,47 +182,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicUInt8(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicUInt8(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt8(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicUInt8(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicUInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicUInt8(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicUInt8(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicUInt8(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicUInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt8(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicUInt8(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt8(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicUInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt8(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicUInt8(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt8(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicUInt8(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt8(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicUInt8(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt8(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicUInt8(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicUInt8(encoding: r1)
-    CAtomicsStore(&i, AtomicUInt8(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicUInt8(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicUInt8(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicUInt8(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicUInt8(encoding: r2)
-    CAtomicsStore(&i, AtomicUInt8(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicUInt8(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicUInt8(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicUInt8(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -236,47 +236,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicInt16(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicInt16(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt16(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicInt16(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicInt16(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicInt16(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicInt16(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicInt16(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicInt16(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt16(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt16(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicInt16(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt16(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicInt16(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt16(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicInt16(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt16(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicInt16(encoding: r1)
-    CAtomicsStore(&i, AtomicInt16(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicInt16(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicInt16(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicInt16(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicInt16(encoding: r2)
-    CAtomicsStore(&i, AtomicInt16(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicInt16(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicInt16(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicInt16(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -290,47 +290,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicUInt16(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicUInt16(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt16(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicUInt16(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicUInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicUInt16(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicUInt16(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicUInt16(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicUInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt16(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicUInt16(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt16(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicUInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt16(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicUInt16(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt16(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicUInt16(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt16(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicUInt16(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt16(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicUInt16(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicUInt16(encoding: r1)
-    CAtomicsStore(&i, AtomicUInt16(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicUInt16(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicUInt16(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicUInt16(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicUInt16(encoding: r2)
-    CAtomicsStore(&i, AtomicUInt16(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicUInt16(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicUInt16(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicUInt16(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -344,47 +344,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicInt32(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicInt32(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt32(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicInt32(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicInt32(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicInt32(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicInt32(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicInt32(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicInt32(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt32(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt32(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicInt32(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt32(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicInt32(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt32(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicInt32(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt32(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicInt32(encoding: r1)
-    CAtomicsStore(&i, AtomicInt32(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicInt32(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicInt32(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicInt32(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicInt32(encoding: r2)
-    CAtomicsStore(&i, AtomicInt32(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicInt32(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicInt32(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicInt32(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -398,47 +398,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicUInt32(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicUInt32(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt32(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicUInt32(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicUInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicUInt32(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicUInt32(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicUInt32(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicUInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt32(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicUInt32(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt32(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicUInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt32(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicUInt32(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt32(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicUInt32(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt32(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicUInt32(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt32(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicUInt32(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicUInt32(encoding: r1)
-    CAtomicsStore(&i, AtomicUInt32(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicUInt32(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicUInt32(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicUInt32(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicUInt32(encoding: r2)
-    CAtomicsStore(&i, AtomicUInt32(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicUInt32(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicUInt32(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicUInt32(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -452,47 +452,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicInt64(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicInt64(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt64(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicInt64(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicInt64(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicInt64(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicInt64(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicInt64(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicInt64(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt64(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt64(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicInt64(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt64(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicInt64(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicInt64(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicInt64(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicInt64(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicInt64(encoding: r1)
-    CAtomicsStore(&i, AtomicInt64(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicInt64(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicInt64(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicInt64(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicInt64(encoding: r2)
-    CAtomicsStore(&i, AtomicInt64(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicInt64(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicInt64(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicInt64(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -506,47 +506,47 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicUInt64(encoding: r1)
     XCTAssertEqual(r1, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicUInt64(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt64(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicUInt64(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicUInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    j = CAtomicsAdd(&i, AtomicUInt64(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesAdd(&i, AtomicUInt64(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 &+ r2, i.decode())
 
-    j = CAtomicsSubtract(&i, AtomicUInt64(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesSubtract(&i, AtomicUInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1 &+ r2, j.decode())
     XCTAssertEqual(r1, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt64(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseOr(&i, AtomicUInt64(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt64(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseOr(&i, AtomicUInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 | r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt64(encoding: r2), .relaxed)
-    j = CAtomicsBitwiseXor(&i, AtomicUInt64(encoding: r1), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt64(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesBitwiseXor(&i, AtomicUInt64(encoding: r1), .relaxed)
     XCTAssertEqual(r2, j.decode())
     XCTAssertEqual(r1 ^ r2, i.decode())
 
-    CAtomicsStore(&i, AtomicUInt64(encoding: r1), .relaxed)
-    j = CAtomicsBitwiseAnd(&i, AtomicUInt64(encoding: r2), .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicUInt64(encoding: r1), .relaxed)
+    j = CAtomicsPrimitivesBitwiseAnd(&i, AtomicUInt64(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r1 & r2, i.decode())
 
     j = AtomicUInt64(encoding: r1)
-    CAtomicsStore(&i, AtomicUInt64(encoding: r1), .relaxed)
-    XCTAssertTrue(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicUInt64(encoding: r2), .relaxed, .relaxed))
+    CAtomicsPrimitivesStore(&i, AtomicUInt64(encoding: r1), .relaxed)
+    XCTAssertTrue(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicUInt64(encoding: r2), .relaxed, .relaxed))
     XCTAssertEqual(r2, i.decode())
 
     j = AtomicUInt64(encoding: r2)
-    CAtomicsStore(&i, AtomicUInt64(encoding: r1), .relaxed)
-    while(!CAtomicsCompareAndExchangeWeak(&i, &j, AtomicUInt64(encoding: r3), .relaxed, .relaxed)) {}
+    CAtomicsPrimitivesStore(&i, AtomicUInt64(encoding: r1), .relaxed)
+    while(!CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicUInt64(encoding: r3), .relaxed, .relaxed)) {}
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r3, i.decode())
 
@@ -561,23 +561,23 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicRawPointer(encoding: r0)
     XCTAssertEqual(r0, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicRawPointer(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicRawPointer(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicRawPointer(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicRawPointer(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicRawPointer(encoding: r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicRawPointer(encoding: r2), .relaxed, .relaxed), false)
     XCTAssertEqual(r2, j.decode())
 
-    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicRawPointer(encoding: r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicRawPointer(encoding: r3), .relaxed, .relaxed), true)
     XCTAssertEqual(r2, j.decode())
 
-    while !CAtomicsCompareAndExchangeWeak(&i, &j, AtomicRawPointer(encoding: r1), .relaxed, .relaxed) {}
+    while !CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicRawPointer(encoding: r1), .relaxed, .relaxed) {}
     XCTAssertEqual(r3, j.decode())
     XCTAssertEqual(r1, i.decode())
   }
@@ -591,30 +591,30 @@ public class CAtomicsBasicTests: XCTestCase
 
     var i = AtomicMutableRawPointer(encoding: r0)
     XCTAssertEqual(r0, i.decode())
-    XCTAssertEqual(CAtomicsIsLockFree(&i), true)
+    XCTAssertEqual(CAtomicsPrimitivesIsLockFree(&i), true)
 
-    CAtomicsStore(&i, AtomicMutableRawPointer(encoding: r1), .relaxed)
-    var j = CAtomicsLoad(&i, .relaxed)
+    CAtomicsPrimitivesStore(&i, AtomicMutableRawPointer(encoding: r1), .relaxed)
+    var j = CAtomicsPrimitivesLoad(&i, .relaxed)
     XCTAssertEqual(i.decode(), j.decode())
 
-    j = CAtomicsExchange(&i, AtomicMutableRawPointer(encoding: r2), .relaxed)
+    j = CAtomicsPrimitivesExchange(&i, AtomicMutableRawPointer(encoding: r2), .relaxed)
     XCTAssertEqual(r1, j.decode())
     XCTAssertEqual(r2, i.decode())
 
-    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicMutableRawPointer(encoding: r2), .relaxed, .relaxed), false)
+    XCTAssertEqual(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicMutableRawPointer(encoding: r2), .relaxed, .relaxed), false)
     XCTAssertEqual(r2, j.decode())
 
-    XCTAssertEqual(CAtomicsCompareAndExchangeStrong(&i, &j, AtomicMutableRawPointer(encoding: r3), .relaxed, .relaxed), true)
+    XCTAssertEqual(CAtomicsPrimitivesCompareAndExchangeStrong(&i, &j, AtomicMutableRawPointer(encoding: r3), .relaxed, .relaxed), true)
     XCTAssertEqual(r2, j.decode())
 
-    while !CAtomicsCompareAndExchangeWeak(&i, &j, AtomicMutableRawPointer(encoding: r1), .relaxed, .relaxed) {}
+    while !CAtomicsPrimitivesCompareAndExchangeWeak(&i, &j, AtomicMutableRawPointer(encoding: r1), .relaxed, .relaxed) {}
     XCTAssertEqual(r3, j.decode())
     XCTAssertEqual(r1, i.decode())
   }
 
   public func testFence()
   {
-    CAtomicsThreadFence(.release)
-    CAtomicsThreadFence(.acquire)
+    CAtomicsPrimitivesThreadFence(.release)
+    CAtomicsPrimitivesThreadFence(.acquire)
   }
 }

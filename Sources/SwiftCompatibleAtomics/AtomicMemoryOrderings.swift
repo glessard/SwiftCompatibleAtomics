@@ -148,12 +148,12 @@ extension AtomicUpdateOrdering: CustomStringConvertible {
 @inlinable
 public func atomicMemoryFence(ordering: AtomicUpdateOrdering)
 {
-  CAtomicsThreadFence(ordering._rawValue)
+  CAtomicsPrimitivesThreadFence(ordering._rawValue)
 }
 #else
 @inline(__always)
 public func atomicMemoryFence(ordering: AtomicUpdateOrdering)
 {
-  CAtomicsThreadFence(ordering._rawValue)
+  CAtomicsPrimitivesThreadFence(ordering._rawValue)
 }
 #endif

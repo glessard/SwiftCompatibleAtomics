@@ -78,7 +78,7 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 #define CATOMICS_PRIMITIVES_IS_LOCK_FREE(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        _Bool CAtomicsIsLockFree(primitiveAtomicType *_Nonnull atomic) \
+        _Bool CAtomicsPrimitivesIsLockFree(primitiveAtomicType *_Nonnull atomic) \
         { return atomic_is_lock_free(&(atomic->a)); }
 
 #define CATOMICS_PRIMITIVES_ENCODE(primitiveAtomicType, swiftCompatibleType, conversionType) \
@@ -96,25 +96,25 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 #define CATOMICS_PRIMITIVES_LOAD(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        primitiveAtomicType CAtomicsLoad(primitiveAtomicType *_Nonnull atomic, enum LoadMemoryOrder order) \
+        primitiveAtomicType CAtomicsPrimitivesLoad(primitiveAtomicType *_Nonnull atomic, enum LoadMemoryOrder order) \
         { primitiveAtomicType s; s.a = atomic_load_explicit(&(atomic->a), order); return s; }
 
 #define CATOMICS_PRIMITIVES_STORE(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        void CAtomicsStore(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType value, enum StoreMemoryOrder order) \
+        void CAtomicsPrimitivesStore(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType value, enum StoreMemoryOrder order) \
         { atomic_store_explicit(&(atomic->a), value.a, order); }
 
 #define CATOMICS_PRIMITIVES_SWAP(primitiveAtomicType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        primitiveAtomicType CAtomicsExchange(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType value, enum UpdateMemoryOrder order) \
+        primitiveAtomicType CAtomicsPrimitivesExchange(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType value, enum UpdateMemoryOrder order) \
         { primitiveAtomicType s; s.a = atomic_exchange_explicit(&(atomic->a), value.a, order); return s; }
 
 #define CATOMICS_PRIMITIVES_WEAK_CAS(primitiveAtomicType, conversionType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        _Bool CAtomicsCompareAndExchangeWeak(primitiveAtomicType *_Nonnull atomic, \
+        _Bool CAtomicsPrimitivesCompareAndExchangeWeak(primitiveAtomicType *_Nonnull atomic, \
                                              primitiveAtomicType *_Nonnull current, primitiveAtomicType future, \
                                              enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
@@ -129,7 +129,7 @@ SWIFT_ENUM(StoreMemoryOrder, open)
 #define CATOMICS_PRIMITIVES_STRONG_CAS(primitiveAtomicType, conversionType) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        _Bool CAtomicsCompareAndExchangeStrong(primitiveAtomicType *_Nonnull atomic, \
+        _Bool CAtomicsPrimitivesCompareAndExchangeStrong(primitiveAtomicType *_Nonnull atomic, \
                                                primitiveAtomicType *_Nonnull current, primitiveAtomicType future, \
                                                enum UpdateMemoryOrder orderSwap, enum LoadMemoryOrder orderLoad) \
         { \
@@ -164,7 +164,7 @@ CATOMICS_PRIMITIVES_GENERATE(AtomicMutableRawPointer, void* _Nullable, uintptr_t
 #define CATOMICS_PRIMITIVES_RMW(primitiveAtomicType, pName, op, opName) \
         static __inline__ __attribute__((__always_inline__)) \
         __attribute__((overloadable)) \
-        primitiveAtomicType CAtomics##opName(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType pName, enum UpdateMemoryOrder order) \
+        primitiveAtomicType CAtomicsPrimitives##opName(primitiveAtomicType *_Nonnull atomic, primitiveAtomicType pName, enum UpdateMemoryOrder order) \
         { primitiveAtomicType s; s.a = atomic_##op##_explicit(&(atomic->a), pName.a, order); return s; }
 
 #define CATOMICS_PRIMITIVES_INT_GENERATE(primitiveAtomicType, swiftCompatibleType) \
@@ -201,7 +201,7 @@ CATOMICS_PRIMITIVES_INT_GENERATE(AtomicUInt64, unsigned long long)
 // fence
 
 static __inline__ __attribute__((__always_inline__))
-void CAtomicsThreadFence(enum UpdateMemoryOrder order)
+void CAtomicsPrimitivesThreadFence(enum UpdateMemoryOrder order)
 {
   atomic_thread_fence(order);
 }
