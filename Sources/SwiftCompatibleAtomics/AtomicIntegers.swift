@@ -4,57 +4,57 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomicsPrimitives
+import CAtomicPrimitives
 
 extension Int: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicInt
+  public typealias AtomicStorage = CAtomicPrimitiveInt
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: Int) -> AtomicInt
+  public static func prepareAtomicStorage(for value: Int) -> CAtomicPrimitiveInt
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt) -> Int
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt) -> Int
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: Int) -> AtomicInt
+  public static func encodeAtomicStorage(for value: Int) -> CAtomicPrimitiveInt
   {
-    return AtomicInt(encoding: value)
+    return CAtomicPrimitiveInt(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicInt) -> Int
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt) -> Int
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: Int) -> AtomicInt
+  public static func prepareAtomicStorage(for value: Int) -> CAtomicPrimitiveInt
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt) -> Int
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt) -> Int
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: Int) -> AtomicInt
+  public static func encodeAtomicStorage(for value: Int) -> CAtomicPrimitiveInt
   {
-    return AtomicInt(encoding: value)
+    return CAtomicPrimitiveInt(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicInt) -> Int
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt) -> Int
   {
     return storage.decode()
   }
@@ -63,53 +63,53 @@ extension Int: AtomicInteger
 
 extension UInt: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicUInt
+  public typealias AtomicStorage = CAtomicPrimitiveUInt
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: UInt) -> AtomicUInt
+  public static func prepareAtomicStorage(for value: UInt) -> CAtomicPrimitiveUInt
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt) -> UInt
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt) -> UInt
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: UInt) -> AtomicUInt
+  public static func encodeAtomicStorage(for value: UInt) -> CAtomicPrimitiveUInt
   {
-    return AtomicUInt(encoding: value)
+    return CAtomicPrimitiveUInt(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicUInt) -> UInt
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt) -> UInt
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: UInt) -> AtomicUInt
+  public static func prepareAtomicStorage(for value: UInt) -> CAtomicPrimitiveUInt
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt) -> UInt
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt) -> UInt
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: UInt) -> AtomicUInt
+  public static func encodeAtomicStorage(for value: UInt) -> CAtomicPrimitiveUInt
   {
-    return AtomicUInt(encoding: value)
+    return CAtomicPrimitiveUInt(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicUInt) -> UInt
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt) -> UInt
   {
     return storage.decode()
   }
@@ -118,53 +118,53 @@ extension UInt: AtomicInteger
 
 extension Int8: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicInt8
+  public typealias AtomicStorage = CAtomicPrimitiveInt8
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: Int8) -> AtomicInt8
+  public static func prepareAtomicStorage(for value: Int8) -> CAtomicPrimitiveInt8
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt8) -> Int8
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt8) -> Int8
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: Int8) -> AtomicInt8
+  public static func encodeAtomicStorage(for value: Int8) -> CAtomicPrimitiveInt8
   {
-    return AtomicInt8(encoding: value)
+    return CAtomicPrimitiveInt8(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicInt8) -> Int8
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt8) -> Int8
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: Int8) -> AtomicInt8
+  public static func prepareAtomicStorage(for value: Int8) -> CAtomicPrimitiveInt8
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt8) -> Int8
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt8) -> Int8
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: Int8) -> AtomicInt8
+  public static func encodeAtomicStorage(for value: Int8) -> CAtomicPrimitiveInt8
   {
-    return AtomicInt8(encoding: value)
+    return CAtomicPrimitiveInt8(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicInt8) -> Int8
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt8) -> Int8
   {
     return storage.decode()
   }
@@ -173,53 +173,53 @@ extension Int8: AtomicInteger
 
 extension UInt8: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicUInt8
+  public typealias AtomicStorage = CAtomicPrimitiveUInt8
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: UInt8) -> AtomicUInt8
+  public static func prepareAtomicStorage(for value: UInt8) -> CAtomicPrimitiveUInt8
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt8) -> UInt8
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt8) -> UInt8
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: UInt8) -> AtomicUInt8
+  public static func encodeAtomicStorage(for value: UInt8) -> CAtomicPrimitiveUInt8
   {
-    return AtomicUInt8(encoding: value)
+    return CAtomicPrimitiveUInt8(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicUInt8) -> UInt8
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt8) -> UInt8
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: UInt8) -> AtomicUInt8
+  public static func prepareAtomicStorage(for value: UInt8) -> CAtomicPrimitiveUInt8
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt8) -> UInt8
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt8) -> UInt8
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: UInt8) -> AtomicUInt8
+  public static func encodeAtomicStorage(for value: UInt8) -> CAtomicPrimitiveUInt8
   {
-    return AtomicUInt8(encoding: value)
+    return CAtomicPrimitiveUInt8(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicUInt8) -> UInt8
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt8) -> UInt8
   {
     return storage.decode()
   }
@@ -228,53 +228,53 @@ extension UInt8: AtomicInteger
 
 extension Int16: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicInt16
+  public typealias AtomicStorage = CAtomicPrimitiveInt16
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: Int16) -> AtomicInt16
+  public static func prepareAtomicStorage(for value: Int16) -> CAtomicPrimitiveInt16
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt16) -> Int16
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt16) -> Int16
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: Int16) -> AtomicInt16
+  public static func encodeAtomicStorage(for value: Int16) -> CAtomicPrimitiveInt16
   {
-    return AtomicInt16(encoding: value)
+    return CAtomicPrimitiveInt16(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicInt16) -> Int16
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt16) -> Int16
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: Int16) -> AtomicInt16
+  public static func prepareAtomicStorage(for value: Int16) -> CAtomicPrimitiveInt16
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt16) -> Int16
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt16) -> Int16
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: Int16) -> AtomicInt16
+  public static func encodeAtomicStorage(for value: Int16) -> CAtomicPrimitiveInt16
   {
-    return AtomicInt16(encoding: value)
+    return CAtomicPrimitiveInt16(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicInt16) -> Int16
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt16) -> Int16
   {
     return storage.decode()
   }
@@ -283,53 +283,53 @@ extension Int16: AtomicInteger
 
 extension UInt16: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicUInt16
+  public typealias AtomicStorage = CAtomicPrimitiveUInt16
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: UInt16) -> AtomicUInt16
+  public static func prepareAtomicStorage(for value: UInt16) -> CAtomicPrimitiveUInt16
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt16) -> UInt16
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt16) -> UInt16
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: UInt16) -> AtomicUInt16
+  public static func encodeAtomicStorage(for value: UInt16) -> CAtomicPrimitiveUInt16
   {
-    return AtomicUInt16(encoding: value)
+    return CAtomicPrimitiveUInt16(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicUInt16) -> UInt16
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt16) -> UInt16
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: UInt16) -> AtomicUInt16
+  public static func prepareAtomicStorage(for value: UInt16) -> CAtomicPrimitiveUInt16
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt16) -> UInt16
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt16) -> UInt16
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: UInt16) -> AtomicUInt16
+  public static func encodeAtomicStorage(for value: UInt16) -> CAtomicPrimitiveUInt16
   {
-    return AtomicUInt16(encoding: value)
+    return CAtomicPrimitiveUInt16(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicUInt16) -> UInt16
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt16) -> UInt16
   {
     return storage.decode()
   }
@@ -338,53 +338,53 @@ extension UInt16: AtomicInteger
 
 extension Int32: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicInt32
+  public typealias AtomicStorage = CAtomicPrimitiveInt32
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: Int32) -> AtomicInt32
+  public static func prepareAtomicStorage(for value: Int32) -> CAtomicPrimitiveInt32
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt32) -> Int32
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt32) -> Int32
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: Int32) -> AtomicInt32
+  public static func encodeAtomicStorage(for value: Int32) -> CAtomicPrimitiveInt32
   {
-    return AtomicInt32(encoding: value)
+    return CAtomicPrimitiveInt32(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicInt32) -> Int32
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt32) -> Int32
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: Int32) -> AtomicInt32
+  public static func prepareAtomicStorage(for value: Int32) -> CAtomicPrimitiveInt32
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt32) -> Int32
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt32) -> Int32
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: Int32) -> AtomicInt32
+  public static func encodeAtomicStorage(for value: Int32) -> CAtomicPrimitiveInt32
   {
-    return AtomicInt32(encoding: value)
+    return CAtomicPrimitiveInt32(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicInt32) -> Int32
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt32) -> Int32
   {
     return storage.decode()
   }
@@ -393,53 +393,53 @@ extension Int32: AtomicInteger
 
 extension UInt32: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicUInt32
+  public typealias AtomicStorage = CAtomicPrimitiveUInt32
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: UInt32) -> AtomicUInt32
+  public static func prepareAtomicStorage(for value: UInt32) -> CAtomicPrimitiveUInt32
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt32) -> UInt32
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt32) -> UInt32
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: UInt32) -> AtomicUInt32
+  public static func encodeAtomicStorage(for value: UInt32) -> CAtomicPrimitiveUInt32
   {
-    return AtomicUInt32(encoding: value)
+    return CAtomicPrimitiveUInt32(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicUInt32) -> UInt32
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt32) -> UInt32
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: UInt32) -> AtomicUInt32
+  public static func prepareAtomicStorage(for value: UInt32) -> CAtomicPrimitiveUInt32
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt32) -> UInt32
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt32) -> UInt32
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: UInt32) -> AtomicUInt32
+  public static func encodeAtomicStorage(for value: UInt32) -> CAtomicPrimitiveUInt32
   {
-    return AtomicUInt32(encoding: value)
+    return CAtomicPrimitiveUInt32(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicUInt32) -> UInt32
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt32) -> UInt32
   {
     return storage.decode()
   }
@@ -448,53 +448,53 @@ extension UInt32: AtomicInteger
 
 extension Int64: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicInt64
+  public typealias AtomicStorage = CAtomicPrimitiveInt64
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: Int64) -> AtomicInt64
+  public static func prepareAtomicStorage(for value: Int64) -> CAtomicPrimitiveInt64
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt64) -> Int64
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt64) -> Int64
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: Int64) -> AtomicInt64
+  public static func encodeAtomicStorage(for value: Int64) -> CAtomicPrimitiveInt64
   {
-    return AtomicInt64(encoding: value)
+    return CAtomicPrimitiveInt64(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicInt64) -> Int64
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt64) -> Int64
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: Int64) -> AtomicInt64
+  public static func prepareAtomicStorage(for value: Int64) -> CAtomicPrimitiveInt64
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicInt64) -> Int64
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveInt64) -> Int64
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: Int64) -> AtomicInt64
+  public static func encodeAtomicStorage(for value: Int64) -> CAtomicPrimitiveInt64
   {
-    return AtomicInt64(encoding: value)
+    return CAtomicPrimitiveInt64(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicInt64) -> Int64
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveInt64) -> Int64
   {
     return storage.decode()
   }
@@ -503,53 +503,53 @@ extension Int64: AtomicInteger
 
 extension UInt64: AtomicInteger
 {
-  public typealias AtomicStorage = AtomicUInt64
+  public typealias AtomicStorage = CAtomicPrimitiveUInt64
 
 #if swift(>=4.2)
   @inlinable
-  public static func prepareAtomicStorage(for value: UInt64) -> AtomicUInt64
+  public static func prepareAtomicStorage(for value: UInt64) -> CAtomicPrimitiveUInt64
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inlinable
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt64) -> UInt64
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt64) -> UInt64
   {
     return decodeAtomicStorage(storage)
   }
 
   @inlinable
-  public static func encodeAtomicStorage(for value: UInt64) -> AtomicUInt64
+  public static func encodeAtomicStorage(for value: UInt64) -> CAtomicPrimitiveUInt64
   {
-    return AtomicUInt64(encoding: value)
+    return CAtomicPrimitiveUInt64(encoding: value)
   }
 
   @inlinable
-  public static func decodeAtomicStorage(_ storage: AtomicUInt64) -> UInt64
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt64) -> UInt64
   {
     return storage.decode()
   }
 #else
   @inline(__always)
-  public static func prepareAtomicStorage(for value: UInt64) -> AtomicUInt64
+  public static func prepareAtomicStorage(for value: UInt64) -> CAtomicPrimitiveUInt64
   {
     return encodeAtomicStorage(for: value)
   }
 
   @inline(__always)
-  public static func disposeAtomicStorage(_ storage: inout AtomicUInt64) -> UInt64
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitiveUInt64) -> UInt64
   {
     return decodeAtomicStorage(storage)
   }
 
   @inline(__always)
-  public static func encodeAtomicStorage(for value: UInt64) -> AtomicUInt64
+  public static func encodeAtomicStorage(for value: UInt64) -> CAtomicPrimitiveUInt64
   {
-    return AtomicUInt64(encoding: value)
+    return CAtomicPrimitiveUInt64(encoding: value)
   }
 
   @inline(__always)
-  public static func decodeAtomicStorage(_ storage: AtomicUInt64) -> UInt64
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitiveUInt64) -> UInt64
   {
     return storage.decode()
   }

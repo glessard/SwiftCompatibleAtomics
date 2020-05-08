@@ -4,9 +4,9 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomicsPrimitives
+import CAtomicPrimitives
 
-extension AtomicRawPointer: PrimitiveAtomicOptional
+extension CAtomicPrimitiveRawPointer: PrimitiveAtomicOptional
 {
 #if swift(>=4.2)
   public var isNil: Bool {
@@ -16,10 +16,10 @@ extension AtomicRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicRawPointer {
+  public static var nilValue: CAtomicPrimitiveRawPointer {
     @inlinable
     get {
-      return AtomicRawPointer(encoding: nil)
+      return CAtomicPrimitiveRawPointer(encoding: nil)
     }
   }
 #else
@@ -30,16 +30,16 @@ extension AtomicRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicRawPointer {
+  public static var nilValue: CAtomicPrimitiveRawPointer {
     @inline(__always)
     get {
-      return AtomicRawPointer(encoding: nil)
+      return CAtomicPrimitiveRawPointer(encoding: nil)
     }
   }
 #endif
 }
 
-extension AtomicMutableRawPointer: PrimitiveAtomicOptional
+extension CAtomicPrimitiveMutableRawPointer: PrimitiveAtomicOptional
 {
 #if swift(>=4.2)
   public var isNil: Bool {
@@ -49,10 +49,10 @@ extension AtomicMutableRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicMutableRawPointer {
+  public static var nilValue: CAtomicPrimitiveMutableRawPointer {
     @inlinable
     get {
-      return AtomicMutableRawPointer(encoding: nil)
+      return CAtomicPrimitiveMutableRawPointer(encoding: nil)
     }
   }
 #else
@@ -63,10 +63,10 @@ extension AtomicMutableRawPointer: PrimitiveAtomicOptional
     }
   }
 
-  public static var nilValue: AtomicMutableRawPointer {
+  public static var nilValue: CAtomicPrimitiveMutableRawPointer {
     @inline(__always)
     get {
-      return AtomicMutableRawPointer(encoding: nil)
+      return CAtomicPrimitiveMutableRawPointer(encoding: nil)
     }
   }
 #endif

@@ -4,36 +4,36 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomicsPrimitives
+import CAtomicPrimitives
 % for Type in ['Int', 'UInt', 'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64']:
 
 extension ${Type}: AtomicInteger
 {
-  public typealias AtomicStorage = Atomic${Type}
+  public typealias AtomicStorage = CAtomicPrimitive${Type}
 
 #if swift(>=4.2)
 % for inlinable in ['@inlinable', '@inline(__always)']:
 % end = '#else' if inlinable == '@inlinable' else '#endif'
   ${inlinable}
-  public static func prepareAtomicStorage(for value: ${Type}) -> Atomic${Type}
+  public static func prepareAtomicStorage(for value: ${Type}) -> CAtomicPrimitive${Type}
   {
     return encodeAtomicStorage(for: value)
   }
 
   ${inlinable}
-  public static func disposeAtomicStorage(_ storage: inout Atomic${Type}) -> ${Type}
+  public static func disposeAtomicStorage(_ storage: inout CAtomicPrimitive${Type}) -> ${Type}
   {
     return decodeAtomicStorage(storage)
   }
 
   ${inlinable}
-  public static func encodeAtomicStorage(for value: ${Type}) -> Atomic${Type}
+  public static func encodeAtomicStorage(for value: ${Type}) -> CAtomicPrimitive${Type}
   {
-    return Atomic${Type}(encoding: value)
+    return CAtomicPrimitive${Type}(encoding: value)
   }
 
   ${inlinable}
-  public static func decodeAtomicStorage(_ storage: Atomic${Type}) -> ${Type}
+  public static func decodeAtomicStorage(_ storage: CAtomicPrimitive${Type}) -> ${Type}
   {
     return storage.decode()
   }

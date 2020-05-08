@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import CAtomicsPrimitives
+import CAtomicPrimitives
 
 public struct AtomicLoadOrdering: Equatable, Hashable
 {
@@ -148,12 +148,12 @@ extension AtomicUpdateOrdering: CustomStringConvertible {
 @inlinable
 public func atomicMemoryFence(ordering: AtomicUpdateOrdering)
 {
-  CAtomicsPrimitivesThreadFence(ordering._rawValue)
+  CAtomicPrimitivesThreadFence(ordering._rawValue)
 }
 #else
 @inline(__always)
 public func atomicMemoryFence(ordering: AtomicUpdateOrdering)
 {
-  CAtomicsPrimitivesThreadFence(ordering._rawValue)
+  CAtomicPrimitivesThreadFence(ordering._rawValue)
 }
 #endif

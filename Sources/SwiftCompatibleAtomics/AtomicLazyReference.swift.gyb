@@ -4,7 +4,7 @@
 //  Licensed under Apache License v2.0
 //
 
-import CAtomicsPrimitives
+import CAtomicPrimitives
 
 public struct UnsafeAtomicLazyReference<Instance: AnyObject>
 {

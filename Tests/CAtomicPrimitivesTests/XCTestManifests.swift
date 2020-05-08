@@ -16,8 +16,8 @@ extension CAtomicsBasicTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__CAtomicsBasicTests = [
-        ("testAtomicMutableRawPointer", testAtomicMutableRawPointer),
-        ("testAtomicRawPointer", testAtomicRawPointer),
+        ("testCAtomicPrimitiveMutableRawPointer", testCAtomicPrimitiveMutableRawPointer),
+        ("testCAtomicPrimitiveRawPointer", testCAtomicPrimitiveRawPointer),
         ("testFence", testFence),
         ("testInt", testInt),
         ("testInt16", testInt16),

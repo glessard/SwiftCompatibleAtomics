@@ -7,13 +7,13 @@ let package = Package(
   name: "SwiftCompatibleAtomics",
   products: [
     .library(name: "SwiftCompatibleAtomics", type: .static, targets: ["SwiftCompatibleAtomics"]),
-    .library(name: "CAtomicsPrimitives", type: .static, targets: ["CAtomicsPrimitives"]),
+    .library(name: "CAtomicPrimitives", type: .static, targets: ["CAtomicPrimitives"]),
   ],
   targets: [
-    .target(name: "SwiftCompatibleAtomics", dependencies: ["CAtomicsPrimitives"]),
+    .target(name: "SwiftCompatibleAtomics", dependencies: ["CAtomicPrimitives"]),
     .testTarget(name: "SwiftCompatibleAtomicsTests", dependencies: ["SwiftCompatibleAtomics"]),
-    .target(name: "CAtomicsPrimitives", dependencies: []),
-    .testTarget(name: "CAtomicsPrimitivesTests", dependencies: ["CAtomicsPrimitives"]),
+    .target(name: "CAtomicPrimitives", dependencies: []),
+    .testTarget(name: "CAtomicPrimitivesTests", dependencies: ["CAtomicPrimitives"]),
   ],
   swiftLanguageVersions: [.v3, .v4, .v4_2, .version("5")]
 )
