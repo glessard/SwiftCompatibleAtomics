@@ -1,4 +1,8 @@
-# SwiftCompatibleAtomics [![Build Status](https://travis-ci.org/glessard/deferred.svg?branch=master)](https://travis-ci.org/glessard/deferred)
+[Karoy Lorentey](https://github.com/lorentey)'s proposed atomics module implementation has been released as is at https://github.com/apple/swift-se-0282-experimental
+
+This one is now archived and only exists as a curiosity.
+
+## SwiftCompatibleAtomics [![Build Status](https://travis-ci.org/glessard/deferred.svg?branch=master)](https://travis-ci.org/glessard/deferred)
 
 This is a source-compatible version of [Karoy Lorentey](https://github.com/lorentey)'s pitched `Atomics` submodule for the Swift standard library. His pitch is [here](https://gist.github.com/lorentey/cf8703b5974ebe8f85cfb92a6628880d), his implementation is [here](https://github.com/apple/swift/pull/30553), the discussion is [here](https://forums.swift.org/t/low-level-atomic-operations/34683).
 
