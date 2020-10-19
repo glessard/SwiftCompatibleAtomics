@@ -1,4 +1,4 @@
-[Karoy Lorentey](https://github.com/lorentey)'s proposed atomics module implementation has been released as is at https://github.com/apple/swift-se-0282-experimental
+An official Atomics libarry for Swift has been released! Get it at https://github.com/apple/swift-atomics
 
 This one is now archived and only exists as a curiosity.
 
