@@ -1,4 +1,4 @@
-An official Atomics libarry for Swift has been released! Get it at https://github.com/apple/swift-atomics
+An official Atomics library for Swift has been released! Get it at https://github.com/apple/swift-atomics
 
 This one is now archived and only exists as a curiosity.
 
